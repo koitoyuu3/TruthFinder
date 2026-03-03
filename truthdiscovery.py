@@ -45,7 +45,7 @@ class TruthFinder(object):
             update[i] = self.influence_related * s + row1["fact_confidence"]
 
         for i, row1 in df.iterrows():
-            df.set_value(i, "fact_confidence", update[i])
+            df.at[i, "fact_confidence"] = update[i]
 
         return df
 
@@ -58,13 +58,13 @@ class TruthFinder(object):
             # trustworthiness of corresponding websites `W(f)`
             ts = df.loc[df["fact"] == row["fact"], "trustworthiness"]
             v = sum(trustworthiness_score(t) for t in ts)
-            df.set_value(i, "fact_confidence", v)
+            df.at[i, "fact_confidence"] = v
         return df
 
     def compute_fact_confidence(self, df):
         f = lambda x: sigmoid(self.dampening_factor * x)
         for i, row in df.iterrows():
-            df.set_value(i, "fact_confidence", f(row["fact_confidence"]))
+            df.at[i, "fact_confidence"] = f(row["fact_confidence"])
         return df
 
     def update_fact_confidence(self, df):
