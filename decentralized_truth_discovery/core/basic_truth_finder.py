@@ -28,6 +28,9 @@ import pandas as pd
 from typing import Dict, Optional, Callable
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+from .zk_proof import ZKProofEngine, attach_grouped_proofs
+from .text_vectorization import build_tfidf_vectorizer
+
 
 def sigmoid(x):
     """Sigmoid函数"""
@@ -56,7 +59,9 @@ class BasicTruthFinder:
     def __init__(self, 
                  implication: Callable[[str, str], float],
                  dampening_factor: float = 0.3,
-                 influence_related: float = 0.5):
+                 influence_related: float = 0.5,
+                 enable_zk_proof: bool = True,
+                 zk_proof_secret: Optional[str] = None):
         """
         初始化BasicTruthFinder
         
@@ -70,6 +75,8 @@ class BasicTruthFinder:
             influence_related: 关联影响因子 rho ∈ [0, 1]
                               - 控制事实之间关联对confidence的影响程度
                               - 默认0.5
+            enable_zk_proof: 是否为结果附加零知识证明
+            zk_proof_secret: 证明私钥种子（可选）
         """
         assert 0 < dampening_factor < 1, "dampening_factor must be in (0, 1)"
         assert 0 <= influence_related <= 1, "influence_related must be in [0, 1]"
@@ -77,6 +84,12 @@ class BasicTruthFinder:
         self.implication = implication
         self.dampening_factor = dampening_factor
         self.influence_related = influence_related
+        self.enable_zk_proof = enable_zk_proof
+        self.last_iteration_count = 0
+        self.zk_proof_engine = ZKProofEngine(
+            prover_id="BasicTruthFinder",
+            secret_seed=zk_proof_secret,
+        )
 
     def calculate_confidence(self, df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -241,6 +254,19 @@ class BasicTruthFinder:
         """
         return norm(t2 - t1) < threshold
 
+    def _estimate_global_truth_text(self, dataframe: pd.DataFrame) -> Dict[str, str]:
+        """
+        基于fact_confidence提取每个object的代表性真值文本。
+        """
+        truth_map: Dict[str, str] = {}
+        for object_id in dataframe["object"].unique():
+            obj_df = dataframe[dataframe["object"] == object_id]
+            if obj_df.empty:
+                continue
+            best_idx = obj_df["fact_confidence"].astype(float).idxmax()
+            truth_map[str(object_id)] = str(dataframe.loc[best_idx, "fact"])
+        return truth_map
+
     def train(self, 
               dataframe: pd.DataFrame,
               max_iterations: int = 200,
@@ -268,6 +294,7 @@ class BasicTruthFinder:
         dataframe["fact_confidence"] = np.zeros(len(dataframe.index))
 
         # 迭代
+        converged_at = None
         for i in range(max_iterations):
             # 保存上一轮的trustworthiness
             t1 = dataframe.drop_duplicates("website")["trustworthiness"]
@@ -280,7 +307,30 @@ class BasicTruthFinder:
 
             # 检查收敛
             if self.stop_condition(t1, t2, threshold):
-                return dataframe
+                converged_at = i + 1
+                break
+
+        self.last_iteration_count = converged_at if converged_at is not None else max_iterations
+
+        if self.enable_zk_proof:
+            truth_map = self._estimate_global_truth_text(dataframe)
+            dataframe["global_truth"] = dataframe["object"].map(truth_map)
+            source_scores = (
+                dataframe[["website", "trustworthiness"]]
+                .drop_duplicates(subset=["website"])
+                .set_index("website")["trustworthiness"]
+                .astype(float)
+                .to_dict()
+            )
+            dataframe = attach_grouped_proofs(
+                dataframe,
+                method_name="BasicTruthFinder",
+                source_scores=source_scores,
+                group_columns=("object",),
+                truth_column="global_truth",
+                iteration_count=self.last_iteration_count,
+                proof_engine=self.zk_proof_engine,
+            )
 
         return dataframe
 
@@ -316,7 +366,7 @@ def create_implication_function_from_texts(texts: list,
         implication函数：接受两个文本，返回相似度
     """
     if vectorizer is None:
-        vectorizer = TfidfVectorizer(min_df=1)
+        vectorizer = build_tfidf_vectorizer(texts, stop_words=None)
         vectorizer.fit(texts)
     
     def similarity(w1: str, w2: str) -> float:

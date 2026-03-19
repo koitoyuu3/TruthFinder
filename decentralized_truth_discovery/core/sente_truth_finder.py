@@ -16,10 +16,16 @@ SenteTruth TruthFinder
 """
 import numpy as np
 from numpy.linalg import norm
+import os
 import pandas as pd
 from typing import Dict, Optional, Union, List
 import warnings
 from sentence_transformers import SentenceTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+from .zk_proof import ZKProofEngine, attach_grouped_proofs
+from .text_vectorization import build_tfidf_vectorizer
+
 HAS_SBERT = True
 
 
@@ -52,7 +58,11 @@ class SenteTruthFinder:
                  max_iterations: int = 200,
                  initial_credibility: float = 0.5,
                  sbert_model: Optional[str] = None,
-                 use_sbert: bool = True):
+                 use_sbert: bool = True,
+                 strict_sbert: bool = False,
+                 local_files_only: Optional[bool] = None,
+                 enable_zk_proof: bool = True,
+                 zk_proof_secret: Optional[str] = None):
         """
         初始化SenteTruthFinder
         
@@ -63,14 +73,34 @@ class SenteTruthFinder:
             initial_credibility: 初始节点可信度 (0-1之间)
                                - 所有节点开始时都有这个可信度
             sbert_model: SBERT模型名称（可选）
-                        - 如果不提供，使用默认模型 'all-MiniLM-L6-v2'
+                        - 如果不提供，使用默认模型 'paraphrase-multilingual-MiniLM-L12-v2'
                         - 如果use_sbert=False，忽略此参数
             use_sbert: 是否使用SBERT（如果False，使用TF-IDF作为备选）
+            strict_sbert: 是否强制必须使用SBERT
+                         - True: 模型加载失败时直接报错
+                         - False: 模型加载失败时退回TF-IDF
+            local_files_only: 是否只从本地缓存加载模型
+                            - None: 自动读取 HF_HUB_OFFLINE / TRANSFORMERS_OFFLINE
+            enable_zk_proof: 是否为结果附加零知识证明
+            zk_proof_secret: 证明私钥种子（可选）
         """
         self.convergence_threshold = convergence_threshold
         self.max_iterations = max_iterations
         self.initial_credibility = initial_credibility
         self.use_sbert = use_sbert and HAS_SBERT
+        self.strict_sbert = strict_sbert
+        if local_files_only is None:
+            local_files_only = (
+                os.environ.get("HF_HUB_OFFLINE", "0") == "1"
+                or os.environ.get("TRANSFORMERS_OFFLINE", "0") == "1"
+            )
+        self.local_files_only = local_files_only
+        self.enable_zk_proof = enable_zk_proof
+        self.last_iteration_count = 0
+        self.zk_proof_engine = ZKProofEngine(
+            prover_id="SenteTruthFinder",
+            secret_seed=zk_proof_secret,
+        )
         
         # 节点可信度历史
         # 格式: {website: credibility}
@@ -84,11 +114,18 @@ class SenteTruthFinder:
         
         # 句子编码器
         if self.use_sbert:
-            model_name = sbert_model or 'all-MiniLM-L6-v2'
+            model_name = sbert_model or 'paraphrase-multilingual-MiniLM-L12-v2'
             try:
-                self.encoder = SentenceTransformer(model_name)
+                self.encoder = SentenceTransformer(
+                    model_name,
+                    local_files_only=self.local_files_only,
+                )
                 print(f"Using SBERT model: {model_name}")
             except Exception as e:
+                if self.strict_sbert:
+                    raise RuntimeError(
+                        f"Failed to load SBERT model {model_name} while strict_sbert=True: {e}"
+                    ) from e
                 warnings.warn(f"Failed to load SBERT model {model_name}: {e}. Falling back to TF-IDF.")
                 self.use_sbert = False
                 self.encoder = None
@@ -116,14 +153,7 @@ class SenteTruthFinder:
             return embeddings
         else:
             # 使用TF-IDF作为备选
-            if self.tfidf_vectorizer is None:
-                self.tfidf_vectorizer = TfidfVectorizer(
-                    lowercase=True,
-                    stop_words='english',
-                    ngram_range=(1, 2),
-                    max_features=1000
-                )
-            
+            self.tfidf_vectorizer = build_tfidf_vectorizer(texts, max_features=1000)
             vectors = self.tfidf_vectorizer.fit_transform(texts)
             return vectors.toarray()
 
@@ -142,29 +172,20 @@ class SenteTruthFinder:
             - 对角线元素为1.0（自己与自己的相似度）
         """
         n = len(embeddings)
-        similarity_matrix = np.zeros((n, n))
-        
-        for i in range(n):
-            for j in range(n):
-                if i == j:
-                    similarity_matrix[i, j] = 1.0
-                else:
-                    # 计算余弦相似度
-                    v_i = embeddings[i]
-                    v_j = embeddings[j]
-                    dot_product = np.dot(v_i, v_j)
-                    norm_i = norm(v_i)
-                    norm_j = norm(v_j)
-                    
-                    if norm_i > 0 and norm_j > 0:
-                        similarity = dot_product / (norm_i * norm_j)
-                        # 确保相似度在[0, 1]范围内（余弦相似度通常在[-1, 1]，我们归一化到[0, 1]）
-                        similarity = (similarity + 1) / 2
-                    else:
-                        similarity = 0.0
-                    
-                    similarity_matrix[i, j] = similarity
-        
+        if n == 0:
+            return np.zeros((0, 0), dtype=float)
+
+        embeddings = np.asarray(embeddings, dtype=float)
+        norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
+        normalized = np.divide(
+            embeddings,
+            norms,
+            out=np.zeros_like(embeddings, dtype=float),
+            where=norms > 0,
+        )
+        similarity_matrix = normalized @ normalized.T
+        similarity_matrix = np.clip(similarity_matrix, -1.0, 1.0)
+        np.fill_diagonal(similarity_matrix, 1.0)
         return similarity_matrix
 
     def _calculate_trustworthiness(self, similarity_matrix: np.ndarray, node_idx: int) -> float:
@@ -198,6 +219,12 @@ class SenteTruthFinder:
         
         return float(phi)
 
+    def _calculate_trustworthiness_scores(self, similarity_matrix: np.ndarray) -> List[float]:
+        return [
+            self._calculate_trustworthiness(similarity_matrix, idx)
+            for idx in range(len(similarity_matrix))
+        ]
+
     def _aggregate_truth(self, 
                         df: pd.DataFrame,
                         embeddings: np.ndarray,
@@ -222,6 +249,8 @@ class SenteTruthFinder:
         object_id = df['object'].iloc[0]
         n = len(df)
         
+        phi_values = self._calculate_trustworthiness_scores(similarity_matrix)
+
         # 计算每个节点的加权分数
         scores = []
         texts = []
@@ -234,7 +263,7 @@ class SenteTruthFinder:
             C_i = self.node_credibility.get(website, self.initial_credibility)
             
             # 计算可信度分数
-            phi_i = self._calculate_trustworthiness(similarity_matrix, idx)
+            phi_i = phi_values[idx]
             
             # 计算加权分数
             score = C_i * phi_i
@@ -272,13 +301,14 @@ class SenteTruthFinder:
             return
         
         # 计算所有节点的可信度和可信度分数
+        phi_values = self._calculate_trustworthiness_scores(similarity_matrix)
         credibilities = []
         trustworthiness_scores = []
         
         for idx, (_, row) in enumerate(df.iterrows()):
             website = row['website']
             C_i = self.node_credibility.get(website, self.initial_credibility)
-            phi_i = self._calculate_trustworthiness(similarity_matrix, idx)
+            phi_i = phi_values[idx]
             
             credibilities.append(C_i)
             trustworthiness_scores.append(phi_i)
@@ -291,18 +321,15 @@ class SenteTruthFinder:
         for idx, (_, row) in enumerate(df.iterrows()):
             website = row['website']
             C_i = self.node_credibility.get(website, self.initial_credibility)
-            phi_i = self._calculate_trustworthiness(similarity_matrix, idx)
+            phi_i = phi_values[idx]
             
             # 公式4：C_i ← ( (Σ_{l=1}^n C_l) / (Σ_{l=1}^n C_l · φ(v_l)) ) · C_i · φ(v_i)
-            if sum_C_phi > 0:
+            if abs(sum_C_phi) > 1e-12:
                 new_C_i = (sum_C / sum_C_phi) * C_i * phi_i
             else:
                 # 如果分母为0，保持原值
                 new_C_i = C_i
-            
-            # 确保可信度在合理范围内（避免极端值）
-            new_C_i = max(0.01, min(1.0, new_C_i))
-            
+
             self.node_credibility[website] = new_C_i
 
     def _initialize_credibility(self, dataframe: pd.DataFrame):
@@ -398,6 +425,8 @@ class SenteTruthFinder:
         self._initialize_credibility(dataframe)
         
         # 迭代
+        converged_at = None
+        prev_truth_map: Dict[str, str] = {}
         for i in range(max_iter):
             print(f'Iteration {i + 1}/{max_iter}')
             
@@ -406,6 +435,14 @@ class SenteTruthFinder:
             
             # 执行一次迭代
             dataframe = self.iteration(dataframe)
+
+            current_truth_map = (
+                dataframe[["object", "global_truth"]]
+                .drop_duplicates(subset=["object"])
+                .set_index("object")["global_truth"]
+                .astype(str)
+                .to_dict()
+            )
             
             # 检查收敛
             max_change = 0.0
@@ -417,10 +454,28 @@ class SenteTruthFinder:
                 change = abs(curr_val - prev_val)
                 max_change = max(max_change, change)
             
-            if max_change < conv_threshold:
+            if max_change < conv_threshold or (prev_truth_map and current_truth_map == prev_truth_map):
                 print(f'Convergence reached at iteration {i + 1}/{max_iter}')
+                converged_at = i + 1
                 break
-        
+
+            prev_truth_map = current_truth_map
+
+        self.last_iteration_count = converged_at if converged_at is not None else max_iter
+
+        if self.enable_zk_proof:
+            source_scores = {website: float(score) for website, score in self.node_credibility.items()}
+            dataframe = attach_grouped_proofs(
+                dataframe,
+                method_name="SenteTruthFinder",
+                source_scores=source_scores,
+                group_columns=("object",),
+                truth_column="global_truth",
+                iteration_count=self.last_iteration_count,
+                proof_engine=self.zk_proof_engine,
+                extra_public_data={"use_sbert": bool(self.use_sbert)},
+            )
+
         return dataframe
 
     def get_source_reliability(self, website: Optional[str] = None) -> Dict:

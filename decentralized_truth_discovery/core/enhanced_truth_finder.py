@@ -24,6 +24,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
 from typing import Dict, Optional, Union, List, Tuple
 
+from .zk_proof import ZKProofEngine, attach_grouped_proofs
+from .text_vectorization import build_tfidf_vectorizer, is_free_text
+
 
 class EnhancedTruthFinder:
     """
@@ -66,7 +69,9 @@ class EnhancedTruthFinder:
                  max_iterations: int = 200,
                  initial_reliability: float = 0.5,
                  numeric_weight: float = 0.5,
-                 enable_hybrid_mode: bool = False):
+                 enable_hybrid_mode: bool = False,
+                 enable_zk_proof: bool = True,
+                 zk_proof_secret: Optional[str] = None):
         """
         初始化EnhancedTruthFinder
 
@@ -109,6 +114,14 @@ class EnhancedTruthFinder:
                                - True: 支持从文本中提取数值和离散信息，使用多维度误差
                                - False: 使用原有的单一数据类型模式（数值或离散）
                                - 默认False，保持向后兼容
+
+            enable_zk_proof: 是否为结果附加零知识证明
+                            - True: 输出结果中包含 proof/proof_id/proof_verified
+                            - False: 不生成 proof
+
+            zk_proof_secret: 生成证明的私钥种子（可选）
+                            - 不提供时会读取环境变量 TRUTHFINDER_ZK_SECRET
+                            - 若仍为空，则使用进程内随机私钥
         """
         # 保存所有参数，供后续方法使用
         self.alpha = alpha
@@ -118,6 +131,11 @@ class EnhancedTruthFinder:
         self.initial_reliability = initial_reliability
         self.numeric_weight = numeric_weight
         self.enable_hybrid_mode = enable_hybrid_mode
+        self.enable_zk_proof = enable_zk_proof
+        self.zk_proof_engine = ZKProofEngine(
+            prover_id="EnhancedTruthFinder",
+            secret_seed=zk_proof_secret,
+        )
 
         # 源可靠性历史状态
         # 这是一个字典，记录每个数据源的历史信息
@@ -148,6 +166,8 @@ class EnhancedTruthFinder:
         # TF-IDF向量化器（用于混合模式的语义相似度计算）
         # 在混合模式下，用于将文本转换为向量，计算余弦相似度
         self.tfidf_vectorizer: Optional[TfidfVectorizer] = None
+        self._semantic_similarity_cache: Dict[Tuple[str, str], float] = {}
+        self._structured_info_cache: Dict[str, Dict[str, Dict[str, Union[float, str, List[str]]]]] = {}
 
     def _initialize_source_reliability(self, dataframe: pd.DataFrame):
         """
@@ -193,6 +213,294 @@ class EnhancedTruthFinder:
                 }
                 # 注意：第一次时，我们假设所有源都是可信的（r=0.5中等），误差为0，一致性为1（完美）
 
+    @staticmethod
+    def _normalize_text_for_comparison(value: Union[str, float]) -> str:
+        normalized = str(value).strip().lower()
+        normalized = normalized.replace('：', ':').replace('，', ',')
+        normalized = normalized.replace('（', '(').replace('）', ')')
+        normalized = re.sub(r'\s+', ' ', normalized)
+        return normalized
+
+    def _discrete_value_to_text(self, value: Union[str, float, List[str], Tuple[str, ...], set]) -> str:
+        if isinstance(value, (list, tuple, set)):
+            return ' '.join(str(item) for item in value)
+        return str(value)
+
+    def _normalize_discrete_value(self, value: Union[str, float, List[str], Tuple[str, ...], set]):
+        if isinstance(value, (list, tuple, set)):
+            normalized_items = [
+                self._normalize_text_for_comparison(item)
+                for item in value
+                if str(item).strip()
+            ]
+            return tuple(sorted(set(normalized_items)))
+        return self._normalize_text_for_comparison(value)
+
+    def _get_structured_info(self, text: str) -> Dict[str, Dict[str, Union[float, str, List[str]]]]:
+        if text not in self._structured_info_cache:
+            self._structured_info_cache[text] = self._extract_structured_info(text)
+        return self._structured_info_cache[text]
+
+    @staticmethod
+    def _weighted_median(values: List[float], weights: List[float]) -> float:
+        if not values:
+            raise ValueError("values must not be empty")
+
+        order = np.argsort(np.asarray(values, dtype=float))
+        sorted_values = np.asarray(values, dtype=float)[order]
+        sorted_weights = np.asarray(weights, dtype=float)[order]
+        cumulative = np.cumsum(sorted_weights)
+        cutoff = 0.5 * float(sorted_weights.sum())
+        idx = int(np.searchsorted(cumulative, cutoff, side='left'))
+        idx = min(idx, len(sorted_values) - 1)
+        return float(sorted_values[idx])
+
+    def _robust_numeric_truth(self, values: List[float], weights: List[float]) -> float:
+        if not values:
+            raise ValueError("values must not be empty")
+
+        if len(values) == 1:
+            return float(values[0])
+
+        center = self._weighted_median(values, weights)
+        deviations = [abs(float(value) - center) for value in values]
+        scale = self._weighted_median(deviations, weights)
+        adaptive_floor = max(abs(center) * 0.05, 1e-6)
+        threshold = max(3.0 * scale, adaptive_floor)
+
+        inlier_indices = [
+            idx for idx, deviation in enumerate(deviations)
+            if deviation <= threshold
+        ]
+        if not inlier_indices:
+            return center
+
+        inlier_values = [float(values[idx]) for idx in inlier_indices]
+        inlier_weights = [max(1e-12, float(weights[idx])) for idx in inlier_indices]
+        return self._weighted_median(inlier_values, inlier_weights)
+
+    def _aggregate_keyword_truth(self, keyword_lists: List[List[str]], weights: List[float]) -> List[str]:
+        keyword_support: Dict[str, float] = {}
+        total_weight = 0.0
+
+        for keywords, weight in zip(keyword_lists, weights):
+            total_weight += float(weight)
+            for keyword in set(str(item).strip() for item in keywords if str(item).strip()):
+                keyword_support[keyword] = keyword_support.get(keyword, 0.0) + float(weight)
+
+        if not keyword_support:
+            return []
+
+        support_threshold = max(0.35 * total_weight, 0.5 * max(keyword_support.values()))
+        selected_keywords = [
+            keyword for keyword, support in keyword_support.items()
+            if support >= support_threshold
+        ]
+        return sorted(selected_keywords, key=lambda keyword: (-keyword_support[keyword], keyword))
+
+    def _field_support_ratio(
+        self,
+        extracted_infos: List[Dict[str, Union[Dict[str, float], Dict[str, str], float]]],
+        field_type: str,
+        field_key: str,
+    ) -> float:
+        total_weight = sum(float(item['weight']) for item in extracted_infos)
+        if total_weight <= 0:
+            return 0.0
+
+        supported_weight = 0.0
+        for item in extracted_infos:
+            field_values = item['info'].get(field_type, {})
+            if field_key not in field_values:
+                continue
+
+            field_value = field_values[field_key]
+            if isinstance(field_value, (list, tuple, set)):
+                if not any(str(entry).strip() for entry in field_value):
+                    continue
+            elif not str(field_value).strip():
+                continue
+
+            supported_weight += float(item['weight'])
+
+        return supported_weight / total_weight
+
+    def _build_truth_summary_text(self, truth_dict: Dict[str, Dict[str, Union[float, str, List[str]]]]) -> str:
+        parts: List[str] = []
+        for key, value in truth_dict.get('numeric', {}).items():
+            parts.append(f"{key} {value}")
+        for key, value in truth_dict.get('discrete', {}).items():
+            parts.append(f"{key} {self._discrete_value_to_text(value)}")
+        return ' '.join(parts)
+
+    def _build_hybrid_truth(self, df: pd.DataFrame) -> Dict[str, Dict[str, Union[float, str, List[str]]]]:
+        extracted_infos = []
+        for _, row in df.iterrows():
+            website = row['website']
+            fact_text = str(row['fact'])
+            weight = float(
+                self.source_reliability_history.get(website, {}).get('r', self.initial_reliability)
+            )
+            extracted_infos.append({
+                'info': self._get_structured_info(fact_text),
+                'weight': max(1e-12, weight),
+            })
+
+        field_support_threshold = max(0.0, min(1.0, float(getattr(self, 'hybrid_field_support_threshold', 0.0))))
+
+        numeric_truth: Dict[str, float] = {}
+        numeric_keys = sorted(set().union(*[item['info']['numeric'].keys() for item in extracted_infos]))
+        for key in numeric_keys:
+            if self._field_support_ratio(extracted_infos, 'numeric', key) < field_support_threshold:
+                continue
+
+            values: List[float] = []
+            weights: List[float] = []
+            for item in extracted_infos:
+                if key in item['info']['numeric']:
+                    values.append(float(item['info']['numeric'][key]))
+                    weights.append(float(item['weight']))
+            if values:
+                numeric_truth[key] = self._robust_numeric_truth(values, weights)
+
+        discrete_truth: Dict[str, Union[str, List[str]]] = {}
+        discrete_keys = sorted(set().union(*[item['info']['discrete'].keys() for item in extracted_infos]))
+        for key in discrete_keys:
+            if self._field_support_ratio(extracted_infos, 'discrete', key) < field_support_threshold:
+                continue
+
+            if key == 'keywords':
+                keyword_lists = [
+                    list(item['info']['discrete'].get(key, []))
+                    for item in extracted_infos
+                    if key in item['info']['discrete']
+                ]
+                weights = [
+                    float(item['weight'])
+                    for item in extracted_infos
+                    if key in item['info']['discrete']
+                ]
+                aggregated_keywords = self._aggregate_keyword_truth(keyword_lists, weights)
+                if aggregated_keywords:
+                    discrete_truth[key] = aggregated_keywords
+                continue
+
+            candidate_weights: Dict[str, float] = {}
+            representative_values: Dict[str, Union[str, List[str]]] = {}
+            reference_texts: List[Tuple[str, float]] = []
+            for item in extracted_infos:
+                if key not in item['info']['discrete']:
+                    continue
+                raw_value = item['info']['discrete'][key]
+                normalized_value = self._normalize_discrete_value(raw_value)
+                normalized_text = self._discrete_value_to_text(normalized_value)
+                candidate_weights[normalized_text] = candidate_weights.get(normalized_text, 0.0) + float(item['weight'])
+                representative_values[normalized_text] = raw_value
+                reference_texts.append((self._discrete_value_to_text(raw_value), float(item['weight'])))
+
+            if not candidate_weights:
+                continue
+
+            best_candidate = self._select_discrete_candidate(candidate_weights, reference_texts)
+            selected_value = representative_values.get(best_candidate, best_candidate)
+            if isinstance(selected_value, tuple):
+                selected_value = list(selected_value)
+            discrete_truth[key] = selected_value
+
+        return {
+            'numeric': numeric_truth,
+            'discrete': discrete_truth,
+        }
+
+    def _calculate_hybrid_error(
+        self,
+        input_text: str,
+        truth_dict: Dict[str, Dict[str, Union[float, str, List[str]]]],
+    ) -> float:
+        extracted_info = self._get_structured_info(input_text)
+
+        numeric_truth = truth_dict.get('numeric', {})
+        numeric_errors = []
+        numeric_matched = 0
+        for key, truth_val in numeric_truth.items():
+            if key not in extracted_info['numeric']:
+                numeric_errors.append(1.0)
+                continue
+
+            numeric_matched += 1
+            extracted_val = float(extracted_info['numeric'][key])
+            truth_float = float(truth_val)
+            scale = max(abs(truth_float), abs(extracted_val), 1.0)
+            relative_error = abs(extracted_val - truth_float) / scale
+            numeric_errors.append(min(1.0, relative_error) ** 2)
+
+        discrete_truth = truth_dict.get('discrete', {})
+        discrete_errors = []
+        discrete_matched = 0
+        for key, truth_val in discrete_truth.items():
+            if key not in extracted_info['discrete']:
+                discrete_errors.append(1.0)
+                continue
+
+            discrete_matched += 1
+            extracted_val = extracted_info['discrete'][key]
+            if key == 'keywords':
+                extracted_keywords = {
+                    self._normalize_text_for_comparison(item)
+                    for item in (extracted_val if isinstance(extracted_val, list) else [extracted_val])
+                }
+                truth_keywords = {
+                    self._normalize_text_for_comparison(item)
+                    for item in (truth_val if isinstance(truth_val, list) else [truth_val])
+                }
+                union = extracted_keywords | truth_keywords
+                similarity = (len(extracted_keywords & truth_keywords) / len(union)) if union else 1.0
+                discrete_errors.append(1.0 - similarity)
+                continue
+
+            if self._normalize_discrete_value(extracted_val) == self._normalize_discrete_value(truth_val):
+                discrete_errors.append(0.0)
+                continue
+
+            similarity = self._calculate_semantic_similarity(
+                self._discrete_value_to_text(extracted_val),
+                self._discrete_value_to_text(truth_val),
+            )
+            discrete_errors.append(max(0.0, min(1.0, 1.0 - similarity)))
+
+        active_weights = []
+        weighted_errors = []
+        if numeric_truth:
+            active_weights.append(self.numeric_weight)
+            weighted_errors.append(np.mean(numeric_errors) if numeric_errors else 1.0)
+        if discrete_truth:
+            active_weights.append(1.0 - self.numeric_weight)
+            weighted_errors.append(np.mean(discrete_errors) if discrete_errors else 1.0)
+
+        if not active_weights:
+            return 1.0
+
+        total_weight = sum(active_weights)
+        combined_error = sum(
+            (weight / total_weight) * float(error)
+            for weight, error in zip(active_weights, weighted_errors)
+        )
+
+        total_fields = len(numeric_truth) + len(discrete_truth)
+        matched_fields = numeric_matched + discrete_matched
+        coverage_ratio = (matched_fields / total_fields) if total_fields else 0.0
+        if total_fields:
+            completeness_factor = max(0.60, 1.0 - 0.35 * coverage_ratio)
+            combined_error *= completeness_factor
+
+        truth_summary = self._build_truth_summary_text(truth_dict)
+        if truth_summary:
+            textual_error = 1.0 - self._calculate_semantic_similarity(input_text, truth_summary)
+            textual_weight = 0.10 if coverage_ratio >= 0.5 else 0.15
+            combined_error = (1.0 - textual_weight) * combined_error + textual_weight * textual_error
+
+        return float(max(0.0, min(1.0, combined_error)))
+
     def _detect_data_type(self, fact_series: pd.Series) -> str:
         """
         检测fact列的数据类型
@@ -236,13 +544,14 @@ class EnhancedTruthFinder:
         """
         # ========== 如果启用了混合模式，直接返回'hybrid' ==========
         if self.enable_hybrid_mode:
-            # 混合模式：从文本中提取数值和离散信息
-            # 检查fact列是否包含文本（字符串类型）
-            if fact_series.dtype == 'object' or fact_series.dtype == 'string':
-                # 检查是否包含较长的文本（通常混合模式用于处理完整文本）
-                sample_text = str(fact_series.iloc[0]) if len(fact_series) > 0 else ''
-                if len(sample_text) > 20:  # 如果文本长度超过20，认为是混合模式
-                    return 'hybrid'
+            sample_values = [str(value) for value in fact_series.dropna().head(5)]
+            hybrid_signal = any(
+                len(value) > 20
+                or re.search(r'\$\d|\b(symbol|put|call|option|btc|eth|doge)\b|看涨|看跌|期权', value, re.IGNORECASE)
+                for value in sample_values
+            )
+            if hybrid_signal:
+                return 'hybrid'
 
             # 如果文本太短，回退到普通检测
             # 继续下面的检测逻辑
@@ -409,6 +718,58 @@ class EnhancedTruthFinder:
         # 这样做是为了查找时不分大小写，更容易找到关键词
         text_lower = text.lower()
 
+        # 提取加密资产价格（BTC/ETH/DOGE: 123.45）
+        # 新示例中的结构化 response 会被归一化成这类文本，
+        # 这里优先映射到具名键，避免退化成匿名 value_0/value_1/value_2。
+        crypto_pattern = r'\b(BTC|ETH|DOGE)\b\s*[:=]\s*\$?(-?\d+(?:\.\d+)?)'
+        crypto_matches = re.findall(crypto_pattern, text, re.IGNORECASE)
+        for asset, price in crypto_matches:
+            result['numeric'][f'{asset.lower()}_price'] = float(price)
+
+        # 提取中文期权关键信息（适配“看涨/看跌/行权价/报价/出价/无价值概率”等表达）
+        chinese_numeric_patterns = [
+            (r'看跌(?:期权)?[^。；，,]*?行权价为\s*(-?\d+(?:\.\d+)?)', 'put_strike_price'),
+            (r'看涨(?:期权)?[^。；，,]*?行权价为\s*(-?\d+(?:\.\d+)?)', 'call_strike_price'),
+            (r'看跌(?:期权)?[^。；，,]*?(?:当前)?(?:报价|出价)为\s*(-?\d+(?:\.\d+)?)', 'put_quote'),
+            (r'看涨(?:期权)?[^。；，,]*?(?:当前)?(?:报价|出价)为\s*(-?\d+(?:\.\d+)?)', 'call_quote'),
+            (r'看涨(?:期权)?[^。；，,]*?有\s*(-?\d+(?:\.\d+)?)\s*的出价', 'call_quote'),
+            (r'看跌(?:期权)?[^。；，,]*?有\s*(\d+(?:\.\d+)?)%\s*的概率到期无价值', 'put_worthless_probability'),
+        ]
+        for pattern, field_name in chinese_numeric_patterns:
+            match = re.search(pattern, text)
+            if match:
+                result['numeric'][field_name] = float(match.group(1))
+
+        expiry_match = re.search(r'(\d{4})年(\d{1,2})月(?:开始交易|到期)', text)
+        if expiry_match:
+            result['numeric']['expiry_year'] = float(expiry_match.group(1))
+            result['numeric']['expiry_month'] = float(expiry_match.group(2))
+
+        option_quote_patterns = [
+            (
+                r'\$(-?\d+(?:\.\d+)?)\s+put\b[^$]{0,40}?\$(-?\d+(?:\.\d+)?)',
+                ('put_strike_price', 'put_quote'),
+            ),
+            (
+                r'\$(-?\d+(?:\.\d+)?)\s+call\b[^$]{0,40}?\$(-?\d+(?:\.\d+)?)',
+                ('call_strike_price', 'call_quote'),
+            ),
+            (
+                r'put\b[^$]{0,20}?priced at\s*\$(-?\d+(?:\.\d+)?)',
+                ('put_quote',),
+            ),
+            (
+                r'call\b[^$]{0,20}?priced at\s*\$(-?\d+(?:\.\d+)?)',
+                ('call_quote',),
+            ),
+        ]
+        for pattern, field_names in option_quote_patterns:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if not match:
+                continue
+            for index, field_name in enumerate(field_names, start=1):
+                result['numeric'][field_name] = float(match.group(index))
+
         # 如果文本里同时包含"put"和"call"这两个词
         # 【老奶奶版解释】
         # "put"和"call"是期权交易的专业术语
@@ -526,7 +887,9 @@ class EnhancedTruthFinder:
             # 我们选择更长的"Agilent Technologies, Inc."，因为它更完整
             # max(..., key=len) 表示选择长度最长的
             # .strip() 是去掉首尾的空格
-            result['discrete']['company'] = max(company_matches, key=len).strip()
+            company_candidate = max(company_matches, key=len).strip()
+            if not (crypto_matches and company_candidate.upper() in {'BTC', 'ETH', 'DOGE'}):
+                result['discrete']['company'] = company_candidate
 
         # 提取股票代码（Symbol: XXX格式）
         # 【老奶奶版解释】
@@ -543,6 +906,10 @@ class EnhancedTruthFinder:
             # .group(1) 表示取第一个括号里匹配的内容（就是股票代码部分）
             result['discrete']['symbol'] = symbol_match.group(1)
             # 例如：如果文本是"Symbol: A"，那么 result['discrete']['symbol'] = 'A'
+        else:
+            paren_symbol_match = re.search(r'\(([A-Z]{1,5})\)', text)
+            if paren_symbol_match:
+                result['discrete']['symbol'] = paren_symbol_match.group(1)
 
         # 提取关键词（put, call, option, premium等）
         # 【老奶奶版解释】
@@ -550,15 +917,34 @@ class EnhancedTruthFinder:
         # 比如如果文章提到"put"、"call"、"option"这些词，说明文章在讲期权交易
         # 我们把找到的关键词都存到一个列表里
         keywords = []
-        # 这是我们关心的关键词列表
         key_terms = ['put', 'call', 'option', 'premium', 'strike', 'expiry', 'volatility', 'bid', 'ask']
-        # 看看文章里有没有这些词
+        chinese_option_terms = ['看涨', '看跌', '期权', '行权价', '报价', '出价', '溢价', '到期', '无价值']
+        finance_terms = [
+            'ETF', '现货', '净流入', '流入', '回升', '回暖', '改善', '买盘', '活跃',
+            '流出', '偏弱', '需求', '风险偏好', '机构', '资金', '比特币'
+        ]
         for term in key_terms:
             if term.lower() in text_lower:
-                # 如果找到了，就加到列表里
                 keywords.append(term)
-        # 把找到的所有关键词存到文字盒子里
-        result['discrete']['keywords'] = keywords
+        for term in chinese_option_terms:
+            if term in text:
+                keywords.append(term)
+        for term in finance_terms:
+            if term.lower() in text_lower:
+                keywords.append(term)
+        result['discrete']['keywords'] = sorted(set(keywords))
+
+        positive_markers = ['净流入', '流入', '回升', '回暖', '改善', '买盘', '活跃', '提升']
+        negative_markers = ['流出', '偏弱', '下滑', '疲弱']
+        positive_hits = [marker for marker in positive_markers if marker in text]
+        negative_hits = [marker for marker in negative_markers if marker in text]
+
+        if positive_hits and not negative_hits:
+            result['discrete']['trend'] = 'positive'
+        elif negative_hits and not positive_hits:
+            result['discrete']['trend'] = 'negative'
+        elif positive_hits or negative_hits:
+            result['discrete']['trend'] = 'mixed'
         # 例如：如果文章提到"put"和"call"，那么 keywords = ['put', 'call']
 
         # 提取期权类型
@@ -597,37 +983,77 @@ class EnhancedTruthFinder:
             - 1.0: 完全相似
             - 0.0: 完全不同
         """
-        if not text1 or not text2:
+        normalized_text1 = self._normalize_text_for_comparison(text1)
+        normalized_text2 = self._normalize_text_for_comparison(text2)
+        if not normalized_text1 or not normalized_text2:
             return 0.0
 
-        # 如果TF-IDF向量化器还没有初始化，就创建一个
-        if self.tfidf_vectorizer is None:
-            self.tfidf_vectorizer = TfidfVectorizer(
-                lowercase=True,
-                stop_words='english',
-                ngram_range=(1, 2),  # 使用1-gram和2-gram
-                max_features=1000
-            )
+        cache_key = tuple(sorted((normalized_text1, normalized_text2)))
+        cached_value = self._semantic_similarity_cache.get(cache_key)
+        if cached_value is not None:
+            return cached_value
 
         try:
-            # 将两个文本转换为TF-IDF向量
-            vectors = self.tfidf_vectorizer.fit_transform([text1, text2])
+            vectorizer = build_tfidf_vectorizer([normalized_text1, normalized_text2], max_features=1000)
+            vectors = vectorizer.fit_transform([normalized_text1, normalized_text2])
 
-            # 计算余弦相似度
             similarity = cosine_similarity(vectors[0:1], vectors[1:2])[0][0]
-
-            # 确保返回值在[0, 1]范围内
-            return max(0.0, min(1.0, similarity))
+            similarity = max(0.0, min(1.0, similarity))
         except Exception:
-            # 如果计算失败（例如文本太短），使用简单的字符串匹配
-            # 计算Jaccard相似度作为备选
-            words1 = set(text1.lower().split())
-            words2 = set(text2.lower().split())
+            words1 = set(normalized_text1.split())
+            words2 = set(normalized_text2.split())
             if len(words1) == 0 or len(words2) == 0:
                 return 0.0
             intersection = len(words1 & words2)
             union = len(words1 | words2)
-            return intersection / union if union > 0 else 0.0
+            similarity = intersection / union if union > 0 else 0.0
+
+        self._semantic_similarity_cache[cache_key] = float(similarity)
+        return float(similarity)
+
+    def _select_discrete_candidate(
+        self,
+        candidate_weights: Dict[str, float],
+        reference_texts: Optional[List[Tuple[str, float]]] = None,
+    ) -> str:
+        if not candidate_weights:
+            raise ValueError("candidate_weights must not be empty")
+
+        max_weight = max(candidate_weights.values())
+        tied_values = [
+            value
+            for value, weight in candidate_weights.items()
+            if abs(weight - max_weight) < 1e-12
+        ]
+        if len(tied_values) == 1:
+            return tied_values[0]
+
+        if not reference_texts:
+            return sorted(tied_values)[0]
+
+        def semantic_support(candidate: str) -> float:
+            total = 0.0
+            for reference_text, weight in reference_texts:
+                total += float(weight) * self._calculate_semantic_similarity(candidate, reference_text)
+            return total
+
+        return max(
+            tied_values,
+            key=lambda value: (semantic_support(value), candidate_weights[value], value),
+        )
+
+    def _calculate_discrete_error(self, input_value: Union[str, float], truth_value: Union[str, float]) -> float:
+        input_str = str(input_value).strip()
+        truth_str = str(truth_value).strip()
+
+        if input_str == truth_str:
+            return 0.0
+
+        if is_free_text(input_str) or is_free_text(truth_str):
+            similarity = self._calculate_semantic_similarity(input_str, truth_str)
+            return max(0.0, min(1.0, 1.0 - similarity))
+
+        return 1.0
 
     def _calculate_local_truth(self, df: pd.DataFrame) -> Dict[str, Union[float, str]]:
         """
@@ -677,65 +1103,7 @@ class EnhancedTruthFinder:
 
         # ========== 根据数据类型选择计算方式 ==========
         if self.data_type == 'hybrid':
-            # ========== 混合类型：从文本中提取信息，分别计算数值和离散真值 ==========
-            # 混合模式的思想：
-            # 1. 从每个源的文本中提取结构化信息（数值+离散）
-            # 2. 对数值部分使用加权平均
-            # 3. 对离散部分使用加权投票或语义相似度
-            # 4. 组合成结构化真值
-
-            # 收集所有源提取的信息
-            extracted_infos = []  # 存储每个源提取的信息和可靠性
-            for _, row in df.iterrows():
-                website = row['website']
-                fact_text = str(row['fact'])
-                r = self.source_reliability_history.get(website, {}).get('r', self.initial_reliability)
-
-                # 提取结构化信息
-                info = self._extract_structured_info(fact_text)
-                extracted_infos.append({
-                    'info': info,
-                    'weight': r,
-                    'text': fact_text
-                })
-
-            # 计算数值真值（对每个数值字段使用加权平均）
-            numeric_truth = {}
-            for key in set().union(*[item['info']['numeric'].keys() for item in extracted_infos]):
-                # 对每个数值字段，计算加权平均
-                weighted_sum = 0.0
-                total_weight = 0.0
-                for item in extracted_infos:
-                    if key in item['info']['numeric']:
-                        value = item['info']['numeric'][key]
-                        weight = item['weight']
-                        weighted_sum += weight * value
-                        total_weight += weight
-
-                if total_weight > 0:
-                    numeric_truth[key] = weighted_sum / total_weight
-
-            # 计算离散真值（使用加权投票，选择权重和最大的值）
-            discrete_truth = {}
-            for key in set().union(*[item['info']['discrete'].keys() for item in extracted_infos]):
-                # 对每个离散字段，使用加权投票
-                candidate_weights = {}
-                for item in extracted_infos:
-                    if key in item['info']['discrete']:
-                        value = str(item['info']['discrete'][key])
-                        weight = item['weight']
-                        if value not in candidate_weights:
-                            candidate_weights[value] = 0.0
-                        candidate_weights[value] += weight
-
-                if candidate_weights:
-                    discrete_truth[key] = max(candidate_weights, key=candidate_weights.get)
-
-            # 组合成结构化真值
-            truth_value = {
-                'numeric': numeric_truth,
-                'discrete': discrete_truth
-            }
+            truth_value = self._build_hybrid_truth(df)
 
         elif self.data_type == 'numeric':
             # ========== 数值类型：使用加权平均 ==========
@@ -805,9 +1173,14 @@ class EnhancedTruthFinder:
 
             # 选择权重和最大的候选值作为真值
             if candidate_weights:
-                # max函数可以找到字典中值最大的键
-                # key参数指定比较的依据：按照字典的值（权重和）进行比较
-                truth_value = max(candidate_weights, key=candidate_weights.get)
+                reference_texts = [
+                    (
+                        str(row['fact']),
+                        float(self.source_reliability_history.get(row['website'], {}).get('r', self.initial_reliability)),
+                    )
+                    for _, row in df.iterrows()
+                ]
+                truth_value = self._select_discrete_candidate(candidate_weights, reference_texts)
                 # 例如：如果candidate_weights = {'Einstein': 1.7, 'Newton': 0.5}
                 # 那么：truth_value = 'Einstein'（因为1.7 > 0.5）
             else:
@@ -895,88 +1268,9 @@ class EnhancedTruthFinder:
 
                     # ========== 根据数据类型计算误差 ==========
                     if self.data_type == 'hybrid':
-                        # ========== 混合类型：多维度误差计算 ==========
-                        # 混合模式的思想：
-                        # 1. 从输入文本中提取结构化信息（数值+离散）
-                        # 2. 分别计算数值误差和离散误差
-                        # 3. 使用加权组合得到综合误差
-                        # 4. 综合误差 = α × 数值误差 + (1-α) × 离散误差
-
-                        input_text = str(input_value)  # 源提供的文本
-                        truth_dict = truth_value  # 真值字典，格式：{'numeric': {...}, 'discrete': {...}}
-
-                        # 从输入文本中提取结构化信息
-                        extracted_info = self._extract_structured_info(input_text)
-
-                        # ========== 计算数值误差 ==========
-                        numeric_errors = []
-                        if 'numeric' in truth_dict and truth_dict['numeric']:
-                            # 对每个数值字段，计算平方误差
-                            for key, truth_val in truth_dict['numeric'].items():
-                                if key in extracted_info['numeric']:
-                                    extracted_val = extracted_info['numeric'][key]
-                                    # 计算归一化的平方误差（避免不同量级的数值影响）
-                                    # 归一化：使用相对误差或除以真值
-                                    if abs(truth_val) > 1e-6:  # 避免除零
-                                        relative_error = abs(extracted_val - truth_val) / abs(truth_val)
-                                        numeric_errors.append(relative_error ** 2)
-                                    else:
-                                        # 如果真值接近0，使用绝对误差
-                                        numeric_errors.append((extracted_val - truth_val) ** 2)
-
-                        # 计算平均数值误差
-                        numeric_error = np.mean(numeric_errors) if numeric_errors else 1.0
-                        # 如果没有提取到数值或没有匹配的字段，认为误差最大（1.0）
-
-                        # ========== 计算离散误差（使用语义相似度）==========
-                        discrete_errors = []
-                        if 'discrete' in truth_dict and truth_dict['discrete']:
-                            # 方法1：对每个离散字段，计算匹配度
-                            for key, truth_val in truth_dict['discrete'].items():
-                                if key in extracted_info['discrete']:
-                                    extracted_val = str(extracted_info['discrete'][key])
-                                    truth_val_str = str(truth_val)
-
-                                    if extracted_val == truth_val_str:
-                                        # 完全匹配，误差为0
-                                        discrete_errors.append(0.0)
-                                    else:
-                                        # 不完全匹配，使用语义相似度计算误差
-                                        # 误差 = 1 - 相似度
-                                        similarity = self._calculate_semantic_similarity(extracted_val, truth_val_str)
-                                        discrete_errors.append(1.0 - similarity)
-
-                            # 方法2：整体文本的语义相似度
-                            # 构建真值文本摘要（用于整体相似度计算）
-                            truth_text_parts = []
-                            if 'company' in truth_dict['discrete']:
-                                truth_text_parts.append(truth_dict['discrete']['company'])
-                            if 'symbol' in truth_dict['discrete']:
-                                truth_text_parts.append(truth_dict['discrete']['symbol'])
-                            if 'keywords' in truth_dict['discrete']:
-                                if isinstance(truth_dict['discrete']['keywords'], list):
-                                    truth_text_parts.extend(truth_dict['discrete']['keywords'])
-
-                            truth_text_summary = ' '.join(truth_text_parts)
-
-                            # 计算整体文本相似度
-                            if truth_text_summary:
-                                overall_similarity = self._calculate_semantic_similarity(input_text, truth_text_summary)
-                                # 将整体相似度也加入离散误差（权重较低）
-                                discrete_errors.append(1.0 - overall_similarity)
-
-                        # 计算平均离散误差
-                        discrete_error = np.mean(discrete_errors) if discrete_errors else 1.0
-                        # 如果没有提取到离散信息或没有匹配的字段，认为误差最大（1.0）
-
-                        # ========== 加权组合综合误差 ==========
-                        # 综合误差 = α × 数值误差 + (1-α) × 离散误差
-                        # α是数值误差的权重（self.numeric_weight）
-                        combined_error = self.numeric_weight * numeric_error + (1 - self.numeric_weight) * discrete_error
-
-                        error = combined_error
-                        # 例如：如果numeric_weight=0.5, numeric_error=0.1, discrete_error=0.2
-                        # 那么：combined_error = 0.5×0.1 + 0.5×0.2 = 0.15
+                        input_text = str(input_value)
+                        truth_dict = truth_value
+                        error = self._calculate_hybrid_error(input_text, truth_dict)
 
                     elif self.data_type == 'numeric':
                         # ========== 数值类型：使用平方误差 ==========
@@ -999,16 +1293,7 @@ class EnhancedTruthFinder:
                         input_str = str(input_value)  # 转换为字符串，例如：'Einstein'
                         truth_str = str(truth_value)   # 转换为字符串，例如：'Einstein'
 
-                        if input_str == truth_str:
-                            # 完全匹配，误差为0
-                            error = 0.0
-                            # 例如：input_str='Einstein', truth_str='Einstein' → error = 0.0
-                        else:
-                            # 不匹配，误差为1
-                            error = 1.0
-                            # 例如：input_str='Newton', truth_str='Einstein' → error = 1.0
-                            # 注意：这里使用简单的0/1误差，不考虑字符串相似度
-                            # 未来可以扩展为使用编辑距离等更复杂的度量
+                        error = self._calculate_discrete_error(input_str, truth_str)
 
                     errors.append(error)  # 保存这个误差
 
@@ -1139,56 +1424,7 @@ class EnhancedTruthFinder:
 
             # ========== 根据数据类型选择计算方式 ==========
             if self.data_type == 'hybrid':
-                # ========== 混合类型：从文本中提取信息，分别计算数值和离散真值 ==========
-                # 收集所有源提取的信息
-                extracted_infos = []
-                for _, row in obj_data.iterrows():
-                    website = row['website']
-                    fact_text = str(row['fact'])
-                    r = self.source_reliability_history.get(website, {}).get('r', self.initial_reliability)
-
-                    # 提取结构化信息
-                    info = self._extract_structured_info(fact_text)
-                    extracted_infos.append({
-                        'info': info,
-                        'weight': r
-                    })
-
-                # 计算数值真值（对每个数值字段使用加权平均）
-                numeric_truth = {}
-                for key in set().union(*[item['info']['numeric'].keys() for item in extracted_infos]):
-                    weighted_sum = 0.0
-                    total_weight = 0.0
-                    for item in extracted_infos:
-                        if key in item['info']['numeric']:
-                            value = item['info']['numeric'][key]
-                            weight = item['weight']
-                            weighted_sum += weight * value
-                            total_weight += weight
-
-                    if total_weight > 0:
-                        numeric_truth[key] = weighted_sum / total_weight
-
-                # 计算离散真值（使用加权投票）
-                discrete_truth = {}
-                for key in set().union(*[item['info']['discrete'].keys() for item in extracted_infos]):
-                    candidate_weights = {}
-                    for item in extracted_infos:
-                        if key in item['info']['discrete']:
-                            value = str(item['info']['discrete'][key])
-                            weight = item['weight']
-                            if value not in candidate_weights:
-                                candidate_weights[value] = 0.0
-                            candidate_weights[value] += weight
-
-                    if candidate_weights:
-                        discrete_truth[key] = max(candidate_weights, key=candidate_weights.get)
-
-                # 组合成结构化真值
-                global_truth[object_id] = {
-                    'numeric': numeric_truth,
-                    'discrete': discrete_truth
-                }
+                global_truth[object_id] = self._build_hybrid_truth(obj_data)
 
             elif self.data_type == 'numeric':
                 # ========== 数值类型：使用加权平均 ==========
@@ -1250,7 +1486,14 @@ class EnhancedTruthFinder:
 
                 # 选择权重和最大的候选值作为真值
                 if candidate_weights:
-                    global_truth[object_id] = max(candidate_weights, key=candidate_weights.get)
+                    reference_texts = [
+                        (
+                            str(row['fact']),
+                            float(self.source_reliability_history.get(row['website'], {}).get('r', self.initial_reliability)),
+                        )
+                        for _, row in obj_data.iterrows()
+                    ]
+                    global_truth[object_id] = self._select_discrete_candidate(candidate_weights, reference_texts)
                     # 例如：如果candidate_weights = {'Einstein': 1.7, 'Newton': 0.5}
                     # 那么：global_truth['theory_A'] = 'Einstein'（因为1.7 > 0.5）
                 else:
@@ -1503,6 +1746,26 @@ class EnhancedTruthFinder:
         if self.last_iteration_count == 0:
             self.last_iteration_count = max_iter
 
+        # 为每个object附加零知识证明（proof绑定输入摘要与真值摘要）
+        if self.enable_zk_proof:
+            source_scores = {
+                website: float(metrics.get('r', self.initial_reliability))
+                for website, metrics in self.source_reliability_history.items()
+            }
+            dataframe = attach_grouped_proofs(
+                dataframe,
+                method_name=f"EnhancedTruthFinder[{self.data_type}]",
+                source_scores=source_scores,
+                group_columns=("object",),
+                truth_column="global_truth",
+                iteration_count=self.last_iteration_count,
+                proof_engine=self.zk_proof_engine,
+                extra_public_data={
+                    "hybrid_mode": bool(self.enable_hybrid_mode),
+                    "data_type": self.data_type,
+                },
+            )
+
         # 返回最终结果
         return dataframe
         # DataFrame现在包含原有数据和新添加的列（source_reliability等）
@@ -1591,6 +1854,25 @@ class EnhancedTruthFinder:
             self.global_truth_history[epoch] = current_truth
             # 例如：保存 {0: {'stock_A': 100.5}, 1: {'stock_A': 100.6}}
 
+        if self.enable_zk_proof:
+            source_scores = {
+                website: float(metrics.get('r', self.initial_reliability))
+                for website, metrics in self.source_reliability_history.items()
+            }
+            dataframe = attach_grouped_proofs(
+                dataframe,
+                method_name=f"EnhancedTruthFinder[batch:{self.data_type}]",
+                source_scores=source_scores,
+                group_columns=("object",),
+                truth_column="global_truth",
+                iteration_count=epoch,
+                proof_engine=self.zk_proof_engine,
+                extra_public_data={
+                    "hybrid_mode": bool(self.enable_hybrid_mode),
+                    "epoch": epoch,
+                },
+            )
+
         return dataframe
 
     def get_source_reliability(self, website: Optional[str] = None) -> Dict:
@@ -1654,3 +1936,8 @@ class EnhancedTruthFinder:
         self.global_truth_history = {}
         # 例如：调用前是 {0: {...}, 1: {...}}
         # 调用后变成 {}
+        self.data_type = None
+        self.last_iteration_count = 0
+        self.tfidf_vectorizer = None
+        self._semantic_similarity_cache = {}
+        self._structured_info_cache = {}
