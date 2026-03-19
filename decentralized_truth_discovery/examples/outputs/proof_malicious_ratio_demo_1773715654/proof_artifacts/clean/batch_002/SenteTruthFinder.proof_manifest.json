@@ -1,0 +1,15 @@
+{
+  "experiment_id": "proof_malicious_ratio_demo_1773715654_clean_batch_002",
+  "method": "SenteTruthFinder",
+  "method_experiment_id": "proof_malicious_ratio_demo_1773715654_clean_batch_002:SenteTruthFinder",
+  "row_count": 20,
+  "proof_group_count": 2,
+  "bundle_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_malicious_ratio_demo_1773715654/proof_artifacts/clean/batch_002/SenteTruthFinder.proof_bundle.json",
+  "chainmaker": {
+    "bundle_name": "SenteTruthFinder",
+    "groups": [],
+    "manifest_path": "",
+    "exported": false,
+    "error": "submission.pubSignals must be a 15-element list for current n=4 Groth16 proof"
+  }
+}

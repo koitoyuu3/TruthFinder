@@ -1,0 +1,1019 @@
+{
+  "experiment_id": "proof_scalability_demo_1773715441_w003_a04_s02:EnhancedTruthFinder-NonHybrid",
+  "experiment_digest": "956e3378eea6be9f371696ed7a8b75c9d5944461cad277efe06c43451e91161a",
+  "method": "EnhancedTruthFinder-NonHybrid",
+  "row_count": 16,
+  "result_digest": "96bdf6f79d969eada660ee1e70b4544f78aa665b46c9cb43259a5fc25395bbc6",
+  "rows": [
+    {
+      "claim_id": 1,
+      "raw_line": "1. [agent-2] 第3条新闻简短摘要 -> Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "record_type": "text",
+      "website": "agent-2",
+      "fact": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "object": "第3条新闻简短摘要",
+      "response_value": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "parent_object": "第3条新闻简短摘要",
+      "asset": "TEXT",
+      "fact_type": "text",
+      "source_reliability": 0.8590204629400106,
+      "error_metric": 0.16410376846584734,
+      "consistency_metric": 0.999988958097743,
+      "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "proof_id": "8ccc7db8a20956a4bfec99ff182a8b5a6372ff0765cc240e653a50facdad3fa1",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 2,
+      "raw_line": "2. [agent-2] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-2",
+      "fact": 90409.15,
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::BTC",
+      "response_value": 90409.15,
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "parent_object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "asset": "BTC",
+      "fact_type": "numeric",
+      "source_reliability": 1.0,
+      "error_metric": 0.0,
+      "consistency_metric": 1.0,
+      "global_truth": 90409.15,
+      "proof_id": "e13e1f1100d1e1b37153e7d4decc8cc2fd9c4b286e710567bf6dd54c4aa0406c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 2,
+      "raw_line": "2. [agent-2] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-2",
+      "fact": 0.15436,
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::DOGE",
+      "response_value": 0.15436,
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "parent_object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "asset": "DOGE",
+      "fact_type": "numeric",
+      "source_reliability": 1.0,
+      "error_metric": 0.0,
+      "consistency_metric": 1.0,
+      "global_truth": 0.15436,
+      "proof_id": "76f9630c951f9672f726a0cdbdd446fad1b03de64ca6d08446bec54779194b03",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 2,
+      "raw_line": "2. [agent-2] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-2",
+      "fact": 3033.22,
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::ETH",
+      "response_value": 3033.22,
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "parent_object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "asset": "ETH",
+      "fact_type": "numeric",
+      "source_reliability": 1.0,
+      "error_metric": 0.0,
+      "consistency_metric": 1.0,
+      "global_truth": 3033.22,
+      "proof_id": "3b54da1a72049135e4ad432559d5f8360d14d11b5e4b5775ef973583e9568202",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 3,
+      "raw_line": "3. [agent-4] 第3条新闻简短摘要 -> Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "record_type": "text",
+      "website": "agent-4",
+      "fact": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "object": "第3条新闻简短摘要",
+      "response_value": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "parent_object": "第3条新闻简短摘要",
+      "asset": "TEXT",
+      "fact_type": "text",
+      "source_reliability": 1.0,
+      "error_metric": 0.0,
+      "consistency_metric": 1.0,
+      "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "proof_id": "8ccc7db8a20956a4bfec99ff182a8b5a6372ff0765cc240e653a50facdad3fa1",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 4,
+      "raw_line": "4. [agent-4] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-4",
+      "fact": 90409.15,
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::BTC",
+      "response_value": 90409.15,
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "parent_object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "asset": "BTC",
+      "fact_type": "numeric",
+      "source_reliability": 1.0,
+      "error_metric": 0.0,
+      "consistency_metric": 1.0,
+      "global_truth": 90409.15,
+      "proof_id": "e13e1f1100d1e1b37153e7d4decc8cc2fd9c4b286e710567bf6dd54c4aa0406c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 4,
+      "raw_line": "4. [agent-4] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-4",
+      "fact": 0.15436,
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::DOGE",
+      "response_value": 0.15436,
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "parent_object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "asset": "DOGE",
+      "fact_type": "numeric",
+      "source_reliability": 1.0,
+      "error_metric": 0.0,
+      "consistency_metric": 1.0,
+      "global_truth": 0.15436,
+      "proof_id": "76f9630c951f9672f726a0cdbdd446fad1b03de64ca6d08446bec54779194b03",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 4,
+      "raw_line": "4. [agent-4] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-4",
+      "fact": 3033.22,
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::ETH",
+      "response_value": 3033.22,
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "parent_object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "asset": "ETH",
+      "fact_type": "numeric",
+      "source_reliability": 1.0,
+      "error_metric": 0.0,
+      "consistency_metric": 1.0,
+      "global_truth": 3033.22,
+      "proof_id": "3b54da1a72049135e4ad432559d5f8360d14d11b5e4b5775ef973583e9568202",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 5,
+      "raw_line": "5. [agent-8] 第3条新闻简短摘要 -> Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "record_type": "text",
+      "website": "agent-8",
+      "fact": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "object": "第3条新闻简短摘要",
+      "response_value": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "parent_object": "第3条新闻简短摘要",
+      "asset": "TEXT",
+      "fact_type": "text",
+      "source_reliability": 0.8590204629400106,
+      "error_metric": 0.16410376846584734,
+      "consistency_metric": 0.999988958097743,
+      "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "proof_id": "8ccc7db8a20956a4bfec99ff182a8b5a6372ff0765cc240e653a50facdad3fa1",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 6,
+      "raw_line": "6. [agent-8] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-8",
+      "fact": 90409.15,
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::BTC",
+      "response_value": 90409.15,
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "parent_object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "asset": "BTC",
+      "fact_type": "numeric",
+      "source_reliability": 1.0,
+      "error_metric": 0.0,
+      "consistency_metric": 1.0,
+      "global_truth": 90409.15,
+      "proof_id": "e13e1f1100d1e1b37153e7d4decc8cc2fd9c4b286e710567bf6dd54c4aa0406c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 6,
+      "raw_line": "6. [agent-8] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-8",
+      "fact": 0.15436,
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::DOGE",
+      "response_value": 0.15436,
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "parent_object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "asset": "DOGE",
+      "fact_type": "numeric",
+      "source_reliability": 1.0,
+      "error_metric": 0.0,
+      "consistency_metric": 1.0,
+      "global_truth": 0.15436,
+      "proof_id": "76f9630c951f9672f726a0cdbdd446fad1b03de64ca6d08446bec54779194b03",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 6,
+      "raw_line": "6. [agent-8] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-8",
+      "fact": 3033.22,
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::ETH",
+      "response_value": 3033.22,
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "parent_object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "asset": "ETH",
+      "fact_type": "numeric",
+      "source_reliability": 1.0,
+      "error_metric": 0.0,
+      "consistency_metric": 1.0,
+      "global_truth": 3033.22,
+      "proof_id": "3b54da1a72049135e4ad432559d5f8360d14d11b5e4b5775ef973583e9568202",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 7,
+      "raw_line": "7. [agent-9] 第3条新闻简短摘要 -> Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "record_type": "text",
+      "website": "agent-9",
+      "fact": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "object": "第3条新闻简短摘要",
+      "response_value": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "parent_object": "第3条新闻简短摘要",
+      "asset": "TEXT",
+      "fact_type": "text",
+      "source_reliability": 1.0,
+      "error_metric": 0.0,
+      "consistency_metric": 1.0,
+      "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "proof_id": "8ccc7db8a20956a4bfec99ff182a8b5a6372ff0765cc240e653a50facdad3fa1",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 8,
+      "raw_line": "8. [agent-9] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-9",
+      "fact": 90409.15,
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::BTC",
+      "response_value": 90409.15,
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "parent_object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "asset": "BTC",
+      "fact_type": "numeric",
+      "source_reliability": 1.0,
+      "error_metric": 0.0,
+      "consistency_metric": 1.0,
+      "global_truth": 90409.15,
+      "proof_id": "e13e1f1100d1e1b37153e7d4decc8cc2fd9c4b286e710567bf6dd54c4aa0406c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 8,
+      "raw_line": "8. [agent-9] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-9",
+      "fact": 0.15436,
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::DOGE",
+      "response_value": 0.15436,
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "parent_object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "asset": "DOGE",
+      "fact_type": "numeric",
+      "source_reliability": 1.0,
+      "error_metric": 0.0,
+      "consistency_metric": 1.0,
+      "global_truth": 0.15436,
+      "proof_id": "76f9630c951f9672f726a0cdbdd446fad1b03de64ca6d08446bec54779194b03",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 8,
+      "raw_line": "8. [agent-9] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-9",
+      "fact": 3033.22,
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::ETH",
+      "response_value": 3033.22,
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "parent_object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "asset": "ETH",
+      "fact_type": "numeric",
+      "source_reliability": 1.0,
+      "error_metric": 0.0,
+      "consistency_metric": 1.0,
+      "global_truth": 3033.22,
+      "proof_id": "3b54da1a72049135e4ad432559d5f8360d14d11b5e4b5775ef973583e9568202",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    }
+  ],
+  "proof_groups": [
+    {
+      "group_id": {
+        "object": "第3条新闻简短摘要"
+      },
+      "group_digest": "ea5e2a54f8cd144be175880b802d31ac6df64d6dfb743140f7089b08f1f33fdf",
+      "result_digest": "06f352d6f6ecf5aa9a011be9c284c578731e5698baa75aae2363c102bf06811a",
+      "row_count": 4,
+      "proof_id": "8ccc7db8a20956a4bfec99ff182a8b5a6372ff0765cc240e653a50facdad3fa1",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_backend": "snarkjs_groth16",
+      "statement_hash": "3731194120",
+      "statement_digest_sha256": "425524485eda3a756890bce4f6158b7a29f2a549aca92819c00fd29788e3540b",
+      "verification_key_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n4/verification_key.json",
+      "artifact_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n4",
+      "public_json": [
+        "3731194120",
+        "0",
+        "3718040",
+        "1",
+        "0",
+        "0",
+        "0",
+        "0",
+        "859020",
+        "1000000",
+        "859020",
+        "1000000",
+        "0",
+        "3718040",
+        "3731194120"
+      ],
+      "proof_json": {
+        "pi_a": [
+          "1705162272652815539496697148677501419874013148525066973456648644855186753291",
+          "2582292890912628984956316463411871902740167658064275433146020245025918525635",
+          "1"
+        ],
+        "pi_b": [
+          [
+            "10565378451434127340979069034031066562868130056606829725299061302926588343735",
+            "17457849376864355279266084015335347320395259978699637006875941666837183942035"
+          ],
+          [
+            "9849212192214508382876196014042894976983445224696661653603056862168686643058",
+            "8479113163424975344144650223218283551937020603788791635503642335896070610621"
+          ],
+          [
+            "1",
+            "0"
+          ]
+        ],
+        "pi_c": [
+          "13514964428732608234890034824932979652925346887654142946652730104826474961415",
+          "1036327413385319941305974779379811910309917064857692133162836033438139269073",
+          "1"
+        ],
+        "protocol": "groth16",
+        "curve": "bn128"
+      },
+      "contract_call": {
+        "a": [
+          1705162272652815539496697148677501419874013148525066973456648644855186753291,
+          2582292890912628984956316463411871902740167658064275433146020245025918525635
+        ],
+        "b": [
+          [
+            17457849376864355279266084015335347320395259978699637006875941666837183942035,
+            10565378451434127340979069034031066562868130056606829725299061302926588343735
+          ],
+          [
+            8479113163424975344144650223218283551937020603788791635503642335896070610621,
+            9849212192214508382876196014042894976983445224696661653603056862168686643058
+          ]
+        ],
+        "c": [
+          13514964428732608234890034824932979652925346887654142946652730104826474961415,
+          1036327413385319941305974779379811910309917064857692133162836033438139269073
+        ],
+        "pubSignals": [
+          3731194120,
+          0,
+          3718040,
+          1,
+          0,
+          0,
+          0,
+          0,
+          859020,
+          1000000,
+          859020,
+          1000000,
+          0,
+          3718040,
+          3731194120
+        ],
+        "publicSignalCount": 15,
+        "outputStatementHashField": 3731194120,
+        "outputWeightedSum": 0,
+        "outputTotalWeight": 3718040,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 0,
+        "claimedTotalWeight": 3718040,
+        "inputStatementHashField": 3731194120
+      },
+      "contract_submission": {
+        "experimentId": "0x9032ae31c41677db69b66373f7c1d3da9e8c4d85b00375b6c3c97601891942e7",
+        "groupId": "0xea5e2a54f8cd144be175880b802d31ac6df64d6dfb743140f7089b08f1f33fdf",
+        "resultDigest": "0x06f352d6f6ecf5aa9a011be9c284c578731e5698baa75aae2363c102bf06811a",
+        "proofId": "0x8ccc7db8a20956a4bfec99ff182a8b5a6372ff0765cc240e653a50facdad3fa1",
+        "statementDigestSha256": "0x425524485eda3a756890bce4f6158b7a29f2a549aca92819c00fd29788e3540b",
+        "a": [
+          1705162272652815539496697148677501419874013148525066973456648644855186753291,
+          2582292890912628984956316463411871902740167658064275433146020245025918525635
+        ],
+        "b": [
+          [
+            17457849376864355279266084015335347320395259978699637006875941666837183942035,
+            10565378451434127340979069034031066562868130056606829725299061302926588343735
+          ],
+          [
+            8479113163424975344144650223218283551937020603788791635503642335896070610621,
+            9849212192214508382876196014042894976983445224696661653603056862168686643058
+          ]
+        ],
+        "c": [
+          13514964428732608234890034824932979652925346887654142946652730104826474961415,
+          1036327413385319941305974779379811910309917064857692133162836033438139269073
+        ],
+        "pubSignals": [
+          3731194120,
+          0,
+          3718040,
+          1,
+          0,
+          0,
+          0,
+          0,
+          859020,
+          1000000,
+          859020,
+          1000000,
+          0,
+          3718040,
+          3731194120
+        ],
+        "publicSignalCount": 15,
+        "outputStatementHashField": 3731194120,
+        "outputWeightedSum": 0,
+        "outputTotalWeight": 3718040,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 0,
+        "claimedTotalWeight": 3718040,
+        "inputStatementHashField": 3731194120
+      },
+      "rows": null
+    },
+    {
+      "group_id": {
+        "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::BTC"
+      },
+      "group_digest": "9ddb6999627f03cfc26b9c666c7703a15683629d09e78cb26472d3a051e98f3d",
+      "result_digest": "726d0482ca4946a6e78e0126efaba4b8c43c5c99dee480bdcd1c6a8c2e6325d6",
+      "row_count": 4,
+      "proof_id": "e13e1f1100d1e1b37153e7d4decc8cc2fd9c4b286e710567bf6dd54c4aa0406c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_backend": "snarkjs_groth16",
+      "statement_hash": "361641518091500",
+      "statement_digest_sha256": "7efdda6f6b91a237dbdcbf154fbbb12abb7d9831f38b12794c648389c3343ea0",
+      "verification_key_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n4/verification_key.json",
+      "artifact_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n4",
+      "public_json": [
+        "361641518091500",
+        "361636600000000",
+        "4000000",
+        "1",
+        "90409150",
+        "90409150",
+        "90409150",
+        "90409150",
+        "1000000",
+        "1000000",
+        "1000000",
+        "1000000",
+        "361636600000000",
+        "4000000",
+        "361641518091500"
+      ],
+      "proof_json": {
+        "pi_a": [
+          "13135648152054054758486616731081990007850384401578709208997047587333875084345",
+          "11507914216098589950247415111935743565353230440448623863113463984579160649870",
+          "1"
+        ],
+        "pi_b": [
+          [
+            "220143389402693724791302668602468236271631532967024161840243278165760589910",
+            "15996604574237127143888368959761552977015366415868575353741903110245014697965"
+          ],
+          [
+            "12371992610577529237341055630576424174238493872401996728671140479475936968496",
+            "18199923564707240878942854541142858945130886093311495676154124288698627270998"
+          ],
+          [
+            "1",
+            "0"
+          ]
+        ],
+        "pi_c": [
+          "10264774902601987724398636678722241422246834634045543977823029407855196250417",
+          "17723552954923168781549885799064109704989144251660626890119409283692527437162",
+          "1"
+        ],
+        "protocol": "groth16",
+        "curve": "bn128"
+      },
+      "contract_call": {
+        "a": [
+          13135648152054054758486616731081990007850384401578709208997047587333875084345,
+          11507914216098589950247415111935743565353230440448623863113463984579160649870
+        ],
+        "b": [
+          [
+            15996604574237127143888368959761552977015366415868575353741903110245014697965,
+            220143389402693724791302668602468236271631532967024161840243278165760589910
+          ],
+          [
+            18199923564707240878942854541142858945130886093311495676154124288698627270998,
+            12371992610577529237341055630576424174238493872401996728671140479475936968496
+          ]
+        ],
+        "c": [
+          10264774902601987724398636678722241422246834634045543977823029407855196250417,
+          17723552954923168781549885799064109704989144251660626890119409283692527437162
+        ],
+        "pubSignals": [
+          361641518091500,
+          361636600000000,
+          4000000,
+          1,
+          90409150,
+          90409150,
+          90409150,
+          90409150,
+          1000000,
+          1000000,
+          1000000,
+          1000000,
+          361636600000000,
+          4000000,
+          361641518091500
+        ],
+        "publicSignalCount": 15,
+        "outputStatementHashField": 361641518091500,
+        "outputWeightedSum": 361636600000000,
+        "outputTotalWeight": 4000000,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 361636600000000,
+        "claimedTotalWeight": 4000000,
+        "inputStatementHashField": 361641518091500
+      },
+      "contract_submission": {
+        "experimentId": "0x9032ae31c41677db69b66373f7c1d3da9e8c4d85b00375b6c3c97601891942e7",
+        "groupId": "0x9ddb6999627f03cfc26b9c666c7703a15683629d09e78cb26472d3a051e98f3d",
+        "resultDigest": "0x726d0482ca4946a6e78e0126efaba4b8c43c5c99dee480bdcd1c6a8c2e6325d6",
+        "proofId": "0xe13e1f1100d1e1b37153e7d4decc8cc2fd9c4b286e710567bf6dd54c4aa0406c",
+        "statementDigestSha256": "0x7efdda6f6b91a237dbdcbf154fbbb12abb7d9831f38b12794c648389c3343ea0",
+        "a": [
+          13135648152054054758486616731081990007850384401578709208997047587333875084345,
+          11507914216098589950247415111935743565353230440448623863113463984579160649870
+        ],
+        "b": [
+          [
+            15996604574237127143888368959761552977015366415868575353741903110245014697965,
+            220143389402693724791302668602468236271631532967024161840243278165760589910
+          ],
+          [
+            18199923564707240878942854541142858945130886093311495676154124288698627270998,
+            12371992610577529237341055630576424174238493872401996728671140479475936968496
+          ]
+        ],
+        "c": [
+          10264774902601987724398636678722241422246834634045543977823029407855196250417,
+          17723552954923168781549885799064109704989144251660626890119409283692527437162
+        ],
+        "pubSignals": [
+          361641518091500,
+          361636600000000,
+          4000000,
+          1,
+          90409150,
+          90409150,
+          90409150,
+          90409150,
+          1000000,
+          1000000,
+          1000000,
+          1000000,
+          361636600000000,
+          4000000,
+          361641518091500
+        ],
+        "publicSignalCount": 15,
+        "outputStatementHashField": 361641518091500,
+        "outputWeightedSum": 361636600000000,
+        "outputTotalWeight": 4000000,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 361636600000000,
+        "claimedTotalWeight": 4000000,
+        "inputStatementHashField": 361641518091500
+      },
+      "rows": null
+    },
+    {
+      "group_id": {
+        "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::DOGE"
+      },
+      "group_digest": "900e275f4899ec35b45c2fcfde3ce62c6f3c7aacb625e80352b0388ae4dc477a",
+      "result_digest": "d29551e80b4ed08e877bfbe763162084f096f4def23fd25b6deaadc5b9b88d89",
+      "row_count": 4,
+      "proof_id": "76f9630c951f9672f726a0cdbdd446fad1b03de64ca6d08446bec54779194b03",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_backend": "snarkjs_groth16",
+      "statement_hash": "4630001540",
+      "statement_digest_sha256": "47d4d9160347415db094db9991dfbd6557bdda9d97a26f1bd7bb6bd12f47829b",
+      "verification_key_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n4/verification_key.json",
+      "artifact_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n4",
+      "public_json": [
+        "4630001540",
+        "616000000",
+        "4000000",
+        "1",
+        "154",
+        "154",
+        "154",
+        "154",
+        "1000000",
+        "1000000",
+        "1000000",
+        "1000000",
+        "616000000",
+        "4000000",
+        "4630001540"
+      ],
+      "proof_json": {
+        "pi_a": [
+          "4871556108660095778081676655864201711147471430254926735562982627513600343802",
+          "7051445570919587790498586677010202216237095870516338372495787584647602221240",
+          "1"
+        ],
+        "pi_b": [
+          [
+            "610419773184989780879593985605889447582603574751578170528156796814489372569",
+            "12971810847081047999051209237431019726291879552841172335750989919929388859352"
+          ],
+          [
+            "15226824773539255421247707520048665210666306828056842623957560537885690285933",
+            "9076588976037830444494662529786229633948190122612120067436621396966865725146"
+          ],
+          [
+            "1",
+            "0"
+          ]
+        ],
+        "pi_c": [
+          "20259532433584982410454540307097968566458170007301530766529365929199911999347",
+          "11110979352038722231775011639811057315116715773811014050468368737314258096791",
+          "1"
+        ],
+        "protocol": "groth16",
+        "curve": "bn128"
+      },
+      "contract_call": {
+        "a": [
+          4871556108660095778081676655864201711147471430254926735562982627513600343802,
+          7051445570919587790498586677010202216237095870516338372495787584647602221240
+        ],
+        "b": [
+          [
+            12971810847081047999051209237431019726291879552841172335750989919929388859352,
+            610419773184989780879593985605889447582603574751578170528156796814489372569
+          ],
+          [
+            9076588976037830444494662529786229633948190122612120067436621396966865725146,
+            15226824773539255421247707520048665210666306828056842623957560537885690285933
+          ]
+        ],
+        "c": [
+          20259532433584982410454540307097968566458170007301530766529365929199911999347,
+          11110979352038722231775011639811057315116715773811014050468368737314258096791
+        ],
+        "pubSignals": [
+          4630001540,
+          616000000,
+          4000000,
+          1,
+          154,
+          154,
+          154,
+          154,
+          1000000,
+          1000000,
+          1000000,
+          1000000,
+          616000000,
+          4000000,
+          4630001540
+        ],
+        "publicSignalCount": 15,
+        "outputStatementHashField": 4630001540,
+        "outputWeightedSum": 616000000,
+        "outputTotalWeight": 4000000,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 616000000,
+        "claimedTotalWeight": 4000000,
+        "inputStatementHashField": 4630001540
+      },
+      "contract_submission": {
+        "experimentId": "0x9032ae31c41677db69b66373f7c1d3da9e8c4d85b00375b6c3c97601891942e7",
+        "groupId": "0x900e275f4899ec35b45c2fcfde3ce62c6f3c7aacb625e80352b0388ae4dc477a",
+        "resultDigest": "0xd29551e80b4ed08e877bfbe763162084f096f4def23fd25b6deaadc5b9b88d89",
+        "proofId": "0x76f9630c951f9672f726a0cdbdd446fad1b03de64ca6d08446bec54779194b03",
+        "statementDigestSha256": "0x47d4d9160347415db094db9991dfbd6557bdda9d97a26f1bd7bb6bd12f47829b",
+        "a": [
+          4871556108660095778081676655864201711147471430254926735562982627513600343802,
+          7051445570919587790498586677010202216237095870516338372495787584647602221240
+        ],
+        "b": [
+          [
+            12971810847081047999051209237431019726291879552841172335750989919929388859352,
+            610419773184989780879593985605889447582603574751578170528156796814489372569
+          ],
+          [
+            9076588976037830444494662529786229633948190122612120067436621396966865725146,
+            15226824773539255421247707520048665210666306828056842623957560537885690285933
+          ]
+        ],
+        "c": [
+          20259532433584982410454540307097968566458170007301530766529365929199911999347,
+          11110979352038722231775011639811057315116715773811014050468368737314258096791
+        ],
+        "pubSignals": [
+          4630001540,
+          616000000,
+          4000000,
+          1,
+          154,
+          154,
+          154,
+          154,
+          1000000,
+          1000000,
+          1000000,
+          1000000,
+          616000000,
+          4000000,
+          4630001540
+        ],
+        "publicSignalCount": 15,
+        "outputStatementHashField": 4630001540,
+        "outputWeightedSum": 616000000,
+        "outputTotalWeight": 4000000,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 616000000,
+        "claimedTotalWeight": 4000000,
+        "inputStatementHashField": 4630001540
+      },
+      "rows": null
+    },
+    {
+      "group_id": {
+        "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据::ETH"
+      },
+      "group_digest": "484537643b851dc0b9a3506e5f911bb8a94bf5fb320cec9b8b3e12e19ba0a61d",
+      "result_digest": "738735d3dc50daf5fa0b6d7831e945929b77bd067fd07cc80687221654a44c15",
+      "row_count": 4,
+      "proof_id": "3b54da1a72049135e4ad432559d5f8360d14d11b5e4b5775ef973583e9568202",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_backend": "snarkjs_groth16",
+      "statement_hash": "12136924332200",
+      "statement_digest_sha256": "11220e16c16d059ad929427776ba9b8456278cb1aa1461192594748099f1cc3b",
+      "verification_key_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n4/verification_key.json",
+      "artifact_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n4",
+      "public_json": [
+        "12136924332200",
+        "12132880000000",
+        "4000000",
+        "1",
+        "3033220",
+        "3033220",
+        "3033220",
+        "3033220",
+        "1000000",
+        "1000000",
+        "1000000",
+        "1000000",
+        "12132880000000",
+        "4000000",
+        "12136924332200"
+      ],
+      "proof_json": {
+        "pi_a": [
+          "4223998671432026795139767306956833063952491348411856764400097409775916439366",
+          "5733544218590822901411490448049260377798792004889511820415009844246814201054",
+          "1"
+        ],
+        "pi_b": [
+          [
+            "12604186032163576454410764984294910491790077986623458751268994839215898312567",
+            "8427191948302579120334240542887586591042411260290161449905966460573834682618"
+          ],
+          [
+            "21475686410286265217692095989550382530460161697897477622774880668131922327893",
+            "18517972706292493406208859993690829757782523093145764595416907604304926216962"
+          ],
+          [
+            "1",
+            "0"
+          ]
+        ],
+        "pi_c": [
+          "8898381234410362159133717781281094373264691828033631776036422846924910135395",
+          "19498027151126149638486247373722367240934615748844662271272264595096986524119",
+          "1"
+        ],
+        "protocol": "groth16",
+        "curve": "bn128"
+      },
+      "contract_call": {
+        "a": [
+          4223998671432026795139767306956833063952491348411856764400097409775916439366,
+          5733544218590822901411490448049260377798792004889511820415009844246814201054
+        ],
+        "b": [
+          [
+            8427191948302579120334240542887586591042411260290161449905966460573834682618,
+            12604186032163576454410764984294910491790077986623458751268994839215898312567
+          ],
+          [
+            18517972706292493406208859993690829757782523093145764595416907604304926216962,
+            21475686410286265217692095989550382530460161697897477622774880668131922327893
+          ]
+        ],
+        "c": [
+          8898381234410362159133717781281094373264691828033631776036422846924910135395,
+          19498027151126149638486247373722367240934615748844662271272264595096986524119
+        ],
+        "pubSignals": [
+          12136924332200,
+          12132880000000,
+          4000000,
+          1,
+          3033220,
+          3033220,
+          3033220,
+          3033220,
+          1000000,
+          1000000,
+          1000000,
+          1000000,
+          12132880000000,
+          4000000,
+          12136924332200
+        ],
+        "publicSignalCount": 15,
+        "outputStatementHashField": 12136924332200,
+        "outputWeightedSum": 12132880000000,
+        "outputTotalWeight": 4000000,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 12132880000000,
+        "claimedTotalWeight": 4000000,
+        "inputStatementHashField": 12136924332200
+      },
+      "contract_submission": {
+        "experimentId": "0x9032ae31c41677db69b66373f7c1d3da9e8c4d85b00375b6c3c97601891942e7",
+        "groupId": "0x484537643b851dc0b9a3506e5f911bb8a94bf5fb320cec9b8b3e12e19ba0a61d",
+        "resultDigest": "0x738735d3dc50daf5fa0b6d7831e945929b77bd067fd07cc80687221654a44c15",
+        "proofId": "0x3b54da1a72049135e4ad432559d5f8360d14d11b5e4b5775ef973583e9568202",
+        "statementDigestSha256": "0x11220e16c16d059ad929427776ba9b8456278cb1aa1461192594748099f1cc3b",
+        "a": [
+          4223998671432026795139767306956833063952491348411856764400097409775916439366,
+          5733544218590822901411490448049260377798792004889511820415009844246814201054
+        ],
+        "b": [
+          [
+            8427191948302579120334240542887586591042411260290161449905966460573834682618,
+            12604186032163576454410764984294910491790077986623458751268994839215898312567
+          ],
+          [
+            18517972706292493406208859993690829757782523093145764595416907604304926216962,
+            21475686410286265217692095989550382530460161697897477622774880668131922327893
+          ]
+        ],
+        "c": [
+          8898381234410362159133717781281094373264691828033631776036422846924910135395,
+          19498027151126149638486247373722367240934615748844662271272264595096986524119
+        ],
+        "pubSignals": [
+          12136924332200,
+          12132880000000,
+          4000000,
+          1,
+          3033220,
+          3033220,
+          3033220,
+          3033220,
+          1000000,
+          1000000,
+          1000000,
+          1000000,
+          12132880000000,
+          4000000,
+          12136924332200
+        ],
+        "publicSignalCount": 15,
+        "outputStatementHashField": 12136924332200,
+        "outputWeightedSum": 12132880000000,
+        "outputTotalWeight": 4000000,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 12132880000000,
+        "claimedTotalWeight": 4000000,
+        "inputStatementHashField": 12136924332200
+      },
+      "rows": null
+    }
+  ]
+}

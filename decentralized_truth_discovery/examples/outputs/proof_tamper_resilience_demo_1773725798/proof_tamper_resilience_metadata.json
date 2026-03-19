@@ -1,0 +1,17 @@
+{
+  "experiment_id": "proof_tamper_resilience_demo_1773725798",
+  "input_json": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10/demo.json",
+  "batch_number": 1,
+  "methods": [
+    "EnhancedTruthFinder-Hybrid",
+    "EnhancedTruthFinder-NonHybrid",
+    "SenteTruthFinder",
+    "BasicTruthFinder",
+    "SenFeedTruthFinder-CompositeTD"
+  ],
+  "score_delta": 0.05,
+  "paths": {
+    "results_csv": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_tamper_resilience_demo_1773725798/proof_tamper_resilience_results.csv",
+    "summary_csv": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_tamper_resilience_demo_1773725798/proof_tamper_resilience_summary.csv"
+  }
+}

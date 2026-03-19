@@ -1,0 +1,815 @@
+{
+  "experiment_id": "proof_malicious_ratio_demo_1773715654_clean_batch_004:SenteTruthFinder",
+  "experiment_digest": "656e1dc7916d0a618c6c326ff5b9f60d03cbc47580a9bf79c1760a51bf93e9b2",
+  "method": "SenteTruthFinder",
+  "row_count": 20,
+  "result_digest": "91fc4d55bf55a72d8b2045d0393d294cd11f21c344d449e1a9ba82b4fa159045",
+  "rows": [
+    {
+      "claim_id": 1,
+      "raw_line": "1. [agent-1] 第4条新闻简短摘要 -> Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "record_type": "text",
+      "website": "agent-1",
+      "fact": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "object": "第4条新闻简短摘要",
+      "response_value": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.5862640130717445,
+      "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "proof_id": "2160ce1b21f1cc6b6b9b02ee333e3a1d7c67354e67eacea12096a023e21612a4",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 2,
+      "raw_line": "2. [agent-1] 2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90665.37, \"DOGE\": 0.15426, \"ETH\": 3031.14}",
+      "record_type": "crypto_price",
+      "website": "agent-1",
+      "fact": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "object": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90665.37,
+        "DOGE": 0.15426,
+        "ETH": 3031.14
+      },
+      "event_timestamp": "2025-11-27 01:30:00",
+      "btc_price": 90665.37,
+      "eth_price": 3031.14,
+      "doge_price": 0.15426,
+      "source_reliability": 0.5862640130717445,
+      "global_truth": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "proof_id": "32c5e35454073d7fb9ab84f64ca80349d23fb8027f45ed0a3af18ecd39abca0e",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 3,
+      "raw_line": "3. [agent-2] 第4条新闻简短摘要 -> Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "record_type": "text",
+      "website": "agent-2",
+      "fact": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "object": "第4条新闻简短摘要",
+      "response_value": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.5862640130717445,
+      "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "proof_id": "2160ce1b21f1cc6b6b9b02ee333e3a1d7c67354e67eacea12096a023e21612a4",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 4,
+      "raw_line": "4. [agent-2] 2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90665.37, \"DOGE\": 0.15426, \"ETH\": 3031.14}",
+      "record_type": "crypto_price",
+      "website": "agent-2",
+      "fact": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "object": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90665.37,
+        "DOGE": 0.15426,
+        "ETH": 3031.14
+      },
+      "event_timestamp": "2025-11-27 01:30:00",
+      "btc_price": 90665.37,
+      "eth_price": 3031.14,
+      "doge_price": 0.15426,
+      "source_reliability": 0.5862640130717445,
+      "global_truth": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "proof_id": "32c5e35454073d7fb9ab84f64ca80349d23fb8027f45ed0a3af18ecd39abca0e",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 5,
+      "raw_line": "5. [agent-3] 第4条新闻简短摘要 -> Agilent Technologies A增强BioTek Cytation C10成像读取器，加入水浸技术和共聚焦旋转盘技术，但未披露明确财务数字。",
+      "record_type": "text",
+      "website": "agent-3",
+      "fact": "Agilent Technologies A增强BioTek Cytation C10成像读取器，加入水浸技术和共聚焦旋转盘技术，但未披露明确财务数字。",
+      "object": "第4条新闻简短摘要",
+      "response_value": "Agilent Technologies A增强BioTek Cytation C10成像读取器，加入水浸技术和共聚焦旋转盘技术，但未披露明确财务数字。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.3522264630205349,
+      "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "proof_id": "2160ce1b21f1cc6b6b9b02ee333e3a1d7c67354e67eacea12096a023e21612a4",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 6,
+      "raw_line": "6. [agent-3] 2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90665.37, \"DOGE\": 0.15426, \"ETH\": 3031.14}",
+      "record_type": "crypto_price",
+      "website": "agent-3",
+      "fact": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "object": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90665.37,
+        "DOGE": 0.15426,
+        "ETH": 3031.14
+      },
+      "event_timestamp": "2025-11-27 01:30:00",
+      "btc_price": 90665.37,
+      "eth_price": 3031.14,
+      "doge_price": 0.15426,
+      "source_reliability": 0.3522264630205349,
+      "global_truth": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "proof_id": "32c5e35454073d7fb9ab84f64ca80349d23fb8027f45ed0a3af18ecd39abca0e",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 7,
+      "raw_line": "7. [agent-4] 第4条新闻简短摘要 -> Agilent Technologies A增强BioTek Cytation C10成像读取器，加入水浸技术和共聚焦旋转盘技术，但未披露明确财务数字。",
+      "record_type": "text",
+      "website": "agent-4",
+      "fact": "Agilent Technologies A增强BioTek Cytation C10成像读取器，加入水浸技术和共聚焦旋转盘技术，但未披露明确财务数字。",
+      "object": "第4条新闻简短摘要",
+      "response_value": "Agilent Technologies A增强BioTek Cytation C10成像读取器，加入水浸技术和共聚焦旋转盘技术，但未披露明确财务数字。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.3522264630205349,
+      "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "proof_id": "2160ce1b21f1cc6b6b9b02ee333e3a1d7c67354e67eacea12096a023e21612a4",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 8,
+      "raw_line": "8. [agent-4] 2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90665.37, \"DOGE\": 0.15426, \"ETH\": 3031.14}",
+      "record_type": "crypto_price",
+      "website": "agent-4",
+      "fact": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "object": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90665.37,
+        "DOGE": 0.15426,
+        "ETH": 3031.14
+      },
+      "event_timestamp": "2025-11-27 01:30:00",
+      "btc_price": 90665.37,
+      "eth_price": 3031.14,
+      "doge_price": 0.15426,
+      "source_reliability": 0.3522264630205349,
+      "global_truth": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "proof_id": "32c5e35454073d7fb9ab84f64ca80349d23fb8027f45ed0a3af18ecd39abca0e",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 9,
+      "raw_line": "9. [agent-5] 第4条新闻简短摘要 -> Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "record_type": "text",
+      "website": "agent-5",
+      "fact": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "object": "第4条新闻简短摘要",
+      "response_value": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.5862640130717445,
+      "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "proof_id": "2160ce1b21f1cc6b6b9b02ee333e3a1d7c67354e67eacea12096a023e21612a4",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 10,
+      "raw_line": "10. [agent-5] 2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90665.37, \"DOGE\": 0.15426, \"ETH\": 3031.14}",
+      "record_type": "crypto_price",
+      "website": "agent-5",
+      "fact": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "object": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90665.37,
+        "DOGE": 0.15426,
+        "ETH": 3031.14
+      },
+      "event_timestamp": "2025-11-27 01:30:00",
+      "btc_price": 90665.37,
+      "eth_price": 3031.14,
+      "doge_price": 0.15426,
+      "source_reliability": 0.5862640130717445,
+      "global_truth": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "proof_id": "32c5e35454073d7fb9ab84f64ca80349d23fb8027f45ed0a3af18ecd39abca0e",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 11,
+      "raw_line": "11. [agent-6] 第4条新闻简短摘要 -> Agilent Technologies A增强BioTek Cytation C10成像读取器，加入水浸技术和共聚焦旋转盘技术，但未披露明确财务数字。",
+      "record_type": "text",
+      "website": "agent-6",
+      "fact": "Agilent Technologies A增强BioTek Cytation C10成像读取器，加入水浸技术和共聚焦旋转盘技术，但未披露明确财务数字。",
+      "object": "第4条新闻简短摘要",
+      "response_value": "Agilent Technologies A增强BioTek Cytation C10成像读取器，加入水浸技术和共聚焦旋转盘技术，但未披露明确财务数字。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.3522264630205349,
+      "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "proof_id": "2160ce1b21f1cc6b6b9b02ee333e3a1d7c67354e67eacea12096a023e21612a4",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 12,
+      "raw_line": "12. [agent-6] 2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90665.37, \"DOGE\": 0.15426, \"ETH\": 3031.14}",
+      "record_type": "crypto_price",
+      "website": "agent-6",
+      "fact": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "object": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90665.37,
+        "DOGE": 0.15426,
+        "ETH": 3031.14
+      },
+      "event_timestamp": "2025-11-27 01:30:00",
+      "btc_price": 90665.37,
+      "eth_price": 3031.14,
+      "doge_price": 0.15426,
+      "source_reliability": 0.3522264630205349,
+      "global_truth": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "proof_id": "32c5e35454073d7fb9ab84f64ca80349d23fb8027f45ed0a3af18ecd39abca0e",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 13,
+      "raw_line": "13. [agent-7] 第4条新闻简短摘要 -> Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "record_type": "text",
+      "website": "agent-7",
+      "fact": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "object": "第4条新闻简短摘要",
+      "response_value": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.5862640130717445,
+      "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "proof_id": "2160ce1b21f1cc6b6b9b02ee333e3a1d7c67354e67eacea12096a023e21612a4",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 14,
+      "raw_line": "14. [agent-7] 2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90665.37, \"DOGE\": 0.15426, \"ETH\": 3031.14}",
+      "record_type": "crypto_price",
+      "website": "agent-7",
+      "fact": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "object": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90665.37,
+        "DOGE": 0.15426,
+        "ETH": 3031.14
+      },
+      "event_timestamp": "2025-11-27 01:30:00",
+      "btc_price": 90665.37,
+      "eth_price": 3031.14,
+      "doge_price": 0.15426,
+      "source_reliability": 0.5862640130717445,
+      "global_truth": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "proof_id": "32c5e35454073d7fb9ab84f64ca80349d23fb8027f45ed0a3af18ecd39abca0e",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 15,
+      "raw_line": "15. [agent-8] 第4条新闻简短摘要 -> Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，但未披露明确财务数字。",
+      "record_type": "text",
+      "website": "agent-8",
+      "fact": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，但未披露明确财务数字。",
+      "object": "第4条新闻简短摘要",
+      "response_value": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，但未披露明确财务数字。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.4257365325079308,
+      "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "proof_id": "2160ce1b21f1cc6b6b9b02ee333e3a1d7c67354e67eacea12096a023e21612a4",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 16,
+      "raw_line": "16. [agent-8] 2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90665.37, \"DOGE\": 0.15426, \"ETH\": 3031.14}",
+      "record_type": "crypto_price",
+      "website": "agent-8",
+      "fact": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "object": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90665.37,
+        "DOGE": 0.15426,
+        "ETH": 3031.14
+      },
+      "event_timestamp": "2025-11-27 01:30:00",
+      "btc_price": 90665.37,
+      "eth_price": 3031.14,
+      "doge_price": 0.15426,
+      "source_reliability": 0.4257365325079308,
+      "global_truth": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "proof_id": "32c5e35454073d7fb9ab84f64ca80349d23fb8027f45ed0a3af18ecd39abca0e",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 17,
+      "raw_line": "17. [agent-9] 第4条新闻简短摘要 -> Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "record_type": "text",
+      "website": "agent-9",
+      "fact": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "object": "第4条新闻简短摘要",
+      "response_value": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.5862640130717435,
+      "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "proof_id": "2160ce1b21f1cc6b6b9b02ee333e3a1d7c67354e67eacea12096a023e21612a4",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 18,
+      "raw_line": "18. [agent-9] 2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90665.37, \"DOGE\": 0.15426, \"ETH\": 3031.14}",
+      "record_type": "crypto_price",
+      "website": "agent-9",
+      "fact": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "object": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90665.37,
+        "DOGE": 0.15426,
+        "ETH": 3031.14
+      },
+      "event_timestamp": "2025-11-27 01:30:00",
+      "btc_price": 90665.37,
+      "eth_price": 3031.14,
+      "doge_price": 0.15426,
+      "source_reliability": 0.5862640130717435,
+      "global_truth": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "proof_id": "32c5e35454073d7fb9ab84f64ca80349d23fb8027f45ed0a3af18ecd39abca0e",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 19,
+      "raw_line": "19. [agent-10] 第4条新闻简短摘要 -> Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "record_type": "text",
+      "website": "agent-10",
+      "fact": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "object": "第4条新闻简短摘要",
+      "response_value": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.5862640130717435,
+      "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
+      "proof_id": "2160ce1b21f1cc6b6b9b02ee333e3a1d7c67354e67eacea12096a023e21612a4",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 20,
+      "raw_line": "20. [agent-10] 2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90665.37, \"DOGE\": 0.15426, \"ETH\": 3031.14}",
+      "record_type": "crypto_price",
+      "website": "agent-10",
+      "fact": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "object": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90665.37,
+        "DOGE": 0.15426,
+        "ETH": 3031.14
+      },
+      "event_timestamp": "2025-11-27 01:30:00",
+      "btc_price": 90665.37,
+      "eth_price": 3031.14,
+      "doge_price": 0.15426,
+      "source_reliability": 0.5862640130717435,
+      "global_truth": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90665.37, ETH: 3031.14, DOGE: 0.15426",
+      "proof_id": "32c5e35454073d7fb9ab84f64ca80349d23fb8027f45ed0a3af18ecd39abca0e",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    }
+  ],
+  "proof_groups": [
+    {
+      "group_id": {
+        "object": "第4条新闻简短摘要"
+      },
+      "group_digest": "c3b2a8ecb06bac1cd180310b34400687dc83bb978beb7645434ae86b9d72973b",
+      "result_digest": "d0c5ea45f8b3c74827ab3064db2af894dab7a4874e6a112fba4a9c96e576559f",
+      "row_count": 10,
+      "proof_id": "2160ce1b21f1cc6b6b9b02ee333e3a1d7c67354e67eacea12096a023e21612a4",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_backend": "snarkjs_groth16",
+      "statement_hash": "5032916809",
+      "statement_digest_sha256": "c8f5954d3959da2fcfc8dbe426ed6b03f04e375a406dfcd6491c6b2ec8410182",
+      "verification_key_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10/verification_key.json",
+      "artifact_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10",
+      "public_json": [
+        "5032916809",
+        "0",
+        "4999999",
+        "1",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "586264",
+        "586264",
+        "352226",
+        "352226",
+        "586264",
+        "352226",
+        "586264",
+        "425737",
+        "586264",
+        "586264",
+        "0",
+        "4999999",
+        "5032916809"
+      ],
+      "proof_json": {
+        "pi_a": [
+          "12697118054830049763008727563037575961426256599725693205520953134508196595634",
+          "10204300283333688717338632878262049783713059435417053813680107507572670992089",
+          "1"
+        ],
+        "pi_b": [
+          [
+            "10881539906220419799452459886725286055131634458538111444144864537242690229865",
+            "2134470635352524283571688157052515455716177398712691908781762802995241739508"
+          ],
+          [
+            "20482729443920009012512018404433472691533840744613728749603166666418676983227",
+            "1591645379210001283061969276857270288514953095910733860949690565519026007793"
+          ],
+          [
+            "1",
+            "0"
+          ]
+        ],
+        "pi_c": [
+          "21310645813154659248742092268398280124165186073209568084359888507953298718535",
+          "10359306862937113956334793668188909288806967745812907217365817665137726099119",
+          "1"
+        ],
+        "protocol": "groth16",
+        "curve": "bn128"
+      },
+      "contract_call": {
+        "a": [
+          12697118054830049763008727563037575961426256599725693205520953134508196595634,
+          10204300283333688717338632878262049783713059435417053813680107507572670992089
+        ],
+        "b": [
+          [
+            2134470635352524283571688157052515455716177398712691908781762802995241739508,
+            10881539906220419799452459886725286055131634458538111444144864537242690229865
+          ],
+          [
+            1591645379210001283061969276857270288514953095910733860949690565519026007793,
+            20482729443920009012512018404433472691533840744613728749603166666418676983227
+          ]
+        ],
+        "c": [
+          21310645813154659248742092268398280124165186073209568084359888507953298718535,
+          10359306862937113956334793668188909288806967745812907217365817665137726099119
+        ],
+        "pubSignals": [
+          5032916809,
+          0,
+          4999999,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          586264,
+          586264,
+          352226,
+          352226,
+          586264,
+          352226,
+          586264,
+          425737,
+          586264,
+          586264,
+          0,
+          4999999,
+          5032916809
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 5032916809,
+        "outputWeightedSum": 0,
+        "outputTotalWeight": 4999999,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 0,
+        "claimedTotalWeight": 4999999,
+        "inputStatementHashField": 5032916809
+      },
+      "contract_submission": {
+        "experimentId": "0x1c5c90897161642abed3dd43c8dac0f603b26187a239eaa78e6afecff12cebec",
+        "groupId": "0xc3b2a8ecb06bac1cd180310b34400687dc83bb978beb7645434ae86b9d72973b",
+        "resultDigest": "0xd0c5ea45f8b3c74827ab3064db2af894dab7a4874e6a112fba4a9c96e576559f",
+        "proofId": "0x2160ce1b21f1cc6b6b9b02ee333e3a1d7c67354e67eacea12096a023e21612a4",
+        "statementDigestSha256": "0xc8f5954d3959da2fcfc8dbe426ed6b03f04e375a406dfcd6491c6b2ec8410182",
+        "a": [
+          12697118054830049763008727563037575961426256599725693205520953134508196595634,
+          10204300283333688717338632878262049783713059435417053813680107507572670992089
+        ],
+        "b": [
+          [
+            2134470635352524283571688157052515455716177398712691908781762802995241739508,
+            10881539906220419799452459886725286055131634458538111444144864537242690229865
+          ],
+          [
+            1591645379210001283061969276857270288514953095910733860949690565519026007793,
+            20482729443920009012512018404433472691533840744613728749603166666418676983227
+          ]
+        ],
+        "c": [
+          21310645813154659248742092268398280124165186073209568084359888507953298718535,
+          10359306862937113956334793668188909288806967745812907217365817665137726099119
+        ],
+        "pubSignals": [
+          5032916809,
+          0,
+          4999999,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          586264,
+          586264,
+          352226,
+          352226,
+          586264,
+          352226,
+          586264,
+          425737,
+          586264,
+          586264,
+          0,
+          4999999,
+          5032916809
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 5032916809,
+        "outputWeightedSum": 0,
+        "outputTotalWeight": 4999999,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 0,
+        "claimedTotalWeight": 4999999,
+        "inputStatementHashField": 5032916809
+      },
+      "rows": null
+    },
+    {
+      "group_id": {
+        "object": "2025-11-27 01:30:00 的 BTC/ETH/DOGE 价格数据"
+      },
+      "group_digest": "57c795f13b8446bac2e0f5d2bfc79922121edb1f3241107a753eb8b58876c926",
+      "result_digest": "9a8c560feae6549974b7958bba0f34f16225b7265186b0f8650800bd97fe663d",
+      "row_count": 10,
+      "proof_id": "32c5e35454073d7fb9ab84f64ca80349d23fb8027f45ed0a3af18ecd39abca0e",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_backend": "snarkjs_groth16",
+      "statement_hash": "10130142266809",
+      "statement_digest_sha256": "4a5859c82da6f86e272e009a7c9c3b3a7d855e33d092225b788aaf6f14190650",
+      "verification_key_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10/verification_key.json",
+      "artifact_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10",
+      "public_json": [
+        "10130142266809",
+        "10124997975000",
+        "4999999",
+        "1",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "586264",
+        "586264",
+        "352226",
+        "352226",
+        "586264",
+        "352226",
+        "586264",
+        "425737",
+        "586264",
+        "586264",
+        "10124997975000",
+        "4999999",
+        "10130142266809"
+      ],
+      "proof_json": {
+        "pi_a": [
+          "633221762909267447861107735059951371550810100520904814324812124214484064802",
+          "8367932515860265029537229922031979367727384217546909608919128455706272647460",
+          "1"
+        ],
+        "pi_b": [
+          [
+            "8509377671885236644349239198142011489169542289302836676848113527495516791882",
+            "10500372677891697307421202967724395331616534347874427224630741022369718030577"
+          ],
+          [
+            "4419806434925608598367333781218615985512832343103314300998991018399755961071",
+            "5818804371660812275115126801738251472279419070933346410531401805939466207710"
+          ],
+          [
+            "1",
+            "0"
+          ]
+        ],
+        "pi_c": [
+          "19852547982102730566449411153222641936910623878433319598591693763634397253789",
+          "980386761102580233853293447513181188580159604762688548869469496996586087562",
+          "1"
+        ],
+        "protocol": "groth16",
+        "curve": "bn128"
+      },
+      "contract_call": {
+        "a": [
+          633221762909267447861107735059951371550810100520904814324812124214484064802,
+          8367932515860265029537229922031979367727384217546909608919128455706272647460
+        ],
+        "b": [
+          [
+            10500372677891697307421202967724395331616534347874427224630741022369718030577,
+            8509377671885236644349239198142011489169542289302836676848113527495516791882
+          ],
+          [
+            5818804371660812275115126801738251472279419070933346410531401805939466207710,
+            4419806434925608598367333781218615985512832343103314300998991018399755961071
+          ]
+        ],
+        "c": [
+          19852547982102730566449411153222641936910623878433319598591693763634397253789,
+          980386761102580233853293447513181188580159604762688548869469496996586087562
+        ],
+        "pubSignals": [
+          10130142266809,
+          10124997975000,
+          4999999,
+          1,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          586264,
+          586264,
+          352226,
+          352226,
+          586264,
+          352226,
+          586264,
+          425737,
+          586264,
+          586264,
+          10124997975000,
+          4999999,
+          10130142266809
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 10130142266809,
+        "outputWeightedSum": 10124997975000,
+        "outputTotalWeight": 4999999,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 10124997975000,
+        "claimedTotalWeight": 4999999,
+        "inputStatementHashField": 10130142266809
+      },
+      "contract_submission": {
+        "experimentId": "0x1c5c90897161642abed3dd43c8dac0f603b26187a239eaa78e6afecff12cebec",
+        "groupId": "0x57c795f13b8446bac2e0f5d2bfc79922121edb1f3241107a753eb8b58876c926",
+        "resultDigest": "0x9a8c560feae6549974b7958bba0f34f16225b7265186b0f8650800bd97fe663d",
+        "proofId": "0x32c5e35454073d7fb9ab84f64ca80349d23fb8027f45ed0a3af18ecd39abca0e",
+        "statementDigestSha256": "0x4a5859c82da6f86e272e009a7c9c3b3a7d855e33d092225b788aaf6f14190650",
+        "a": [
+          633221762909267447861107735059951371550810100520904814324812124214484064802,
+          8367932515860265029537229922031979367727384217546909608919128455706272647460
+        ],
+        "b": [
+          [
+            10500372677891697307421202967724395331616534347874427224630741022369718030577,
+            8509377671885236644349239198142011489169542289302836676848113527495516791882
+          ],
+          [
+            5818804371660812275115126801738251472279419070933346410531401805939466207710,
+            4419806434925608598367333781218615985512832343103314300998991018399755961071
+          ]
+        ],
+        "c": [
+          19852547982102730566449411153222641936910623878433319598591693763634397253789,
+          980386761102580233853293447513181188580159604762688548869469496996586087562
+        ],
+        "pubSignals": [
+          10130142266809,
+          10124997975000,
+          4999999,
+          1,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          586264,
+          586264,
+          352226,
+          352226,
+          586264,
+          352226,
+          586264,
+          425737,
+          586264,
+          586264,
+          10124997975000,
+          4999999,
+          10130142266809
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 10130142266809,
+        "outputWeightedSum": 10124997975000,
+        "outputTotalWeight": 4999999,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 10124997975000,
+        "claimedTotalWeight": 4999999,
+        "inputStatementHashField": 10130142266809
+      },
+      "rows": null
+    }
+  ]
+}

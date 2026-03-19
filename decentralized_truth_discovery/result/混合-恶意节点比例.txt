@@ -1,0 +1,31 @@
+bad agent = 10%
+                        method  clean_rmse  attacked_rmse  growth_rate_pct
+    EnhancedTruthFinder-Hybrid  0.00758258     0.04046995       1.90079506
+              BasicTruthFinder  0.00601017     0.16068826       4.00780349
+ EnhancedTruthFinder-NonHybrid  0.03913709     0.35494873       5.44797952
+SenFeedTruthFinder-CompositeTD  0.04075998     0.52185777       6.49929161
+              SenteTruthFinder  0.03791578     0.61570840       6.99934738
+
+bad agent = 20%
+                        method  clean_rmse  attacked_rmse  growth_rate_pct
+    EnhancedTruthFinder-Hybrid  0.00758258     0.09036616       2.97965477
+              BasicTruthFinder  0.00601017     0.20307958       4.48016679
+SenFeedTruthFinder-CompositeTD  0.04075998     0.68607331       7.29704933
+              SenteTruthFinder  0.03791578     0.70932236       7.41542256
+ EnhancedTruthFinder-NonHybrid  0.03913709     0.79855507       7.75977371
+
+bad agent = 30%
+                        method  clean_rmse  attacked_rmse  growth_rate_pct
+    EnhancedTruthFinder-Hybrid  0.00758258     0.13128057       3.60729026
+              BasicTruthFinder  0.00601017     0.36341689       5.82573793
+ EnhancedTruthFinder-NonHybrid  0.03913709     0.62984889       7.05676958
+              SenteTruthFinder  0.03791578     0.81318534       7.82188300
+SenFeedTruthFinder-CompositeTD  0.04075998     0.86280001       7.98127619
+
+bad agent = 40%
+                        method  clean_rmse  attacked_rmse  growth_rate_pct
+    EnhancedTruthFinder-Hybrid  0.00758258     0.17315113       4.13312818
+              BasicTruthFinder  0.00601017     0.39440539       6.03371760
+              SenteTruthFinder  0.03791578     0.90145729       8.13028022
+SenFeedTruthFinder-CompositeTD  0.04075998     0.91110298       8.14494924
+ EnhancedTruthFinder-NonHybrid  0.03913709     0.93946693       8.24680443

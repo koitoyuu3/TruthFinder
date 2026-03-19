@@ -1,0 +1,815 @@
+{
+  "experiment_id": "proof_malicious_ratio_demo_1773715654_clean_batch_003:SenteTruthFinder",
+  "experiment_digest": "7e0e55fec02aed3f1d607a5c97be22d1c5d337a34c982e572f5583ed293bcf34",
+  "method": "SenteTruthFinder",
+  "row_count": 20,
+  "result_digest": "593fbef16f45fea336d3e3706b8c89d284be0a4a805739191b921cedc6cf1a01",
+  "rows": [
+    {
+      "claim_id": 1,
+      "raw_line": "1. [agent-1] 第3条新闻简短摘要 -> Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "record_type": "text",
+      "website": "agent-1",
+      "fact": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "object": "第3条新闻简短摘要",
+      "response_value": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.5214563394378148,
+      "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "proof_id": "7f6bb1a9b796e216e8a3804d140aee14df5950e0e549eae2c51da575f5c0be12",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 2,
+      "raw_line": "2. [agent-1] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-1",
+      "fact": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90409.15,
+        "DOGE": 0.15436,
+        "ETH": 3033.22
+      },
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "source_reliability": 0.5214563394378148,
+      "global_truth": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "proof_id": "29065b58949cf68698bc112e4c7363cc876575fce5108e508752c7d4c103621c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 3,
+      "raw_line": "3. [agent-2] 第3条新闻简短摘要 -> Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "record_type": "text",
+      "website": "agent-2",
+      "fact": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "object": "第3条新闻简短摘要",
+      "response_value": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.46781549084327767,
+      "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "proof_id": "7f6bb1a9b796e216e8a3804d140aee14df5950e0e549eae2c51da575f5c0be12",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 4,
+      "raw_line": "4. [agent-2] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-2",
+      "fact": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90409.15,
+        "DOGE": 0.15436,
+        "ETH": 3033.22
+      },
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "source_reliability": 0.46781549084327767,
+      "global_truth": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "proof_id": "29065b58949cf68698bc112e4c7363cc876575fce5108e508752c7d4c103621c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 5,
+      "raw_line": "5. [agent-3] 第3条新闻简短摘要 -> Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "record_type": "text",
+      "website": "agent-3",
+      "fact": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "object": "第3条新闻简短摘要",
+      "response_value": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.5214563394378148,
+      "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "proof_id": "7f6bb1a9b796e216e8a3804d140aee14df5950e0e549eae2c51da575f5c0be12",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 6,
+      "raw_line": "6. [agent-3] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-3",
+      "fact": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90409.15,
+        "DOGE": 0.15436,
+        "ETH": 3033.22
+      },
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "source_reliability": 0.5214563394378148,
+      "global_truth": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "proof_id": "29065b58949cf68698bc112e4c7363cc876575fce5108e508752c7d4c103621c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 7,
+      "raw_line": "7. [agent-4] 第3条新闻简短摘要 -> Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "record_type": "text",
+      "website": "agent-4",
+      "fact": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "object": "第3条新闻简短摘要",
+      "response_value": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.5214563394378148,
+      "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "proof_id": "7f6bb1a9b796e216e8a3804d140aee14df5950e0e549eae2c51da575f5c0be12",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 8,
+      "raw_line": "8. [agent-4] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-4",
+      "fact": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90409.15,
+        "DOGE": 0.15436,
+        "ETH": 3033.22
+      },
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "source_reliability": 0.5214563394378148,
+      "global_truth": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "proof_id": "29065b58949cf68698bc112e4c7363cc876575fce5108e508752c7d4c103621c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 9,
+      "raw_line": "9. [agent-5] 第3条新闻简短摘要 -> Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "record_type": "text",
+      "website": "agent-5",
+      "fact": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "object": "第3条新闻简短摘要",
+      "response_value": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.46781549084327767,
+      "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "proof_id": "7f6bb1a9b796e216e8a3804d140aee14df5950e0e549eae2c51da575f5c0be12",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 10,
+      "raw_line": "10. [agent-5] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-5",
+      "fact": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90409.15,
+        "DOGE": 0.15436,
+        "ETH": 3033.22
+      },
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "source_reliability": 0.46781549084327767,
+      "global_truth": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "proof_id": "29065b58949cf68698bc112e4c7363cc876575fce5108e508752c7d4c103621c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 11,
+      "raw_line": "11. [agent-6] 第3条新闻简短摘要 -> Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "record_type": "text",
+      "website": "agent-6",
+      "fact": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "object": "第3条新闻简短摘要",
+      "response_value": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.46781549084327767,
+      "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "proof_id": "7f6bb1a9b796e216e8a3804d140aee14df5950e0e549eae2c51da575f5c0be12",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 12,
+      "raw_line": "12. [agent-6] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-6",
+      "fact": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90409.15,
+        "DOGE": 0.15436,
+        "ETH": 3033.22
+      },
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "source_reliability": 0.46781549084327767,
+      "global_truth": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "proof_id": "29065b58949cf68698bc112e4c7363cc876575fce5108e508752c7d4c103621c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 13,
+      "raw_line": "13. [agent-7] 第3条新闻简短摘要 -> Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "record_type": "text",
+      "website": "agent-7",
+      "fact": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "object": "第3条新闻简短摘要",
+      "response_value": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.5214563394378148,
+      "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "proof_id": "7f6bb1a9b796e216e8a3804d140aee14df5950e0e549eae2c51da575f5c0be12",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 14,
+      "raw_line": "14. [agent-7] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-7",
+      "fact": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90409.15,
+        "DOGE": 0.15436,
+        "ETH": 3033.22
+      },
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "source_reliability": 0.5214563394378148,
+      "global_truth": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "proof_id": "29065b58949cf68698bc112e4c7363cc876575fce5108e508752c7d4c103621c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 15,
+      "raw_line": "15. [agent-8] 第3条新闻简短摘要 -> Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "record_type": "text",
+      "website": "agent-8",
+      "fact": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "object": "第3条新闻简短摘要",
+      "response_value": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，当前价格为133.74美元/股。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.46781549084327767,
+      "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "proof_id": "7f6bb1a9b796e216e8a3804d140aee14df5950e0e549eae2c51da575f5c0be12",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 16,
+      "raw_line": "16. [agent-8] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-8",
+      "fact": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90409.15,
+        "DOGE": 0.15436,
+        "ETH": 3033.22
+      },
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "source_reliability": 0.46781549084327767,
+      "global_truth": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "proof_id": "29065b58949cf68698bc112e4c7363cc876575fce5108e508752c7d4c103621c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 17,
+      "raw_line": "17. [agent-9] 第3条新闻简短摘要 -> Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "record_type": "text",
+      "website": "agent-9",
+      "fact": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "object": "第3条新闻简短摘要",
+      "response_value": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.5214563394378161,
+      "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "proof_id": "7f6bb1a9b796e216e8a3804d140aee14df5950e0e549eae2c51da575f5c0be12",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 18,
+      "raw_line": "18. [agent-9] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-9",
+      "fact": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90409.15,
+        "DOGE": 0.15436,
+        "ETH": 3033.22
+      },
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "source_reliability": 0.5214563394378161,
+      "global_truth": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "proof_id": "29065b58949cf68698bc112e4c7363cc876575fce5108e508752c7d4c103621c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 19,
+      "raw_line": "19. [agent-10] 第3条新闻简短摘要 -> Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "record_type": "text",
+      "website": "agent-10",
+      "fact": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "object": "第3条新闻简短摘要",
+      "response_value": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.5214563394378161,
+      "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
+      "proof_id": "7f6bb1a9b796e216e8a3804d140aee14df5950e0e549eae2c51da575f5c0be12",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 20,
+      "raw_line": "20. [agent-10] 2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90409.15, \"DOGE\": 0.15436, \"ETH\": 3033.22}",
+      "record_type": "crypto_price",
+      "website": "agent-10",
+      "fact": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90409.15,
+        "DOGE": 0.15436,
+        "ETH": 3033.22
+      },
+      "event_timestamp": "2025-11-27 01:00:00",
+      "btc_price": 90409.15,
+      "eth_price": 3033.22,
+      "doge_price": 0.15436,
+      "source_reliability": 0.5214563394378161,
+      "global_truth": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90409.15, ETH: 3033.22, DOGE: 0.15436",
+      "proof_id": "29065b58949cf68698bc112e4c7363cc876575fce5108e508752c7d4c103621c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    }
+  ],
+  "proof_groups": [
+    {
+      "group_id": {
+        "object": "第3条新闻简短摘要"
+      },
+      "group_digest": "ea5e2a54f8cd144be175880b802d31ac6df64d6dfb743140f7089b08f1f33fdf",
+      "result_digest": "bbb651e119d017dd158a42930879a947021e188b5bb14a16f9022b061082d08a",
+      "row_count": 10,
+      "proof_id": "7f6bb1a9b796e216e8a3804d140aee14df5950e0e549eae2c51da575f5c0be12",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_backend": "snarkjs_groth16",
+      "statement_hash": "5032549615",
+      "statement_digest_sha256": "2b6d32cbf660f04499a31b650bc85ed84d73db6d6e3dad690b73b6d2353500d5",
+      "verification_key_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10/verification_key.json",
+      "artifact_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10",
+      "public_json": [
+        "5032549615",
+        "0",
+        "4999996",
+        "1",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "521456",
+        "467815",
+        "521456",
+        "521456",
+        "467815",
+        "467815",
+        "521456",
+        "467815",
+        "521456",
+        "521456",
+        "0",
+        "4999996",
+        "5032549615"
+      ],
+      "proof_json": {
+        "pi_a": [
+          "20825662315148469255462460531160606620141938132695080952846332942913945088296",
+          "19611721386282108688427726333685420983405351662913943639803284606038735091256",
+          "1"
+        ],
+        "pi_b": [
+          [
+            "640670006067236589557421433389889776991550835390049854326544026098055592654",
+            "5815434413948621116954338908244894184935697831498964426817251145588206928013"
+          ],
+          [
+            "17170976959008122255715750285302567445903018070651843366899434608685164141624",
+            "3321428776848556086108520048705837004698415086189776908024588762694333722518"
+          ],
+          [
+            "1",
+            "0"
+          ]
+        ],
+        "pi_c": [
+          "3096922954597851561406542470444364941836032834628938237653108355940934463557",
+          "187077697345060696596447710905841891064656712872154251976480403737703014523",
+          "1"
+        ],
+        "protocol": "groth16",
+        "curve": "bn128"
+      },
+      "contract_call": {
+        "a": [
+          20825662315148469255462460531160606620141938132695080952846332942913945088296,
+          19611721386282108688427726333685420983405351662913943639803284606038735091256
+        ],
+        "b": [
+          [
+            5815434413948621116954338908244894184935697831498964426817251145588206928013,
+            640670006067236589557421433389889776991550835390049854326544026098055592654
+          ],
+          [
+            3321428776848556086108520048705837004698415086189776908024588762694333722518,
+            17170976959008122255715750285302567445903018070651843366899434608685164141624
+          ]
+        ],
+        "c": [
+          3096922954597851561406542470444364941836032834628938237653108355940934463557,
+          187077697345060696596447710905841891064656712872154251976480403737703014523
+        ],
+        "pubSignals": [
+          5032549615,
+          0,
+          4999996,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          521456,
+          467815,
+          521456,
+          521456,
+          467815,
+          467815,
+          521456,
+          467815,
+          521456,
+          521456,
+          0,
+          4999996,
+          5032549615
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 5032549615,
+        "outputWeightedSum": 0,
+        "outputTotalWeight": 4999996,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 0,
+        "claimedTotalWeight": 4999996,
+        "inputStatementHashField": 5032549615
+      },
+      "contract_submission": {
+        "experimentId": "0x2caaabebe190164a7cc0314ed2a97769a6c51ac209b3bceef5f26c8182a58f95",
+        "groupId": "0xea5e2a54f8cd144be175880b802d31ac6df64d6dfb743140f7089b08f1f33fdf",
+        "resultDigest": "0xbbb651e119d017dd158a42930879a947021e188b5bb14a16f9022b061082d08a",
+        "proofId": "0x7f6bb1a9b796e216e8a3804d140aee14df5950e0e549eae2c51da575f5c0be12",
+        "statementDigestSha256": "0x2b6d32cbf660f04499a31b650bc85ed84d73db6d6e3dad690b73b6d2353500d5",
+        "a": [
+          20825662315148469255462460531160606620141938132695080952846332942913945088296,
+          19611721386282108688427726333685420983405351662913943639803284606038735091256
+        ],
+        "b": [
+          [
+            5815434413948621116954338908244894184935697831498964426817251145588206928013,
+            640670006067236589557421433389889776991550835390049854326544026098055592654
+          ],
+          [
+            3321428776848556086108520048705837004698415086189776908024588762694333722518,
+            17170976959008122255715750285302567445903018070651843366899434608685164141624
+          ]
+        ],
+        "c": [
+          3096922954597851561406542470444364941836032834628938237653108355940934463557,
+          187077697345060696596447710905841891064656712872154251976480403737703014523
+        ],
+        "pubSignals": [
+          5032549615,
+          0,
+          4999996,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          521456,
+          467815,
+          521456,
+          521456,
+          467815,
+          467815,
+          521456,
+          467815,
+          521456,
+          521456,
+          0,
+          4999996,
+          5032549615
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 5032549615,
+        "outputWeightedSum": 0,
+        "outputTotalWeight": 4999996,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 0,
+        "claimedTotalWeight": 4999996,
+        "inputStatementHashField": 5032549615
+      },
+      "rows": null
+    },
+    {
+      "group_id": {
+        "object": "2025-11-27 01:00:00 的 BTC/ETH/DOGE 价格数据"
+      },
+      "group_digest": "fa8485a4b50285689f264622e2b531763b5b529fe364899ea36c8114f52b0086",
+      "result_digest": "5b6ef1de37746216ed5dd80635a74fe3d70665cb60acbd5fa7d80e3e92ed7f72",
+      "row_count": 10,
+      "proof_id": "29065b58949cf68698bc112e4c7363cc876575fce5108e508752c7d4c103621c",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_backend": "snarkjs_groth16",
+      "statement_hash": "10130135824615",
+      "statement_digest_sha256": "3c56d016977dec7666db08cce7664e123e6fb18f36d697cd7a3c8839f4a922de",
+      "verification_key_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10/verification_key.json",
+      "artifact_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10",
+      "public_json": [
+        "10130135824615",
+        "10124991900000",
+        "4999996",
+        "1",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "521456",
+        "467815",
+        "521456",
+        "521456",
+        "467815",
+        "467815",
+        "521456",
+        "467815",
+        "521456",
+        "521456",
+        "10124991900000",
+        "4999996",
+        "10130135824615"
+      ],
+      "proof_json": {
+        "pi_a": [
+          "17901513325746767163560331090629010451325452645760704606564973872919957339632",
+          "4407772642796352760835972358625998636147685278203439539175743086038128423822",
+          "1"
+        ],
+        "pi_b": [
+          [
+            "2453552485597929275907300000788579267781393531247832503376995204982837488659",
+            "3177262781998027270511337988567129168563978614564142380968504603492404458985"
+          ],
+          [
+            "14167234799985249424256016298406382183454892243922704478070256906975831258317",
+            "1789488600322847743674036183286238247596008819399004550822405926768009239539"
+          ],
+          [
+            "1",
+            "0"
+          ]
+        ],
+        "pi_c": [
+          "13498995806994220809980323240772276650529567981276407551910237500748250069197",
+          "8164349710883887553681412942853529532638710082947220521729503050556475661100",
+          "1"
+        ],
+        "protocol": "groth16",
+        "curve": "bn128"
+      },
+      "contract_call": {
+        "a": [
+          17901513325746767163560331090629010451325452645760704606564973872919957339632,
+          4407772642796352760835972358625998636147685278203439539175743086038128423822
+        ],
+        "b": [
+          [
+            3177262781998027270511337988567129168563978614564142380968504603492404458985,
+            2453552485597929275907300000788579267781393531247832503376995204982837488659
+          ],
+          [
+            1789488600322847743674036183286238247596008819399004550822405926768009239539,
+            14167234799985249424256016298406382183454892243922704478070256906975831258317
+          ]
+        ],
+        "c": [
+          13498995806994220809980323240772276650529567981276407551910237500748250069197,
+          8164349710883887553681412942853529532638710082947220521729503050556475661100
+        ],
+        "pubSignals": [
+          10130135824615,
+          10124991900000,
+          4999996,
+          1,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          521456,
+          467815,
+          521456,
+          521456,
+          467815,
+          467815,
+          521456,
+          467815,
+          521456,
+          521456,
+          10124991900000,
+          4999996,
+          10130135824615
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 10130135824615,
+        "outputWeightedSum": 10124991900000,
+        "outputTotalWeight": 4999996,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 10124991900000,
+        "claimedTotalWeight": 4999996,
+        "inputStatementHashField": 10130135824615
+      },
+      "contract_submission": {
+        "experimentId": "0x2caaabebe190164a7cc0314ed2a97769a6c51ac209b3bceef5f26c8182a58f95",
+        "groupId": "0xfa8485a4b50285689f264622e2b531763b5b529fe364899ea36c8114f52b0086",
+        "resultDigest": "0x5b6ef1de37746216ed5dd80635a74fe3d70665cb60acbd5fa7d80e3e92ed7f72",
+        "proofId": "0x29065b58949cf68698bc112e4c7363cc876575fce5108e508752c7d4c103621c",
+        "statementDigestSha256": "0x3c56d016977dec7666db08cce7664e123e6fb18f36d697cd7a3c8839f4a922de",
+        "a": [
+          17901513325746767163560331090629010451325452645760704606564973872919957339632,
+          4407772642796352760835972358625998636147685278203439539175743086038128423822
+        ],
+        "b": [
+          [
+            3177262781998027270511337988567129168563978614564142380968504603492404458985,
+            2453552485597929275907300000788579267781393531247832503376995204982837488659
+          ],
+          [
+            1789488600322847743674036183286238247596008819399004550822405926768009239539,
+            14167234799985249424256016298406382183454892243922704478070256906975831258317
+          ]
+        ],
+        "c": [
+          13498995806994220809980323240772276650529567981276407551910237500748250069197,
+          8164349710883887553681412942853529532638710082947220521729503050556475661100
+        ],
+        "pubSignals": [
+          10130135824615,
+          10124991900000,
+          4999996,
+          1,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          521456,
+          467815,
+          521456,
+          521456,
+          467815,
+          467815,
+          521456,
+          467815,
+          521456,
+          521456,
+          10124991900000,
+          4999996,
+          10130135824615
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 10130135824615,
+        "outputWeightedSum": 10124991900000,
+        "outputTotalWeight": 4999996,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 10124991900000,
+        "claimedTotalWeight": 4999996,
+        "inputStatementHashField": 10130135824615
+      },
+      "rows": null
+    }
+  ]
+}

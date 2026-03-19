@@ -1,0 +1,22 @@
+{
+  "bundle_name": "BasicTruthFinder",
+  "contract_file": "decentralized_truth_discovery/core/circuits/TruthSingleProofRegistryN4.sol",
+  "verify_method": "verifySelectedProofFlat",
+  "submit_method": "submitSelectedProofFlat",
+  "groups": [
+    {
+      "group_index": 0,
+      "proof_id": "22c7cd0d25c1a36f9a621ce4956399312b074bd0c6e7cca3ef2dd4478d1499a6",
+      "group_digest": "710ae8364db657bbd672f1d138519c474fdcbd6fe62d3acfc01e32f0922f6c9e",
+      "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_002/agents_04/subset_02/BasicTruthFinder.group_0.verifySelectedProofFlat.params.json",
+      "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_002/agents_04/subset_02/BasicTruthFinder.group_0.submitSelectedProofFlat.params.json"
+    },
+    {
+      "group_index": 1,
+      "proof_id": "10147a3b6770456145b2d11e7a47577ae004324a3fb475ac3983f169e14fab00",
+      "group_digest": "327e482e3c1495ddf46183c206594158ed2463cb8ff971a204d3753b18eb944c",
+      "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_002/agents_04/subset_02/BasicTruthFinder.group_1.verifySelectedProofFlat.params.json",
+      "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_002/agents_04/subset_02/BasicTruthFinder.group_1.submitSelectedProofFlat.params.json"
+    }
+  ]
+}

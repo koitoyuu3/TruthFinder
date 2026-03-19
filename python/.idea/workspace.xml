@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3ffac19f-3482-471e-ad44-ed451332969b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgentSemantic/step3_agent_score_and_chain.py" beforeDir="false" afterPath="$PROJECT_DIR$/AgentSemantic/step3_agent_score_and_chain.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/acon2/mvp.py" beforeDir="false" afterPath="$PROJECT_DIR$/acon2/mvp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/demo_run_K_100_beta_49/out" beforeDir="false" afterPath="$PROJECT_DIR$/output/demo_run_K_100_beta_49/out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/demo_run_K_100_beta_49/out.pk" beforeDir="false" afterPath="$PROJECT_DIR$/output/demo_run_K_100_beta_49/out.pk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/demo_run_K_10_beta_4/out" beforeDir="false" afterPath="$PROJECT_DIR$/output/demo_run_K_10_beta_4/out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/demo_run_K_10_beta_4/out.pk" beforeDir="false" afterPath="$PROJECT_DIR$/output/demo_run_K_10_beta_4/out.pk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/demo_run_K_3_beta_1/out" beforeDir="false" afterPath="$PROJECT_DIR$/output/demo_run_K_3_beta_1/out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/demo_run_K_3_beta_1/out.pk" beforeDir="false" afterPath="$PROJECT_DIR$/output/demo_run_K_3_beta_1/out.pk" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="36xceSHL3FJGZH9tB6y38h34MHF" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.highlight.mappings&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.highlight.symlinks&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.date&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.permissions&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.size&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/yijing/Desktop/区块链语义预言机/ACon2/python/FNSPID_Financial_News_Dataset&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/FNSPID_Financial_News_Dataset" />
+      <recent name="$PROJECT_DIR$/AgentCon" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/AgentSemantic" />
+      <recent name="$PROJECT_DIR$/FNSPID_Financial_News_Dataset" />
+      <recent name="$PROJECT_DIR$/AgentCon" />
+      <recent name="$PROJECT_DIR$/AgentCon/data" />
+      <recent name="$PROJECT_DIR$/AgentCon/qwen_server" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3ffac19f-3482-471e-ad44-ed451332969b" name="Changes" comment="" />
+      <created>1765951757398</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1765951757398</updated>
+      <workItem from="1765951758672" duration="60259000" />
+      <workItem from="1767833187867" duration="1602000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

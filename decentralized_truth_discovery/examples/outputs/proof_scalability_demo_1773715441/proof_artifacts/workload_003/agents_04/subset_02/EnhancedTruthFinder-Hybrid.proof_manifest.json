@@ -1,0 +1,33 @@
+{
+  "experiment_id": "proof_scalability_demo_1773715441_w003_a04_s02",
+  "method": "EnhancedTruthFinder-Hybrid",
+  "method_experiment_id": "proof_scalability_demo_1773715441_w003_a04_s02:EnhancedTruthFinder-Hybrid",
+  "row_count": 8,
+  "proof_group_count": 2,
+  "bundle_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_003/agents_04/subset_02/EnhancedTruthFinder-Hybrid.proof_bundle.json",
+  "chainmaker": {
+    "bundle_name": "EnhancedTruthFinder-Hybrid",
+    "contract_file": "decentralized_truth_discovery/core/circuits/TruthSingleProofRegistryN4.sol",
+    "verify_method": "verifySelectedProofFlat",
+    "submit_method": "submitSelectedProofFlat",
+    "groups": [
+      {
+        "group_index": 0,
+        "proof_id": "b697da60a6e9df2a69b253adcf88511a49a0ddaec0028f7e037a0b355ac09e4b",
+        "group_digest": "ea5e2a54f8cd144be175880b802d31ac6df64d6dfb743140f7089b08f1f33fdf",
+        "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_003/agents_04/subset_02/EnhancedTruthFinder-Hybrid.group_0.verifySelectedProofFlat.params.json",
+        "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_003/agents_04/subset_02/EnhancedTruthFinder-Hybrid.group_0.submitSelectedProofFlat.params.json"
+      },
+      {
+        "group_index": 1,
+        "proof_id": "3cf15bc2a6692cd42b1ba0c528b5f432fa1342e70ff64c602007cd0948f5c0bb",
+        "group_digest": "fa8485a4b50285689f264622e2b531763b5b529fe364899ea36c8114f52b0086",
+        "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_003/agents_04/subset_02/EnhancedTruthFinder-Hybrid.group_1.verifySelectedProofFlat.params.json",
+        "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_003/agents_04/subset_02/EnhancedTruthFinder-Hybrid.group_1.submitSelectedProofFlat.params.json"
+      }
+    ],
+    "manifest_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_003/agents_04/subset_02/EnhancedTruthFinder-Hybrid.chainmaker_manifest.json",
+    "exported": true,
+    "error": ""
+  }
+}

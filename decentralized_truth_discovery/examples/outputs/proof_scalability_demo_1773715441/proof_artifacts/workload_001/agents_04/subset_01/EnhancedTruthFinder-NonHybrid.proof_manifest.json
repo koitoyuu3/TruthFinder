@@ -1,0 +1,47 @@
+{
+  "experiment_id": "proof_scalability_demo_1773715441_w001_a04_s01",
+  "method": "EnhancedTruthFinder-NonHybrid",
+  "method_experiment_id": "proof_scalability_demo_1773715441_w001_a04_s01:EnhancedTruthFinder-NonHybrid",
+  "row_count": 16,
+  "proof_group_count": 4,
+  "bundle_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_01/EnhancedTruthFinder-NonHybrid.proof_bundle.json",
+  "chainmaker": {
+    "bundle_name": "EnhancedTruthFinder-NonHybrid",
+    "contract_file": "decentralized_truth_discovery/core/circuits/TruthSingleProofRegistryN4.sol",
+    "verify_method": "verifySelectedProofFlat",
+    "submit_method": "submitSelectedProofFlat",
+    "groups": [
+      {
+        "group_index": 0,
+        "proof_id": "b5ac69d41e3bcbdc4d9dd6be69ff643a6bdf8e1069b3f21fd61b945e9b6725e9",
+        "group_digest": "b60580daa406bebf91823e85c1aaa914f824267a53b5cf2f36394b150779cbe6",
+        "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_01/EnhancedTruthFinder-NonHybrid.group_0.verifySelectedProofFlat.params.json",
+        "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_01/EnhancedTruthFinder-NonHybrid.group_0.submitSelectedProofFlat.params.json"
+      },
+      {
+        "group_index": 1,
+        "proof_id": "86f50c0beffd398265fcd0759ac8df45b8f420fc0f5f24f2ef4c0eae14b02601",
+        "group_digest": "b23d4e0383e9b057c1dd89e8636d9b9c77d05a8088be453ddab9b6416075f839",
+        "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_01/EnhancedTruthFinder-NonHybrid.group_1.verifySelectedProofFlat.params.json",
+        "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_01/EnhancedTruthFinder-NonHybrid.group_1.submitSelectedProofFlat.params.json"
+      },
+      {
+        "group_index": 2,
+        "proof_id": "6e55dee314e93b82ce37acb9694378412e5367f0ac107ba64c3feb9b08eeca92",
+        "group_digest": "e97412f779e8f574e9c8dce8edf104bff8ba745a8a83cb85c36074dd3670dabf",
+        "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_01/EnhancedTruthFinder-NonHybrid.group_2.verifySelectedProofFlat.params.json",
+        "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_01/EnhancedTruthFinder-NonHybrid.group_2.submitSelectedProofFlat.params.json"
+      },
+      {
+        "group_index": 3,
+        "proof_id": "a20313ef763e689843dc5fd6671214a936c76ac4029cfb7e74bda57d5cbb6790",
+        "group_digest": "03f1ded07f33cf6ef05b2dfb899af30c1db3ffdf03d3d904996a3b2fbc27cbf1",
+        "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_01/EnhancedTruthFinder-NonHybrid.group_3.verifySelectedProofFlat.params.json",
+        "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_01/EnhancedTruthFinder-NonHybrid.group_3.submitSelectedProofFlat.params.json"
+      }
+    ],
+    "manifest_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_01/EnhancedTruthFinder-NonHybrid.chainmaker_manifest.json",
+    "exported": true,
+    "error": ""
+  }
+}

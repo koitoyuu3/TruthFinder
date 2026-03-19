@@ -1,0 +1,42 @@
+args:
+	exp_name: demo_run_K_9_beta_1
+	output_root: output
+	cpu: False
+	data:
+		name: PriceDataset
+		path: ['data/price_DOGE_USD/coingecko_2025-11-27T00:00_2025-12-02T23:59.pk', 'data/price_DOGE_USD/cryptocompare_2025-11-27T00:00_2025-12-02T23:59.pk', 'data/price_ETH_USD/kucoin_2025-11-27T00:00_2025-12-02T23:59.pkdata/price_ETH_USD/kucoin_copy1.pk', 'data/price_ETH_USD/kucoin_copy2.pk', 'data/price_ETH_USD/kucoin_copy3.pk', 'data/price_ETH_USD/kucoin_copy4.pk', 'data/price_ETH_USD/kucoin_copy5.pk', 'data/price_ETH_USD/kucoin_copy6.pk', 'data/price_ETH_USD/kucoin_copy7.pk']
+		start_time: 2025-11-27T00:00
+		end_time: 2025-11-27T00:59
+		time_step_sec: 60
+		seed: 0
+		exp_name: demo_run_K_9_beta_1
+		output_root: output
+
+	model_base:
+		name: ['KF1D', 'KF1D', 'KF1D', 'KF1D', 'KF1D', 'KF1D', 'KF1D', 'KF1D', 'KF1D', 'KF1D']
+		score_min: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+		score_max: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+		lr: [0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
+		state_noise_init: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+		obs_noise_init: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+		exp_name: demo_run_K_9_beta_1
+		output_root: output
+
+	model_ps:
+		name: ['SpecialMVP', 'SpecialMVP', 'SpecialMVP', 'SpecialMVP', 'SpecialMVP', 'SpecialMVP', 'SpecialMVP', 'SpecialMVP', 'SpecialMVP', 'SpecialMVP']
+		n_bins: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
+		eta: 5
+		alpha: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
+		beta: 1
+		nonconsensus_param: 0
+		exp_name: demo_run_K_9_beta_1
+		output_root: output
+
+	train:
+		method: skip
+		exp_name: demo_run_K_9_beta_1
+		output_root: output
+
+
+[price data, data_path = data/price_DOGE_USD/coingecko_2025-11-27T00:00_2025-12-02T23:59.pk] sequence length = 8640
+[price data, data_path = data/price_DOGE_USD/cryptocompare_2025-11-27T00:00_2025-12-02T23:59.pk] sequence length = 8640

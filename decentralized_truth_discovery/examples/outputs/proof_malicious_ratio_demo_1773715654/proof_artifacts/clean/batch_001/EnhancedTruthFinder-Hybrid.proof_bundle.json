@@ -1,0 +1,1125 @@
+{
+  "experiment_id": "proof_malicious_ratio_demo_1773715654_clean_batch_001:EnhancedTruthFinder-Hybrid",
+  "experiment_digest": "e13b2e7f06468079070dd14af8641ba214146a5d9be0b0c8ad930f5029a24a7c",
+  "method": "EnhancedTruthFinder-Hybrid",
+  "row_count": 20,
+  "result_digest": "8b40de48747c2c8f93194622a6f77fe0611d10cd870abe461fcdf51f5b1f889d",
+  "rows": [
+    {
+      "claim_id": 1,
+      "raw_line": "1. [agent-1] 第1条新闻简短摘要 -> Agilent Technologies, Inc. (A)的新期权合约将于2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "record_type": "text",
+      "website": "agent-1",
+      "fact": "Agilent Technologies, Inc. (A)的新期权合约将于2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "response_value": "Agilent Technologies, Inc. (A)的新期权合约将于2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "expiry_month": 8.0,
+          "expiry_year": 2024.0,
+          "percentage_0": 77.0,
+          "put_strike_price": 125.0
+        },
+        "discrete": {
+          "company": "Agilent Technologies",
+          "keywords": [
+            "到期",
+            "期权",
+            "行权价",
+            "无价值",
+            "溢价",
+            "看涨",
+            "看跌"
+          ],
+          "symbol": "A"
+        }
+      },
+      "proof_id": "a4caec489fbaeb6374aeb00d78441268195bb014a689931bdab0d58e6c926654",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 2,
+      "raw_line": "2. [agent-1] 2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90490.22, \"DOGE\": 0.1548, \"ETH\": 3026.33}",
+      "record_type": "crypto_price",
+      "website": "agent-1",
+      "fact": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90490.22, ETH: 3026.33, DOGE: 0.1548",
+      "object": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90490.22,
+        "DOGE": 0.1548,
+        "ETH": 3026.33
+      },
+      "event_timestamp": "2025-11-27 00:00:00",
+      "btc_price": 90490.22,
+      "eth_price": 3026.33,
+      "doge_price": 0.1548,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90490.22,
+          "doge_price": 0.1548,
+          "eth_price": 3026.33
+        },
+        "discrete": {}
+      },
+      "proof_id": "89ea05c12ad2b43ee2631a6854d0059778ede509c0ed8151a3eb4ebdc34a5ee9",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 3,
+      "raw_line": "3. [agent-2] 第1条新闻简短摘要 -> Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "record_type": "text",
+      "website": "agent-2",
+      "fact": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "response_value": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "expiry_month": 8.0,
+          "expiry_year": 2024.0,
+          "percentage_0": 77.0,
+          "put_strike_price": 125.0
+        },
+        "discrete": {
+          "company": "Agilent Technologies",
+          "keywords": [
+            "到期",
+            "期权",
+            "行权价",
+            "无价值",
+            "溢价",
+            "看涨",
+            "看跌"
+          ],
+          "symbol": "A"
+        }
+      },
+      "proof_id": "a4caec489fbaeb6374aeb00d78441268195bb014a689931bdab0d58e6c926654",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 4,
+      "raw_line": "4. [agent-2] 2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90490.22, \"DOGE\": 0.1548, \"ETH\": 3026.33}",
+      "record_type": "crypto_price",
+      "website": "agent-2",
+      "fact": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90490.22, ETH: 3026.33, DOGE: 0.1548",
+      "object": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90490.22,
+        "DOGE": 0.1548,
+        "ETH": 3026.33
+      },
+      "event_timestamp": "2025-11-27 00:00:00",
+      "btc_price": 90490.22,
+      "eth_price": 3026.33,
+      "doge_price": 0.1548,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90490.22,
+          "doge_price": 0.1548,
+          "eth_price": 3026.33
+        },
+        "discrete": {}
+      },
+      "proof_id": "89ea05c12ad2b43ee2631a6854d0059778ede509c0ed8151a3eb4ebdc34a5ee9",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 5,
+      "raw_line": "5. [agent-3] 第1条新闻简短摘要 -> Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "record_type": "text",
+      "website": "agent-3",
+      "fact": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "response_value": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "expiry_month": 8.0,
+          "expiry_year": 2024.0,
+          "percentage_0": 77.0,
+          "put_strike_price": 125.0
+        },
+        "discrete": {
+          "company": "Agilent Technologies",
+          "keywords": [
+            "到期",
+            "期权",
+            "行权价",
+            "无价值",
+            "溢价",
+            "看涨",
+            "看跌"
+          ],
+          "symbol": "A"
+        }
+      },
+      "proof_id": "a4caec489fbaeb6374aeb00d78441268195bb014a689931bdab0d58e6c926654",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 6,
+      "raw_line": "6. [agent-3] 2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90490.22, \"DOGE\": 0.1548, \"ETH\": 3026.33}",
+      "record_type": "crypto_price",
+      "website": "agent-3",
+      "fact": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90490.22, ETH: 3026.33, DOGE: 0.1548",
+      "object": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90490.22,
+        "DOGE": 0.1548,
+        "ETH": 3026.33
+      },
+      "event_timestamp": "2025-11-27 00:00:00",
+      "btc_price": 90490.22,
+      "eth_price": 3026.33,
+      "doge_price": 0.1548,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90490.22,
+          "doge_price": 0.1548,
+          "eth_price": 3026.33
+        },
+        "discrete": {}
+      },
+      "proof_id": "89ea05c12ad2b43ee2631a6854d0059778ede509c0ed8151a3eb4ebdc34a5ee9",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 7,
+      "raw_line": "7. [agent-4] 第1条新闻简短摘要 -> Agilent Technologies, Inc. (Symbol: A) 的新期权合约将于2024年8月开始交易，当前分析数据显示有77%的可能性股票价格会上涨，但125.00美元的行权价可能到期失效。",
+      "record_type": "text",
+      "website": "agent-4",
+      "fact": "Agilent Technologies, Inc. (Symbol: A) 的新期权合约将于2024年8月开始交易，当前分析数据显示有77%的可能性股票价格会上涨，但125.00美元的行权价可能到期失效。",
+      "object": "第1条新闻简短摘要",
+      "response_value": "Agilent Technologies, Inc. (Symbol: A) 的新期权合约将于2024年8月开始交易，当前分析数据显示有77%的可能性股票价格会上涨，但125.00美元的行权价可能到期失效。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.8680910962062331,
+      "error_metric": 0.15194102871368909,
+      "consistency_metric": 0.9999897503810022,
+      "global_truth": {
+        "numeric": {
+          "expiry_month": 8.0,
+          "expiry_year": 2024.0,
+          "percentage_0": 77.0,
+          "put_strike_price": 125.0
+        },
+        "discrete": {
+          "company": "Agilent Technologies",
+          "keywords": [
+            "到期",
+            "期权",
+            "行权价",
+            "无价值",
+            "溢价",
+            "看涨",
+            "看跌"
+          ],
+          "symbol": "A"
+        }
+      },
+      "proof_id": "a4caec489fbaeb6374aeb00d78441268195bb014a689931bdab0d58e6c926654",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 8,
+      "raw_line": "8. [agent-4] 2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90490.22, \"DOGE\": 0.1548, \"ETH\": 3026.33}",
+      "record_type": "crypto_price",
+      "website": "agent-4",
+      "fact": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90490.22, ETH: 3026.33, DOGE: 0.1548",
+      "object": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90490.22,
+        "DOGE": 0.1548,
+        "ETH": 3026.33
+      },
+      "event_timestamp": "2025-11-27 00:00:00",
+      "btc_price": 90490.22,
+      "eth_price": 3026.33,
+      "doge_price": 0.1548,
+      "source_reliability": 0.8680910962062331,
+      "error_metric": 0.15194102871368909,
+      "consistency_metric": 0.9999897503810022,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90490.22,
+          "doge_price": 0.1548,
+          "eth_price": 3026.33
+        },
+        "discrete": {}
+      },
+      "proof_id": "89ea05c12ad2b43ee2631a6854d0059778ede509c0ed8151a3eb4ebdc34a5ee9",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 9,
+      "raw_line": "9. [agent-5] 第1条新闻简短摘要 -> Agilent Technologies, Inc. (Symbol: A) 的看涨和看跌期权在2024年8月到期，当前看涨期权的溢价可能因时间价值较高，而看跌期权的行权价为125美元，有77%的概率到期无价值。",
+      "record_type": "text",
+      "website": "agent-5",
+      "fact": "Agilent Technologies, Inc. (Symbol: A) 的看涨和看跌期权在2024年8月到期，当前看涨期权的溢价可能因时间价值较高，而看跌期权的行权价为125美元，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "response_value": "Agilent Technologies, Inc. (Symbol: A) 的看涨和看跌期权在2024年8月到期，当前看涨期权的溢价可能因时间价值较高，而看跌期权的行权价为125美元，有77%的概率到期无价值。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9236021898197261,
+      "error_metric": 0.08271110137056618,
+      "consistency_metric": 0.9999943441679824,
+      "global_truth": {
+        "numeric": {
+          "expiry_month": 8.0,
+          "expiry_year": 2024.0,
+          "percentage_0": 77.0,
+          "put_strike_price": 125.0
+        },
+        "discrete": {
+          "company": "Agilent Technologies",
+          "keywords": [
+            "到期",
+            "期权",
+            "行权价",
+            "无价值",
+            "溢价",
+            "看涨",
+            "看跌"
+          ],
+          "symbol": "A"
+        }
+      },
+      "proof_id": "a4caec489fbaeb6374aeb00d78441268195bb014a689931bdab0d58e6c926654",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 10,
+      "raw_line": "10. [agent-5] 2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90490.22, \"DOGE\": 0.1548, \"ETH\": 3026.33}",
+      "record_type": "crypto_price",
+      "website": "agent-5",
+      "fact": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90490.22, ETH: 3026.33, DOGE: 0.1548",
+      "object": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90490.22,
+        "DOGE": 0.1548,
+        "ETH": 3026.33
+      },
+      "event_timestamp": "2025-11-27 00:00:00",
+      "btc_price": 90490.22,
+      "eth_price": 3026.33,
+      "doge_price": 0.1548,
+      "source_reliability": 0.9236021898197261,
+      "error_metric": 0.08271110137056618,
+      "consistency_metric": 0.9999943441679824,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90490.22,
+          "doge_price": 0.1548,
+          "eth_price": 3026.33
+        },
+        "discrete": {}
+      },
+      "proof_id": "89ea05c12ad2b43ee2631a6854d0059778ede509c0ed8151a3eb4ebdc34a5ee9",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 11,
+      "raw_line": "11. [agent-6] 第1条新闻简短摘要 -> Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "record_type": "text",
+      "website": "agent-6",
+      "fact": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "response_value": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "expiry_month": 8.0,
+          "expiry_year": 2024.0,
+          "percentage_0": 77.0,
+          "put_strike_price": 125.0
+        },
+        "discrete": {
+          "company": "Agilent Technologies",
+          "keywords": [
+            "到期",
+            "期权",
+            "行权价",
+            "无价值",
+            "溢价",
+            "看涨",
+            "看跌"
+          ],
+          "symbol": "A"
+        }
+      },
+      "proof_id": "a4caec489fbaeb6374aeb00d78441268195bb014a689931bdab0d58e6c926654",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 12,
+      "raw_line": "12. [agent-6] 2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90490.22, \"DOGE\": 0.1548, \"ETH\": 3026.33}",
+      "record_type": "crypto_price",
+      "website": "agent-6",
+      "fact": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90490.22, ETH: 3026.33, DOGE: 0.1548",
+      "object": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90490.22,
+        "DOGE": 0.1548,
+        "ETH": 3026.33
+      },
+      "event_timestamp": "2025-11-27 00:00:00",
+      "btc_price": 90490.22,
+      "eth_price": 3026.33,
+      "doge_price": 0.1548,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90490.22,
+          "doge_price": 0.1548,
+          "eth_price": 3026.33
+        },
+        "discrete": {}
+      },
+      "proof_id": "89ea05c12ad2b43ee2631a6854d0059778ede509c0ed8151a3eb4ebdc34a5ee9",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 13,
+      "raw_line": "13. [agent-7] 第1条新闻简短摘要 -> Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "record_type": "text",
+      "website": "agent-7",
+      "fact": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "response_value": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "expiry_month": 8.0,
+          "expiry_year": 2024.0,
+          "percentage_0": 77.0,
+          "put_strike_price": 125.0
+        },
+        "discrete": {
+          "company": "Agilent Technologies",
+          "keywords": [
+            "到期",
+            "期权",
+            "行权价",
+            "无价值",
+            "溢价",
+            "看涨",
+            "看跌"
+          ],
+          "symbol": "A"
+        }
+      },
+      "proof_id": "a4caec489fbaeb6374aeb00d78441268195bb014a689931bdab0d58e6c926654",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 14,
+      "raw_line": "14. [agent-7] 2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90490.22, \"DOGE\": 0.1548, \"ETH\": 3026.33}",
+      "record_type": "crypto_price",
+      "website": "agent-7",
+      "fact": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90490.22, ETH: 3026.33, DOGE: 0.1548",
+      "object": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90490.22,
+        "DOGE": 0.1548,
+        "ETH": 3026.33
+      },
+      "event_timestamp": "2025-11-27 00:00:00",
+      "btc_price": 90490.22,
+      "eth_price": 3026.33,
+      "doge_price": 0.1548,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90490.22,
+          "doge_price": 0.1548,
+          "eth_price": 3026.33
+        },
+        "discrete": {}
+      },
+      "proof_id": "89ea05c12ad2b43ee2631a6854d0059778ede509c0ed8151a3eb4ebdc34a5ee9",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 15,
+      "raw_line": "15. [agent-8] 第1条新闻简短摘要 -> Agilent Technologies, Inc. (A)的新期权合约将于2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "record_type": "text",
+      "website": "agent-8",
+      "fact": "Agilent Technologies, Inc. (A)的新期权合约将于2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "response_value": "Agilent Technologies, Inc. (A)的新期权合约将于2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "expiry_month": 8.0,
+          "expiry_year": 2024.0,
+          "percentage_0": 77.0,
+          "put_strike_price": 125.0
+        },
+        "discrete": {
+          "company": "Agilent Technologies",
+          "keywords": [
+            "到期",
+            "期权",
+            "行权价",
+            "无价值",
+            "溢价",
+            "看涨",
+            "看跌"
+          ],
+          "symbol": "A"
+        }
+      },
+      "proof_id": "a4caec489fbaeb6374aeb00d78441268195bb014a689931bdab0d58e6c926654",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 16,
+      "raw_line": "16. [agent-8] 2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90490.22, \"DOGE\": 0.1548, \"ETH\": 3026.33}",
+      "record_type": "crypto_price",
+      "website": "agent-8",
+      "fact": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90490.22, ETH: 3026.33, DOGE: 0.1548",
+      "object": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90490.22,
+        "DOGE": 0.1548,
+        "ETH": 3026.33
+      },
+      "event_timestamp": "2025-11-27 00:00:00",
+      "btc_price": 90490.22,
+      "eth_price": 3026.33,
+      "doge_price": 0.1548,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90490.22,
+          "doge_price": 0.1548,
+          "eth_price": 3026.33
+        },
+        "discrete": {}
+      },
+      "proof_id": "89ea05c12ad2b43ee2631a6854d0059778ede509c0ed8151a3eb4ebdc34a5ee9",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 17,
+      "raw_line": "17. [agent-9] 第1条新闻简短摘要 -> Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "record_type": "text",
+      "website": "agent-9",
+      "fact": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "response_value": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "expiry_month": 8.0,
+          "expiry_year": 2024.0,
+          "percentage_0": 77.0,
+          "put_strike_price": 125.0
+        },
+        "discrete": {
+          "company": "Agilent Technologies",
+          "keywords": [
+            "到期",
+            "期权",
+            "行权价",
+            "无价值",
+            "溢价",
+            "看涨",
+            "看跌"
+          ],
+          "symbol": "A"
+        }
+      },
+      "proof_id": "a4caec489fbaeb6374aeb00d78441268195bb014a689931bdab0d58e6c926654",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 18,
+      "raw_line": "18. [agent-9] 2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90490.22, \"DOGE\": 0.1548, \"ETH\": 3026.33}",
+      "record_type": "crypto_price",
+      "website": "agent-9",
+      "fact": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90490.22, ETH: 3026.33, DOGE: 0.1548",
+      "object": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90490.22,
+        "DOGE": 0.1548,
+        "ETH": 3026.33
+      },
+      "event_timestamp": "2025-11-27 00:00:00",
+      "btc_price": 90490.22,
+      "eth_price": 3026.33,
+      "doge_price": 0.1548,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90490.22,
+          "doge_price": 0.1548,
+          "eth_price": 3026.33
+        },
+        "discrete": {}
+      },
+      "proof_id": "89ea05c12ad2b43ee2631a6854d0059778ede509c0ed8151a3eb4ebdc34a5ee9",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 19,
+      "raw_line": "19. [agent-10] 第1条新闻简短摘要 -> Agilent Technologies, Inc. (A)的新期权合约将于2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来较高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "record_type": "text",
+      "website": "agent-10",
+      "fact": "Agilent Technologies, Inc. (A)的新期权合约将于2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来较高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "response_value": "Agilent Technologies, Inc. (A)的新期权合约将于2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来较高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "expiry_month": 8.0,
+          "expiry_year": 2024.0,
+          "percentage_0": 77.0,
+          "put_strike_price": 125.0
+        },
+        "discrete": {
+          "company": "Agilent Technologies",
+          "keywords": [
+            "到期",
+            "期权",
+            "行权价",
+            "无价值",
+            "溢价",
+            "看涨",
+            "看跌"
+          ],
+          "symbol": "A"
+        }
+      },
+      "proof_id": "a4caec489fbaeb6374aeb00d78441268195bb014a689931bdab0d58e6c926654",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 20,
+      "raw_line": "20. [agent-10] 2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90490.22, \"DOGE\": 0.1548, \"ETH\": 3026.33}",
+      "record_type": "crypto_price",
+      "website": "agent-10",
+      "fact": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 90490.22, ETH: 3026.33, DOGE: 0.1548",
+      "object": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90490.22,
+        "DOGE": 0.1548,
+        "ETH": 3026.33
+      },
+      "event_timestamp": "2025-11-27 00:00:00",
+      "btc_price": 90490.22,
+      "eth_price": 3026.33,
+      "doge_price": 0.1548,
+      "source_reliability": 0.9233033615408167,
+      "error_metric": 0.08306149657635321,
+      "consistency_metric": 0.9999943205443746,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90490.22,
+          "doge_price": 0.1548,
+          "eth_price": 3026.33
+        },
+        "discrete": {}
+      },
+      "proof_id": "89ea05c12ad2b43ee2631a6854d0059778ede509c0ed8151a3eb4ebdc34a5ee9",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    }
+  ],
+  "proof_groups": [
+    {
+      "group_id": {
+        "object": "第1条新闻简短摘要"
+      },
+      "group_digest": "b60580daa406bebf91823e85c1aaa914f824267a53b5cf2f36394b150779cbe6",
+      "result_digest": "8eeeea5e01c16878fff91ec2d500877607714a1d311be11488e1774e79c3620f",
+      "row_count": 10,
+      "proof_id": "a4caec489fbaeb6374aeb00d78441268195bb014a689931bdab0d58e6c926654",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_backend": "snarkjs_groth16",
+      "statement_hash": "9237857429",
+      "statement_digest_sha256": "1ebcc941e1b579b2e7f120a7c687ee571058cf502338956f1f0968c8f8fac014",
+      "verification_key_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10/verification_key.json",
+      "artifact_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10",
+      "public_json": [
+        "9237857429",
+        "0",
+        "9178117",
+        "1",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "923303",
+        "923303",
+        "923303",
+        "868091",
+        "923602",
+        "923303",
+        "923303",
+        "923303",
+        "923303",
+        "923303",
+        "0",
+        "9178117",
+        "9237857429"
+      ],
+      "proof_json": {
+        "pi_a": [
+          "13886972383760341445164768918310104535405547168779700987369263212931292084725",
+          "11933483190732536612776483291453357256002445701303187611634186991838265769011",
+          "1"
+        ],
+        "pi_b": [
+          [
+            "14684530711009106908096947022479218640800254704472648861751043274853272476297",
+            "14416502868205449427435000397399220318533616058807626819900722738000113130770"
+          ],
+          [
+            "1400488749028895576497079966259957422356641943425551704664357381161316189804",
+            "10999152892415176484832954352415396969080749249246589981509131788615981427853"
+          ],
+          [
+            "1",
+            "0"
+          ]
+        ],
+        "pi_c": [
+          "21384843248779450559966183747201147484500999846427269281222731092145993214616",
+          "4983086121331476388197186373742734452269139433326231792490174799642119528034",
+          "1"
+        ],
+        "protocol": "groth16",
+        "curve": "bn128"
+      },
+      "contract_call": {
+        "a": [
+          13886972383760341445164768918310104535405547168779700987369263212931292084725,
+          11933483190732536612776483291453357256002445701303187611634186991838265769011
+        ],
+        "b": [
+          [
+            14416502868205449427435000397399220318533616058807626819900722738000113130770,
+            14684530711009106908096947022479218640800254704472648861751043274853272476297
+          ],
+          [
+            10999152892415176484832954352415396969080749249246589981509131788615981427853,
+            1400488749028895576497079966259957422356641943425551704664357381161316189804
+          ]
+        ],
+        "c": [
+          21384843248779450559966183747201147484500999846427269281222731092145993214616,
+          4983086121331476388197186373742734452269139433326231792490174799642119528034
+        ],
+        "pubSignals": [
+          9237857429,
+          0,
+          9178117,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          923303,
+          923303,
+          923303,
+          868091,
+          923602,
+          923303,
+          923303,
+          923303,
+          923303,
+          923303,
+          0,
+          9178117,
+          9237857429
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 9237857429,
+        "outputWeightedSum": 0,
+        "outputTotalWeight": 9178117,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 0,
+        "claimedTotalWeight": 9178117,
+        "inputStatementHashField": 9237857429
+      },
+      "contract_submission": {
+        "experimentId": "0xf0ae0f7c15ec3bde245c450d25c7501c6dc0179556a21854deff48f56a4e8029",
+        "groupId": "0xb60580daa406bebf91823e85c1aaa914f824267a53b5cf2f36394b150779cbe6",
+        "resultDigest": "0x8eeeea5e01c16878fff91ec2d500877607714a1d311be11488e1774e79c3620f",
+        "proofId": "0xa4caec489fbaeb6374aeb00d78441268195bb014a689931bdab0d58e6c926654",
+        "statementDigestSha256": "0x1ebcc941e1b579b2e7f120a7c687ee571058cf502338956f1f0968c8f8fac014",
+        "a": [
+          13886972383760341445164768918310104535405547168779700987369263212931292084725,
+          11933483190732536612776483291453357256002445701303187611634186991838265769011
+        ],
+        "b": [
+          [
+            14416502868205449427435000397399220318533616058807626819900722738000113130770,
+            14684530711009106908096947022479218640800254704472648861751043274853272476297
+          ],
+          [
+            10999152892415176484832954352415396969080749249246589981509131788615981427853,
+            1400488749028895576497079966259957422356641943425551704664357381161316189804
+          ]
+        ],
+        "c": [
+          21384843248779450559966183747201147484500999846427269281222731092145993214616,
+          4983086121331476388197186373742734452269139433326231792490174799642119528034
+        ],
+        "pubSignals": [
+          9237857429,
+          0,
+          9178117,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          923303,
+          923303,
+          923303,
+          868091,
+          923602,
+          923303,
+          923303,
+          923303,
+          923303,
+          923303,
+          0,
+          9178117,
+          9237857429
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 9237857429,
+        "outputWeightedSum": 0,
+        "outputTotalWeight": 9178117,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 0,
+        "claimedTotalWeight": 9178117,
+        "inputStatementHashField": 9237857429
+      },
+      "rows": null
+    },
+    {
+      "group_id": {
+        "object": "2025-11-27 00:00:00 的 BTC/ETH/DOGE 价格数据"
+      },
+      "group_digest": "c0aa227161ea8047f3314af4478796ee1cb2335a0aae545e533c903643038dc2",
+      "result_digest": "20155e568913d55a5937021c53b286c76d9c9fcbab6771f5d6c1dbe3ad403458",
+      "row_count": 10,
+      "proof_id": "89ea05c12ad2b43ee2631a6854d0059778ede509c0ed8151a3eb4ebdc34a5ee9",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_backend": "snarkjs_groth16",
+      "statement_hash": "18595036157429",
+      "statement_digest_sha256": "257ab20784af4a65be8c1995ec09fe68684fa7bba871d19daf515d072604e026",
+      "verification_key_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10/verification_key.json",
+      "artifact_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10",
+      "public_json": [
+        "18595036157429",
+        "18585686925000",
+        "9178117",
+        "1",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "923303",
+        "923303",
+        "923303",
+        "868091",
+        "923602",
+        "923303",
+        "923303",
+        "923303",
+        "923303",
+        "923303",
+        "18585686925000",
+        "9178117",
+        "18595036157429"
+      ],
+      "proof_json": {
+        "pi_a": [
+          "18982993778510144813641207846039186112694057047070752162289517341263518953597",
+          "16247000758730965269956203191341504487302557398810788941986421950974434944734",
+          "1"
+        ],
+        "pi_b": [
+          [
+            "17516291301243137780157491552101981101314677873810824482788971793070317227762",
+            "18822215814738662893501646361155549468944801052766533253153905713798804362291"
+          ],
+          [
+            "7070344280786004677432656905636388609527570385925134960591350908001993339276",
+            "1875351770118180334952350992933228585720939786618056066735550150793706135647"
+          ],
+          [
+            "1",
+            "0"
+          ]
+        ],
+        "pi_c": [
+          "20691579785535473595713689504537378759959972166625979554440064562260753920554",
+          "21844487341474718144739917494592191510403444523808811494205871485573088512143",
+          "1"
+        ],
+        "protocol": "groth16",
+        "curve": "bn128"
+      },
+      "contract_call": {
+        "a": [
+          18982993778510144813641207846039186112694057047070752162289517341263518953597,
+          16247000758730965269956203191341504487302557398810788941986421950974434944734
+        ],
+        "b": [
+          [
+            18822215814738662893501646361155549468944801052766533253153905713798804362291,
+            17516291301243137780157491552101981101314677873810824482788971793070317227762
+          ],
+          [
+            1875351770118180334952350992933228585720939786618056066735550150793706135647,
+            7070344280786004677432656905636388609527570385925134960591350908001993339276
+          ]
+        ],
+        "c": [
+          20691579785535473595713689504537378759959972166625979554440064562260753920554,
+          21844487341474718144739917494592191510403444523808811494205871485573088512143
+        ],
+        "pubSignals": [
+          18595036157429,
+          18585686925000,
+          9178117,
+          1,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          923303,
+          923303,
+          923303,
+          868091,
+          923602,
+          923303,
+          923303,
+          923303,
+          923303,
+          923303,
+          18585686925000,
+          9178117,
+          18595036157429
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 18595036157429,
+        "outputWeightedSum": 18585686925000,
+        "outputTotalWeight": 9178117,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 18585686925000,
+        "claimedTotalWeight": 9178117,
+        "inputStatementHashField": 18595036157429
+      },
+      "contract_submission": {
+        "experimentId": "0xf0ae0f7c15ec3bde245c450d25c7501c6dc0179556a21854deff48f56a4e8029",
+        "groupId": "0xc0aa227161ea8047f3314af4478796ee1cb2335a0aae545e533c903643038dc2",
+        "resultDigest": "0x20155e568913d55a5937021c53b286c76d9c9fcbab6771f5d6c1dbe3ad403458",
+        "proofId": "0x89ea05c12ad2b43ee2631a6854d0059778ede509c0ed8151a3eb4ebdc34a5ee9",
+        "statementDigestSha256": "0x257ab20784af4a65be8c1995ec09fe68684fa7bba871d19daf515d072604e026",
+        "a": [
+          18982993778510144813641207846039186112694057047070752162289517341263518953597,
+          16247000758730965269956203191341504487302557398810788941986421950974434944734
+        ],
+        "b": [
+          [
+            18822215814738662893501646361155549468944801052766533253153905713798804362291,
+            17516291301243137780157491552101981101314677873810824482788971793070317227762
+          ],
+          [
+            1875351770118180334952350992933228585720939786618056066735550150793706135647,
+            7070344280786004677432656905636388609527570385925134960591350908001993339276
+          ]
+        ],
+        "c": [
+          20691579785535473595713689504537378759959972166625979554440064562260753920554,
+          21844487341474718144739917494592191510403444523808811494205871485573088512143
+        ],
+        "pubSignals": [
+          18595036157429,
+          18585686925000,
+          9178117,
+          1,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          923303,
+          923303,
+          923303,
+          868091,
+          923602,
+          923303,
+          923303,
+          923303,
+          923303,
+          923303,
+          18585686925000,
+          9178117,
+          18595036157429
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 18595036157429,
+        "outputWeightedSum": 18585686925000,
+        "outputTotalWeight": 9178117,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 18585686925000,
+        "claimedTotalWeight": 9178117,
+        "inputStatementHashField": 18595036157429
+      },
+      "rows": null
+    }
+  ]
+}

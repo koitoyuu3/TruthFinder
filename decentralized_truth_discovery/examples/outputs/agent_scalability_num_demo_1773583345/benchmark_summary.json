@@ -1,0 +1,79 @@
+{
+  "experiment_id": "agent_scalability_num_demo_1773583345",
+  "config": {
+    "input_json": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10/num_demo.json",
+    "start_batch": 1,
+    "batch_group_size": 10,
+    "num_workloads": 5,
+    "agent_counts": [
+      2,
+      4,
+      6,
+      8,
+      10
+    ],
+    "subset_samples": 3,
+    "subset_seed": 20260315,
+    "selection_strategy": "random",
+    "methods": [
+      "EnhancedTruthFinder-Hybrid",
+      "EnhancedTruthFinder-NonHybrid",
+      "SenteTruthFinder",
+      "BasicTruthFinder",
+      "SenFeedTruthFinder-CompositeTD"
+    ],
+    "weights": {
+      "time": 0.45,
+      "memory": 0.35,
+      "quality": 0.2
+    },
+    "hybrid_top_k": 0,
+    "use_sbert": false,
+    "sbert_model": "paraphrase-multilingual-MiniLM-L12-v2",
+    "strict_sbert": false,
+    "local_files_only": false
+  },
+  "workloads": [
+    {
+      "workload_index": 1,
+      "batch_start": 1,
+      "batch_end": 10,
+      "batch_group_size": 10
+    },
+    {
+      "workload_index": 2,
+      "batch_start": 11,
+      "batch_end": 20,
+      "batch_group_size": 10
+    },
+    {
+      "workload_index": 3,
+      "batch_start": 21,
+      "batch_end": 30,
+      "batch_group_size": 10
+    },
+    {
+      "workload_index": 4,
+      "batch_start": 31,
+      "batch_end": 40,
+      "batch_group_size": 10
+    },
+    {
+      "workload_index": 5,
+      "batch_start": 41,
+      "batch_end": 50,
+      "batch_group_size": 10
+    }
+  ],
+  "hybrid_check": {
+    "enabled": false,
+    "passed": true,
+    "message": "Hybrid ranking constraint disabled."
+  },
+  "artifacts": {
+    "raw_runs_csv": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/agent_scalability_num_demo_1773583345/raw_runs.csv",
+    "scored_runs_csv": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/agent_scalability_num_demo_1773583345/scored_runs.csv",
+    "summary_by_method_agent_count_csv": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/agent_scalability_num_demo_1773583345/summary_by_method_agent_count.csv",
+    "summary_overall_csv": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/agent_scalability_num_demo_1773583345/混合-随着agent变化.csv"
+  }
+}

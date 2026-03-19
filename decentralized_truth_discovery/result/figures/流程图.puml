@@ -1,0 +1,93 @@
+@startuml
+!pragma teoz true
+
+title Sequence Diagram of On-Chain/Off-Chain Trusted Inference with Multi-Agent Truth Discovery and ZKP Verification
+
+hide footbox
+autonumber
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam ParticipantPadding 18
+skinparam BoxPadding 10
+skinparam ArrowThickness 1
+skinparam RoundCorner 6
+
+box "Off-chain Domain"
+actor User
+participant "Off-chain Coordinator" as Coord
+participant "Multi-Agent Network" as Agents
+participant "Truth Discovery Engine" as TD
+participant "ZKP Prover" as Prover
+end box
+
+box "On-chain Domain"
+participant "Task Contract" as Task
+participant "Verification Contract" as Verifier
+end box
+
+group Task submission and event emission
+User -> Task : submitQuery(Q)
+activate Task
+Task -> Task : registerTask(taskId, QHash)
+Task -> Task : emit TaskPosted(taskId, QHash)
+Task --> Coord : notify task event
+end
+
+note over Task, Coord
+The smart contract anchors the task on-chain and emits an event.
+The off-chain coordinator listens to the event and dispatches agents.
+end note
+
+activate Coord
+Coord -> Coord : load query metadata and execution policy
+
+group Parallel multi-agent reasoning
+par Agent 1 branch
+Coord -> Agents : dispatch(taskId, Q, agent_1)
+Agents --> Coord : return candidate result R1
+else Agent 2 branch
+Coord -> Agents : dispatch(taskId, Q, agent_2)
+Agents --> Coord : return candidate result R2
+else Agent n branch
+Coord -> Agents : dispatch(taskId, Q, agent_n)
+Agents --> Coord : return candidate result Rn
+end
+end
+
+group Truth discovery and aggregation
+Coord -> TD : submit candidate set {R1, R2, ..., Rn}
+activate TD
+TD -> TD : compute credibility weights\nand aggregate candidate results
+TD --> Coord : output highest-confidence result R*
+deactivate TD
+end
+
+group Zero-knowledge proof generation
+Coord -> Prover : generateProof(taskId, {Ri}, R*)
+activate Prover
+Prover -> Prover : encode public inputs\nand proving witness
+Prover --> Coord : return proof π
+deactivate Prover
+end
+
+group On-chain verification and result release
+Coord -> Verifier : submitResult(taskId, R*, π)
+activate Verifier
+Verifier -> Verifier : verifyProof(π, taskId, R*)
+alt verification succeeds
+Verifier -> Verifier : storeVerifiedResult(taskId, R*)
+Verifier --> Coord : verification success
+Coord --> User : return verified result R*
+else verification fails
+Verifier --> Coord : verification failure
+Coord --> User : return failure status
+end
+deactivate Verifier
+end
+
+deactivate Coord
+deactivate Task
+@enduml

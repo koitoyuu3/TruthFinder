@@ -1,0 +1,36 @@
+{
+  "bundle_name": "EnhancedTruthFinder-NonHybrid",
+  "contract_file": "decentralized_truth_discovery/core/circuits/TruthSingleProofRegistryN4.sol",
+  "verify_method": "verifySelectedProofFlat",
+  "submit_method": "submitSelectedProofFlat",
+  "groups": [
+    {
+      "group_index": 0,
+      "proof_id": "483df65f9b46092d65adb5fe1ed7faf00e8209b033173eefd91000dcd2cd69c9",
+      "group_digest": "710ae8364db657bbd672f1d138519c474fdcbd6fe62d3acfc01e32f0922f6c9e",
+      "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/five_methods_comparison_demo_1773586252/batch_002/EnhancedTruthFinder-NonHybrid.group_0.verifySelectedProofFlat.params.json",
+      "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/five_methods_comparison_demo_1773586252/batch_002/EnhancedTruthFinder-NonHybrid.group_0.submitSelectedProofFlat.params.json"
+    },
+    {
+      "group_index": 1,
+      "proof_id": "f88f21fdfe17e62f4b7439366c694aaebf6646f67a1ab378aa3195f14f6e0978",
+      "group_digest": "44ceabb8e07140408a5e6f84cdf91e4ebf61455753a7a4fbfb444e49efb3a134",
+      "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/five_methods_comparison_demo_1773586252/batch_002/EnhancedTruthFinder-NonHybrid.group_1.verifySelectedProofFlat.params.json",
+      "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/five_methods_comparison_demo_1773586252/batch_002/EnhancedTruthFinder-NonHybrid.group_1.submitSelectedProofFlat.params.json"
+    },
+    {
+      "group_index": 2,
+      "proof_id": "3a4d932d6bbd2c2de7d1ffc48938e6d2a08b3f1310aecb6382536562270f4791",
+      "group_digest": "35c28ec1f5e63c6865dd222ef273177b11546665d495455f6348d5385b5cb00c",
+      "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/five_methods_comparison_demo_1773586252/batch_002/EnhancedTruthFinder-NonHybrid.group_2.verifySelectedProofFlat.params.json",
+      "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/five_methods_comparison_demo_1773586252/batch_002/EnhancedTruthFinder-NonHybrid.group_2.submitSelectedProofFlat.params.json"
+    },
+    {
+      "group_index": 3,
+      "proof_id": "f6197339bca6e14bc559d2f1cc8f260840eefec143451f8f5209fce6f7b7b228",
+      "group_digest": "70f17b63534216628597e384aa5d3427acdc5dc0ff5f7333911ab45348c309ec",
+      "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/five_methods_comparison_demo_1773586252/batch_002/EnhancedTruthFinder-NonHybrid.group_3.verifySelectedProofFlat.params.json",
+      "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/five_methods_comparison_demo_1773586252/batch_002/EnhancedTruthFinder-NonHybrid.group_3.submitSelectedProofFlat.params.json"
+    }
+  ]
+}

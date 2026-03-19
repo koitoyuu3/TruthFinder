@@ -1,0 +1,15 @@
+{
+  "experiment_id": "proof_malicious_ratio_demo_1773715654_demo_3bad_agent_batch_004",
+  "method": "SenFeedTruthFinder-CompositeTD",
+  "method_experiment_id": "proof_malicious_ratio_demo_1773715654_demo_3bad_agent_batch_004:SenFeedTruthFinder-CompositeTD",
+  "row_count": 40,
+  "proof_group_count": 4,
+  "bundle_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_malicious_ratio_demo_1773715654/proof_artifacts/demo_3bad_agent/batch_004/SenFeedTruthFinder-CompositeTD.proof_bundle.json",
+  "chainmaker": {
+    "bundle_name": "SenFeedTruthFinder-CompositeTD",
+    "groups": [],
+    "manifest_path": "",
+    "exported": false,
+    "error": "submission.pubSignals must be a 15-element list for current n=4 Groth16 proof"
+  }
+}

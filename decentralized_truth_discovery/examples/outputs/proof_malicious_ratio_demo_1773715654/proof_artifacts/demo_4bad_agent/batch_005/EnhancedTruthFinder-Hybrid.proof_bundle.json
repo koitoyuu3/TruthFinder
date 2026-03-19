@@ -1,0 +1,985 @@
+{
+  "experiment_id": "proof_malicious_ratio_demo_1773715654_demo_4bad_agent_batch_005:EnhancedTruthFinder-Hybrid",
+  "experiment_digest": "5ae6788fdc4d55773bdf076246391e0c5321d7efd14b44524fcb3d570d9811d5",
+  "method": "EnhancedTruthFinder-Hybrid",
+  "row_count": 20,
+  "result_digest": "aa166c8f8079b8f90d87090bfa664174590bf5171598371ffadf6bc3ec60c466",
+  "rows": [
+    {
+      "claim_id": 1,
+      "raw_line": "1. [agent-1] 第5条新闻简短摘要 -> NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。还有消息误称，这项进展已拿到最终审批。",
+      "record_type": "text",
+      "website": "agent-1",
+      "fact": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。还有消息误称，这项进展已拿到最终审批。",
+      "object": "第5条新闻简短摘要",
+      "response_value": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。还有消息误称，这项进展已拿到最终审批。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9242453909939712,
+      "error_metric": 0.08195282221413185,
+      "consistency_metric": 0.999989909204331,
+      "global_truth": {
+        "numeric": {},
+        "discrete": {
+          "company": "ProShares UltraPro Short QQQ",
+          "symbol": "SQQQ"
+        }
+      },
+      "proof_id": "c68467efb5ac2e069f01d6a356f35ab46ca48f6bece90c3d6d34b92272bbf36f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 2,
+      "raw_line": "2. [agent-1] 2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 89701.25, \"DOGE\": 0.15909, \"ETH\": 2993.55}",
+      "record_type": "crypto_price",
+      "website": "agent-1",
+      "fact": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 89701.25, ETH: 2993.55, DOGE: 0.15909",
+      "object": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 89701.25,
+        "DOGE": 0.15909,
+        "ETH": 2993.55
+      },
+      "event_timestamp": "2025-11-27 02:00:00",
+      "btc_price": 89701.25,
+      "eth_price": 2993.55,
+      "doge_price": 0.15909,
+      "source_reliability": 0.9242453909939712,
+      "error_metric": 0.08195282221413185,
+      "consistency_metric": 0.999989909204331,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 91067.26,
+          "doge_price": 0.15506,
+          "eth_price": 3048.42
+        },
+        "discrete": {}
+      },
+      "proof_id": "006218f30f83f5939a9e3a502dcdba5c3f2d27e7cb0a05f7ddd88ed9358a0e8f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 3,
+      "raw_line": "3. [agent-2] 第5条新闻简短摘要 -> NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。另有说法错误地认为，该事项会在下月正式落地。",
+      "record_type": "text",
+      "website": "agent-2",
+      "fact": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。另有说法错误地认为，该事项会在下月正式落地。",
+      "object": "第5条新闻简短摘要",
+      "response_value": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。另有说法错误地认为，该事项会在下月正式落地。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9247347969945006,
+      "error_metric": 0.08138028540241975,
+      "consistency_metric": 0.9999899786954616,
+      "global_truth": {
+        "numeric": {},
+        "discrete": {
+          "company": "ProShares UltraPro Short QQQ",
+          "symbol": "SQQQ"
+        }
+      },
+      "proof_id": "c68467efb5ac2e069f01d6a356f35ab46ca48f6bece90c3d6d34b92272bbf36f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 4,
+      "raw_line": "4. [agent-2] 2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 92160.07, \"DOGE\": 0.15149, \"ETH\": 3094.15}",
+      "record_type": "crypto_price",
+      "website": "agent-2",
+      "fact": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 92160.07, ETH: 3094.15, DOGE: 0.15149",
+      "object": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 92160.07,
+        "DOGE": 0.15149,
+        "ETH": 3094.15
+      },
+      "event_timestamp": "2025-11-27 02:00:00",
+      "btc_price": 92160.07,
+      "eth_price": 3094.15,
+      "doge_price": 0.15149,
+      "source_reliability": 0.9247347969945006,
+      "error_metric": 0.08138028540241975,
+      "consistency_metric": 0.9999899786954616,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 91067.26,
+          "doge_price": 0.15506,
+          "eth_price": 3048.42
+        },
+        "discrete": {}
+      },
+      "proof_id": "006218f30f83f5939a9e3a502dcdba5c3f2d27e7cb0a05f7ddd88ed9358a0e8f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 5,
+      "raw_line": "5. [agent-3] 第5条新闻简短摘要 -> NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。另有未经证实的说法称，相关安排已被提前延续到下一季度。",
+      "record_type": "text",
+      "website": "agent-3",
+      "fact": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。另有未经证实的说法称，相关安排已被提前延续到下一季度。",
+      "object": "第5条新闻简短摘要",
+      "response_value": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。另有未经证实的说法称，相关安排已被提前延续到下一季度。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.924279218788256,
+      "error_metric": 0.08191322890537316,
+      "consistency_metric": 0.999989914009338,
+      "global_truth": {
+        "numeric": {},
+        "discrete": {
+          "company": "ProShares UltraPro Short QQQ",
+          "symbol": "SQQQ"
+        }
+      },
+      "proof_id": "c68467efb5ac2e069f01d6a356f35ab46ca48f6bece90c3d6d34b92272bbf36f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 6,
+      "raw_line": "6. [agent-3] 2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 89154.85, \"DOGE\": 0.15816, \"ETH\": 2975.26}",
+      "record_type": "crypto_price",
+      "website": "agent-3",
+      "fact": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 89154.85, ETH: 2975.26, DOGE: 0.15816",
+      "object": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 89154.85,
+        "DOGE": 0.15816,
+        "ETH": 2975.26
+      },
+      "event_timestamp": "2025-11-27 02:00:00",
+      "btc_price": 89154.85,
+      "eth_price": 2975.26,
+      "doge_price": 0.15816,
+      "source_reliability": 0.924279218788256,
+      "error_metric": 0.08191322890537316,
+      "consistency_metric": 0.999989914009338,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 91067.26,
+          "doge_price": 0.15506,
+          "eth_price": 3048.42
+        },
+        "discrete": {}
+      },
+      "proof_id": "006218f30f83f5939a9e3a502dcdba5c3f2d27e7cb0a05f7ddd88ed9358a0e8f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 7,
+      "raw_line": "7. [agent-4] 第5条新闻简短摘要 -> NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。市场还一度误传，公司已经对外确认后续指引会小幅上调。",
+      "record_type": "text",
+      "website": "agent-4",
+      "fact": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。市场还一度误传，公司已经对外确认后续指引会小幅上调。",
+      "object": "第5条新闻简短摘要",
+      "response_value": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。市场还一度误传，公司已经对外确认后续指引会小幅上调。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.924496090777487,
+      "error_metric": 0.08165946268879519,
+      "consistency_metric": 0.9999899448082682,
+      "global_truth": {
+        "numeric": {},
+        "discrete": {
+          "company": "ProShares UltraPro Short QQQ",
+          "symbol": "SQQQ"
+        }
+      },
+      "proof_id": "c68467efb5ac2e069f01d6a356f35ab46ca48f6bece90c3d6d34b92272bbf36f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 8,
+      "raw_line": "8. [agent-4] 2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 92706.47, \"DOGE\": 0.15056, \"ETH\": 3112.44}",
+      "record_type": "crypto_price",
+      "website": "agent-4",
+      "fact": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 92706.47, ETH: 3112.44, DOGE: 0.15056",
+      "object": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 92706.47,
+        "DOGE": 0.15056,
+        "ETH": 3112.44
+      },
+      "event_timestamp": "2025-11-27 02:00:00",
+      "btc_price": 92706.47,
+      "eth_price": 3112.44,
+      "doge_price": 0.15056,
+      "source_reliability": 0.924496090777487,
+      "error_metric": 0.08165946268879519,
+      "consistency_metric": 0.9999899448082682,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 91067.26,
+          "doge_price": 0.15506,
+          "eth_price": 3048.42
+        },
+        "discrete": {}
+      },
+      "proof_id": "006218f30f83f5939a9e3a502dcdba5c3f2d27e7cb0a05f7ddd88ed9358a0e8f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 9,
+      "raw_line": "9. [agent-5] 第5条新闻简短摘要 -> NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
+      "record_type": "text",
+      "website": "agent-5",
+      "fact": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
+      "object": "第5条新闻简短摘要",
+      "response_value": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9300295606254632,
+      "error_metric": 0.07522466953615531,
+      "consistency_metric": 0.9999907269823695,
+      "global_truth": {
+        "numeric": {},
+        "discrete": {
+          "company": "ProShares UltraPro Short QQQ",
+          "symbol": "SQQQ"
+        }
+      },
+      "proof_id": "c68467efb5ac2e069f01d6a356f35ab46ca48f6bece90c3d6d34b92272bbf36f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 10,
+      "raw_line": "10. [agent-5] 2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 91067.26, \"DOGE\": 0.15506, \"ETH\": 3048.42}",
+      "record_type": "crypto_price",
+      "website": "agent-5",
+      "fact": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 91067.26, ETH: 3048.42, DOGE: 0.15506",
+      "object": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 91067.26,
+        "DOGE": 0.15506,
+        "ETH": 3048.42
+      },
+      "event_timestamp": "2025-11-27 02:00:00",
+      "btc_price": 91067.26,
+      "eth_price": 3048.42,
+      "doge_price": 0.15506,
+      "source_reliability": 0.9300295606254632,
+      "error_metric": 0.07522466953615531,
+      "consistency_metric": 0.9999907269823695,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 91067.26,
+          "doge_price": 0.15506,
+          "eth_price": 3048.42
+        },
+        "discrete": {}
+      },
+      "proof_id": "006218f30f83f5939a9e3a502dcdba5c3f2d27e7cb0a05f7ddd88ed9358a0e8f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 11,
+      "raw_line": "11. [agent-6] 第5条新闻简短摘要 -> NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
+      "record_type": "text",
+      "website": "agent-6",
+      "fact": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
+      "object": "第5条新闻简短摘要",
+      "response_value": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9300295606254632,
+      "error_metric": 0.07522466953615531,
+      "consistency_metric": 0.9999907269823695,
+      "global_truth": {
+        "numeric": {},
+        "discrete": {
+          "company": "ProShares UltraPro Short QQQ",
+          "symbol": "SQQQ"
+        }
+      },
+      "proof_id": "c68467efb5ac2e069f01d6a356f35ab46ca48f6bece90c3d6d34b92272bbf36f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 12,
+      "raw_line": "12. [agent-6] 2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 91067.26, \"DOGE\": 0.15506, \"ETH\": 3048.42}",
+      "record_type": "crypto_price",
+      "website": "agent-6",
+      "fact": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 91067.26, ETH: 3048.42, DOGE: 0.15506",
+      "object": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 91067.26,
+        "DOGE": 0.15506,
+        "ETH": 3048.42
+      },
+      "event_timestamp": "2025-11-27 02:00:00",
+      "btc_price": 91067.26,
+      "eth_price": 3048.42,
+      "doge_price": 0.15506,
+      "source_reliability": 0.9300295606254632,
+      "error_metric": 0.07522466953615531,
+      "consistency_metric": 0.9999907269823695,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 91067.26,
+          "doge_price": 0.15506,
+          "eth_price": 3048.42
+        },
+        "discrete": {}
+      },
+      "proof_id": "006218f30f83f5939a9e3a502dcdba5c3f2d27e7cb0a05f7ddd88ed9358a0e8f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 13,
+      "raw_line": "13. [agent-7] 第5条新闻简短摘要 -> NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
+      "record_type": "text",
+      "website": "agent-7",
+      "fact": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
+      "object": "第5条新闻简短摘要",
+      "response_value": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9300295606254632,
+      "error_metric": 0.07522466953615531,
+      "consistency_metric": 0.9999907269823695,
+      "global_truth": {
+        "numeric": {},
+        "discrete": {
+          "company": "ProShares UltraPro Short QQQ",
+          "symbol": "SQQQ"
+        }
+      },
+      "proof_id": "c68467efb5ac2e069f01d6a356f35ab46ca48f6bece90c3d6d34b92272bbf36f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 14,
+      "raw_line": "14. [agent-7] 2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 91067.26, \"DOGE\": 0.15506, \"ETH\": 3048.42}",
+      "record_type": "crypto_price",
+      "website": "agent-7",
+      "fact": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 91067.26, ETH: 3048.42, DOGE: 0.15506",
+      "object": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 91067.26,
+        "DOGE": 0.15506,
+        "ETH": 3048.42
+      },
+      "event_timestamp": "2025-11-27 02:00:00",
+      "btc_price": 91067.26,
+      "eth_price": 3048.42,
+      "doge_price": 0.15506,
+      "source_reliability": 0.9300295606254632,
+      "error_metric": 0.07522466953615531,
+      "consistency_metric": 0.9999907269823695,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 91067.26,
+          "doge_price": 0.15506,
+          "eth_price": 3048.42
+        },
+        "discrete": {}
+      },
+      "proof_id": "006218f30f83f5939a9e3a502dcdba5c3f2d27e7cb0a05f7ddd88ed9358a0e8f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 15,
+      "raw_line": "15. [agent-8] 第5条新闻简短摘要 -> NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
+      "record_type": "text",
+      "website": "agent-8",
+      "fact": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
+      "object": "第5条新闻简短摘要",
+      "response_value": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9300295606254632,
+      "error_metric": 0.07522466953615531,
+      "consistency_metric": 0.9999907269823695,
+      "global_truth": {
+        "numeric": {},
+        "discrete": {
+          "company": "ProShares UltraPro Short QQQ",
+          "symbol": "SQQQ"
+        }
+      },
+      "proof_id": "c68467efb5ac2e069f01d6a356f35ab46ca48f6bece90c3d6d34b92272bbf36f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 16,
+      "raw_line": "16. [agent-8] 2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 91067.26, \"DOGE\": 0.15506, \"ETH\": 3048.42}",
+      "record_type": "crypto_price",
+      "website": "agent-8",
+      "fact": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 91067.26, ETH: 3048.42, DOGE: 0.15506",
+      "object": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 91067.26,
+        "DOGE": 0.15506,
+        "ETH": 3048.42
+      },
+      "event_timestamp": "2025-11-27 02:00:00",
+      "btc_price": 91067.26,
+      "eth_price": 3048.42,
+      "doge_price": 0.15506,
+      "source_reliability": 0.9300295606254632,
+      "error_metric": 0.07522466953615531,
+      "consistency_metric": 0.9999907269823695,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 91067.26,
+          "doge_price": 0.15506,
+          "eth_price": 3048.42
+        },
+        "discrete": {}
+      },
+      "proof_id": "006218f30f83f5939a9e3a502dcdba5c3f2d27e7cb0a05f7ddd88ed9358a0e8f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 17,
+      "raw_line": "17. [agent-9] 第5条新闻简短摘要 -> 纳斯达克100前市指标上涨70.21至15,858.26，ProShares UltraPro Short QQQ (SQQQ)下跌0.15至16.37，未披露明确财务数字。",
+      "record_type": "text",
+      "website": "agent-9",
+      "fact": "纳斯达克100前市指标上涨70.21至15,858.26，ProShares UltraPro Short QQQ (SQQQ)下跌0.15至16.37，未披露明确财务数字。",
+      "object": "第5条新闻简短摘要",
+      "response_value": "纳斯达克100前市指标上涨70.21至15,858.26，ProShares UltraPro Short QQQ (SQQQ)下跌0.15至16.37，未披露明确财务数字。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9330086403218414,
+      "error_metric": 0.07179194484911003,
+      "consistency_metric": 0.9999911451715702,
+      "global_truth": {
+        "numeric": {},
+        "discrete": {
+          "company": "ProShares UltraPro Short QQQ",
+          "symbol": "SQQQ"
+        }
+      },
+      "proof_id": "c68467efb5ac2e069f01d6a356f35ab46ca48f6bece90c3d6d34b92272bbf36f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 18,
+      "raw_line": "18. [agent-9] 2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 91067.26, \"DOGE\": 0.15506, \"ETH\": 3048.42}",
+      "record_type": "crypto_price",
+      "website": "agent-9",
+      "fact": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 91067.26, ETH: 3048.42, DOGE: 0.15506",
+      "object": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 91067.26,
+        "DOGE": 0.15506,
+        "ETH": 3048.42
+      },
+      "event_timestamp": "2025-11-27 02:00:00",
+      "btc_price": 91067.26,
+      "eth_price": 3048.42,
+      "doge_price": 0.15506,
+      "source_reliability": 0.9330086403218414,
+      "error_metric": 0.07179194484911003,
+      "consistency_metric": 0.9999911451715702,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 91067.26,
+          "doge_price": 0.15506,
+          "eth_price": 3048.42
+        },
+        "discrete": {}
+      },
+      "proof_id": "006218f30f83f5939a9e3a502dcdba5c3f2d27e7cb0a05f7ddd88ed9358a0e8f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 19,
+      "raw_line": "19. [agent-10] 第5条新闻简短摘要 -> NASDAQ 100 Pre-Market Indicator 上涨 70.21 至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌 0.15 至 16.37，Palantir Technologies Inc. (PLTR) 上涨 0.32 至 17.45，未披露明确财务数字。",
+      "record_type": "text",
+      "website": "agent-10",
+      "fact": "NASDAQ 100 Pre-Market Indicator 上涨 70.21 至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌 0.15 至 16.37，Palantir Technologies Inc. (PLTR) 上涨 0.32 至 17.45，未披露明确财务数字。",
+      "object": "第5条新闻简短摘要",
+      "response_value": "NASDAQ 100 Pre-Market Indicator 上涨 70.21 至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌 0.15 至 16.37，Palantir Technologies Inc. (PLTR) 上涨 0.32 至 17.45，未披露明确财务数字。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.929367574751926,
+      "error_metric": 0.07599044871559023,
+      "consistency_metric": 0.9999906337790447,
+      "global_truth": {
+        "numeric": {},
+        "discrete": {
+          "company": "ProShares UltraPro Short QQQ",
+          "symbol": "SQQQ"
+        }
+      },
+      "proof_id": "c68467efb5ac2e069f01d6a356f35ab46ca48f6bece90c3d6d34b92272bbf36f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 20,
+      "raw_line": "20. [agent-10] 2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 91067.26, \"DOGE\": 0.15506, \"ETH\": 3048.42}",
+      "record_type": "crypto_price",
+      "website": "agent-10",
+      "fact": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据: BTC: 91067.26, ETH: 3048.42, DOGE: 0.15506",
+      "object": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 91067.26,
+        "DOGE": 0.15506,
+        "ETH": 3048.42
+      },
+      "event_timestamp": "2025-11-27 02:00:00",
+      "btc_price": 91067.26,
+      "eth_price": 3048.42,
+      "doge_price": 0.15506,
+      "source_reliability": 0.929367574751926,
+      "error_metric": 0.07599044871559023,
+      "consistency_metric": 0.9999906337790447,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 91067.26,
+          "doge_price": 0.15506,
+          "eth_price": 3048.42
+        },
+        "discrete": {}
+      },
+      "proof_id": "006218f30f83f5939a9e3a502dcdba5c3f2d27e7cb0a05f7ddd88ed9358a0e8f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    }
+  ],
+  "proof_groups": [
+    {
+      "group_id": {
+        "object": "第5条新闻简短摘要"
+      },
+      "group_digest": "3b6c89fce43332e8d239e732da0029c8056f852d28b92bae8cd0f66670347080",
+      "result_digest": "4bda1a769faae9819bb25a9bfab87ab39f9094091be8fbc498cb1054dfda258d",
+      "row_count": 10,
+      "proof_id": "c68467efb5ac2e069f01d6a356f35ab46ca48f6bece90c3d6d34b92272bbf36f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_backend": "snarkjs_groth16",
+      "statement_hash": "1644841577009",
+      "statement_digest_sha256": "62911f1932d5db6b807c4cca29c456d7da32036f4ca25b1283bf4e97455ab1af",
+      "verification_key_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10/verification_key.json",
+      "artifact_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10",
+      "public_json": [
+        "1644841577009",
+        "1635488604340",
+        "9280252",
+        "1",
+        "100000",
+        "100000",
+        "100000",
+        "100000",
+        "100000",
+        "100000",
+        "100000",
+        "100000",
+        "858260",
+        "100000",
+        "924245",
+        "924735",
+        "924279",
+        "924496",
+        "930030",
+        "930030",
+        "930030",
+        "930030",
+        "933009",
+        "929368",
+        "1635488604340",
+        "9280252",
+        "1644841577009"
+      ],
+      "proof_json": {
+        "pi_a": [
+          "11345257625365861174012096439938676116178165408577967081045669207554663134390",
+          "17562759706787143335543508419158104094597354008270558294945805659949042340917",
+          "1"
+        ],
+        "pi_b": [
+          [
+            "486258991039646783062447185388037806741946277841333639935763762394851439459",
+            "11830967283680171303258077807967154324262723702459136377216067209143070065784"
+          ],
+          [
+            "11227712659302934553538789571638486365532229582061529422240881205123461250712",
+            "20296901277413412585919966442517694406729087508764172745798842756474305275328"
+          ],
+          [
+            "1",
+            "0"
+          ]
+        ],
+        "pi_c": [
+          "21326251968996359544611207662120593425282395098298489040358489702202134900230",
+          "6120469431318513213882219237408304726605678134663851317440648823269140077612",
+          "1"
+        ],
+        "protocol": "groth16",
+        "curve": "bn128"
+      },
+      "contract_call": {
+        "a": [
+          11345257625365861174012096439938676116178165408577967081045669207554663134390,
+          17562759706787143335543508419158104094597354008270558294945805659949042340917
+        ],
+        "b": [
+          [
+            11830967283680171303258077807967154324262723702459136377216067209143070065784,
+            486258991039646783062447185388037806741946277841333639935763762394851439459
+          ],
+          [
+            20296901277413412585919966442517694406729087508764172745798842756474305275328,
+            11227712659302934553538789571638486365532229582061529422240881205123461250712
+          ]
+        ],
+        "c": [
+          21326251968996359544611207662120593425282395098298489040358489702202134900230,
+          6120469431318513213882219237408304726605678134663851317440648823269140077612
+        ],
+        "pubSignals": [
+          1644841577009,
+          1635488604340,
+          9280252,
+          1,
+          100000,
+          100000,
+          100000,
+          100000,
+          100000,
+          100000,
+          100000,
+          100000,
+          858260,
+          100000,
+          924245,
+          924735,
+          924279,
+          924496,
+          930030,
+          930030,
+          930030,
+          930030,
+          933009,
+          929368,
+          1635488604340,
+          9280252,
+          1644841577009
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 1644841577009,
+        "outputWeightedSum": 1635488604340,
+        "outputTotalWeight": 9280252,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 1635488604340,
+        "claimedTotalWeight": 9280252,
+        "inputStatementHashField": 1644841577009
+      },
+      "contract_submission": {
+        "experimentId": "0x3e5968ee54061d65ec83c2767d593e12377f132003b59cca970fb25c15ea11ab",
+        "groupId": "0x3b6c89fce43332e8d239e732da0029c8056f852d28b92bae8cd0f66670347080",
+        "resultDigest": "0x4bda1a769faae9819bb25a9bfab87ab39f9094091be8fbc498cb1054dfda258d",
+        "proofId": "0xc68467efb5ac2e069f01d6a356f35ab46ca48f6bece90c3d6d34b92272bbf36f",
+        "statementDigestSha256": "0x62911f1932d5db6b807c4cca29c456d7da32036f4ca25b1283bf4e97455ab1af",
+        "a": [
+          11345257625365861174012096439938676116178165408577967081045669207554663134390,
+          17562759706787143335543508419158104094597354008270558294945805659949042340917
+        ],
+        "b": [
+          [
+            11830967283680171303258077807967154324262723702459136377216067209143070065784,
+            486258991039646783062447185388037806741946277841333639935763762394851439459
+          ],
+          [
+            20296901277413412585919966442517694406729087508764172745798842756474305275328,
+            11227712659302934553538789571638486365532229582061529422240881205123461250712
+          ]
+        ],
+        "c": [
+          21326251968996359544611207662120593425282395098298489040358489702202134900230,
+          6120469431318513213882219237408304726605678134663851317440648823269140077612
+        ],
+        "pubSignals": [
+          1644841577009,
+          1635488604340,
+          9280252,
+          1,
+          100000,
+          100000,
+          100000,
+          100000,
+          100000,
+          100000,
+          100000,
+          100000,
+          858260,
+          100000,
+          924245,
+          924735,
+          924279,
+          924496,
+          930030,
+          930030,
+          930030,
+          930030,
+          933009,
+          929368,
+          1635488604340,
+          9280252,
+          1644841577009
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 1644841577009,
+        "outputWeightedSum": 1635488604340,
+        "outputTotalWeight": 9280252,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 1635488604340,
+        "claimedTotalWeight": 9280252,
+        "inputStatementHashField": 1644841577009
+      },
+      "rows": null
+    },
+    {
+      "group_id": {
+        "object": "2025-11-27 02:00:00 的 BTC/ETH/DOGE 价格数据"
+      },
+      "group_digest": "df01021ab6c0e5a7f6f437bb1819159da8672c71eae8d8f0eb221ab73b138a57",
+      "result_digest": "2f9f33958193e222e525df821fbc1dad2504f743013f62d8c9c4f5ceb3bbacf0",
+      "row_count": 10,
+      "proof_id": "006218f30f83f5939a9e3a502dcdba5c3f2d27e7cb0a05f7ddd88ed9358a0e8f",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_backend": "snarkjs_groth16",
+      "statement_hash": "18801962323329",
+      "statement_digest_sha256": "ca248961c0bae9a9f6a54a877beb93212fdca4a10dc68819e40499b30ce34b2a",
+      "verification_key_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10/verification_key.json",
+      "artifact_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n10",
+      "public_json": [
+        "18801962323329",
+        "18792510300000",
+        "9280252",
+        "1",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "924245",
+        "924735",
+        "924279",
+        "924496",
+        "930030",
+        "930030",
+        "930030",
+        "930030",
+        "933009",
+        "929368",
+        "18792510300000",
+        "9280252",
+        "18801962323329"
+      ],
+      "proof_json": {
+        "pi_a": [
+          "13918902626968873894925996680039780268201110492657112942392347695487730121546",
+          "124122528977273521552582243077509770574443127332683772810909111000954106394",
+          "1"
+        ],
+        "pi_b": [
+          [
+            "2096820207492455201428629173403978381355712808020805930322918449637502377688",
+            "5694962207827719487194623029315903157422499052819607538356312779657731224150"
+          ],
+          [
+            "447671929476477543236001286917252070669138615906665618372727728866816842394",
+            "3285904125043254728113380726636899696248900618348151992596627287417278375845"
+          ],
+          [
+            "1",
+            "0"
+          ]
+        ],
+        "pi_c": [
+          "19817991730042614195753926053856067985110565598502144693395186421567172196457",
+          "478905095002509686940721717775259317617808143274099150326280537656193736237",
+          "1"
+        ],
+        "protocol": "groth16",
+        "curve": "bn128"
+      },
+      "contract_call": {
+        "a": [
+          13918902626968873894925996680039780268201110492657112942392347695487730121546,
+          124122528977273521552582243077509770574443127332683772810909111000954106394
+        ],
+        "b": [
+          [
+            5694962207827719487194623029315903157422499052819607538356312779657731224150,
+            2096820207492455201428629173403978381355712808020805930322918449637502377688
+          ],
+          [
+            3285904125043254728113380726636899696248900618348151992596627287417278375845,
+            447671929476477543236001286917252070669138615906665618372727728866816842394
+          ]
+        ],
+        "c": [
+          19817991730042614195753926053856067985110565598502144693395186421567172196457,
+          478905095002509686940721717775259317617808143274099150326280537656193736237
+        ],
+        "pubSignals": [
+          18801962323329,
+          18792510300000,
+          9280252,
+          1,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          924245,
+          924735,
+          924279,
+          924496,
+          930030,
+          930030,
+          930030,
+          930030,
+          933009,
+          929368,
+          18792510300000,
+          9280252,
+          18801962323329
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 18801962323329,
+        "outputWeightedSum": 18792510300000,
+        "outputTotalWeight": 9280252,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 18792510300000,
+        "claimedTotalWeight": 9280252,
+        "inputStatementHashField": 18801962323329
+      },
+      "contract_submission": {
+        "experimentId": "0x3e5968ee54061d65ec83c2767d593e12377f132003b59cca970fb25c15ea11ab",
+        "groupId": "0xdf01021ab6c0e5a7f6f437bb1819159da8672c71eae8d8f0eb221ab73b138a57",
+        "resultDigest": "0x2f9f33958193e222e525df821fbc1dad2504f743013f62d8c9c4f5ceb3bbacf0",
+        "proofId": "0x006218f30f83f5939a9e3a502dcdba5c3f2d27e7cb0a05f7ddd88ed9358a0e8f",
+        "statementDigestSha256": "0xca248961c0bae9a9f6a54a877beb93212fdca4a10dc68819e40499b30ce34b2a",
+        "a": [
+          13918902626968873894925996680039780268201110492657112942392347695487730121546,
+          124122528977273521552582243077509770574443127332683772810909111000954106394
+        ],
+        "b": [
+          [
+            5694962207827719487194623029315903157422499052819607538356312779657731224150,
+            2096820207492455201428629173403978381355712808020805930322918449637502377688
+          ],
+          [
+            3285904125043254728113380726636899696248900618348151992596627287417278375845,
+            447671929476477543236001286917252070669138615906665618372727728866816842394
+          ]
+        ],
+        "c": [
+          19817991730042614195753926053856067985110565598502144693395186421567172196457,
+          478905095002509686940721717775259317617808143274099150326280537656193736237
+        ],
+        "pubSignals": [
+          18801962323329,
+          18792510300000,
+          9280252,
+          1,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          924245,
+          924735,
+          924279,
+          924496,
+          930030,
+          930030,
+          930030,
+          930030,
+          933009,
+          929368,
+          18792510300000,
+          9280252,
+          18801962323329
+        ],
+        "publicSignalCount": 27,
+        "outputStatementHashField": 18801962323329,
+        "outputWeightedSum": 18792510300000,
+        "outputTotalWeight": 9280252,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 18792510300000,
+        "claimedTotalWeight": 9280252,
+        "inputStatementHashField": 18801962323329
+      },
+      "rows": null
+    }
+  ]
+}

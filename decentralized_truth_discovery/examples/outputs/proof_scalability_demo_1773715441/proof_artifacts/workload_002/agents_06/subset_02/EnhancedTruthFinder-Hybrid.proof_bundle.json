@@ -1,0 +1,713 @@
+{
+  "experiment_id": "proof_scalability_demo_1773715441_w002_a06_s02:EnhancedTruthFinder-Hybrid",
+  "experiment_digest": "29c7961a26712da5bf13299e43c9725d3f4bb7ec29709077e419b857db83999c",
+  "method": "EnhancedTruthFinder-Hybrid",
+  "row_count": 12,
+  "result_digest": "47c7203821c3e15a70463897f7aeab3ae82ea4a7167c2dc2463824f43d365f9f",
+  "rows": [
+    {
+      "claim_id": 1,
+      "raw_line": "1. [agent-1] 第2条新闻简短摘要 -> Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
+      "record_type": "text",
+      "website": "agent-1",
+      "fact": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
+      "object": "第2条新闻简短摘要",
+      "response_value": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.7752365846286121,
+      "error_metric": 0.2899137602018785,
+      "consistency_metric": 0.9999883379243548,
+      "global_truth": {
+        "numeric": {
+          "percentage_0": 3.12,
+          "value_0": 3.12
+        },
+        "discrete": {
+          "company": "Agilent Technologies"
+        }
+      },
+      "proof_id": "590decd11aae68ebbe57788f473c9e34f9062da1535ebe2b4dfe839bdb133ff5",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 2,
+      "raw_line": "2. [agent-1] 2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90232.46, \"DOGE\": 0.15424, \"ETH\": 3016.6}",
+      "record_type": "crypto_price",
+      "website": "agent-1",
+      "fact": "2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90232.46, ETH: 3016.6, DOGE: 0.15424",
+      "object": "2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90232.46,
+        "DOGE": 0.15424,
+        "ETH": 3016.6
+      },
+      "event_timestamp": "2025-11-27 00:30:00",
+      "btc_price": 90232.46,
+      "eth_price": 3016.6,
+      "doge_price": 0.15424,
+      "source_reliability": 0.7752365846286121,
+      "error_metric": 0.2899137602018785,
+      "consistency_metric": 0.9999883379243548,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90232.46,
+          "doge_price": 0.15424,
+          "eth_price": 3016.6
+        },
+        "discrete": {}
+      },
+      "proof_id": "2f3b9eccecac30e5acfcef38ccae5d30b4b278583f90b1f43d0e60fdae5d9504",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 3,
+      "raw_line": "3. [agent-2] 第2条新闻简短摘要 -> Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
+      "record_type": "text",
+      "website": "agent-2",
+      "fact": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
+      "object": "第2条新闻简短摘要",
+      "response_value": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.7752365846286121,
+      "error_metric": 0.2899137602018785,
+      "consistency_metric": 0.9999883379243548,
+      "global_truth": {
+        "numeric": {
+          "percentage_0": 3.12,
+          "value_0": 3.12
+        },
+        "discrete": {
+          "company": "Agilent Technologies"
+        }
+      },
+      "proof_id": "590decd11aae68ebbe57788f473c9e34f9062da1535ebe2b4dfe839bdb133ff5",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 4,
+      "raw_line": "4. [agent-2] 2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90232.46, \"DOGE\": 0.15424, \"ETH\": 3016.6}",
+      "record_type": "crypto_price",
+      "website": "agent-2",
+      "fact": "2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90232.46, ETH: 3016.6, DOGE: 0.15424",
+      "object": "2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90232.46,
+        "DOGE": 0.15424,
+        "ETH": 3016.6
+      },
+      "event_timestamp": "2025-11-27 00:30:00",
+      "btc_price": 90232.46,
+      "eth_price": 3016.6,
+      "doge_price": 0.15424,
+      "source_reliability": 0.7752365846286121,
+      "error_metric": 0.2899137602018785,
+      "consistency_metric": 0.9999883379243548,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90232.46,
+          "doge_price": 0.15424,
+          "eth_price": 3016.6
+        },
+        "discrete": {}
+      },
+      "proof_id": "2f3b9eccecac30e5acfcef38ccae5d30b4b278583f90b1f43d0e60fdae5d9504",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 5,
+      "raw_line": "5. [agent-3] 第2条新闻简短摘要 -> Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，VTSMX持有公司3.12%的股份。",
+      "record_type": "text",
+      "website": "agent-3",
+      "fact": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，VTSMX持有公司3.12%的股份。",
+      "object": "第2条新闻简短摘要",
+      "response_value": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，VTSMX持有公司3.12%的股份。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.9264335847751256,
+      "error_metric": 0.07940460392063475,
+      "consistency_metric": 0.9999966766329681,
+      "global_truth": {
+        "numeric": {
+          "percentage_0": 3.12,
+          "value_0": 3.12
+        },
+        "discrete": {
+          "company": "Agilent Technologies"
+        }
+      },
+      "proof_id": "590decd11aae68ebbe57788f473c9e34f9062da1535ebe2b4dfe839bdb133ff5",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 6,
+      "raw_line": "6. [agent-3] 2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90232.46, \"DOGE\": 0.15424, \"ETH\": 3016.6}",
+      "record_type": "crypto_price",
+      "website": "agent-3",
+      "fact": "2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90232.46, ETH: 3016.6, DOGE: 0.15424",
+      "object": "2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90232.46,
+        "DOGE": 0.15424,
+        "ETH": 3016.6
+      },
+      "event_timestamp": "2025-11-27 00:30:00",
+      "btc_price": 90232.46,
+      "eth_price": 3016.6,
+      "doge_price": 0.15424,
+      "source_reliability": 0.9264335847751256,
+      "error_metric": 0.07940460392063475,
+      "consistency_metric": 0.9999966766329681,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90232.46,
+          "doge_price": 0.15424,
+          "eth_price": 3016.6
+        },
+        "discrete": {}
+      },
+      "proof_id": "2f3b9eccecac30e5acfcef38ccae5d30b4b278583f90b1f43d0e60fdae5d9504",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 7,
+      "raw_line": "7. [agent-4] 第2条新闻简短摘要 -> Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
+      "record_type": "text",
+      "website": "agent-4",
+      "fact": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
+      "object": "第2条新闻简短摘要",
+      "response_value": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.7752365846286121,
+      "error_metric": 0.2899137602018785,
+      "consistency_metric": 0.9999883379243548,
+      "global_truth": {
+        "numeric": {
+          "percentage_0": 3.12,
+          "value_0": 3.12
+        },
+        "discrete": {
+          "company": "Agilent Technologies"
+        }
+      },
+      "proof_id": "590decd11aae68ebbe57788f473c9e34f9062da1535ebe2b4dfe839bdb133ff5",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 8,
+      "raw_line": "8. [agent-4] 2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90232.46, \"DOGE\": 0.15424, \"ETH\": 3016.6}",
+      "record_type": "crypto_price",
+      "website": "agent-4",
+      "fact": "2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90232.46, ETH: 3016.6, DOGE: 0.15424",
+      "object": "2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90232.46,
+        "DOGE": 0.15424,
+        "ETH": 3016.6
+      },
+      "event_timestamp": "2025-11-27 00:30:00",
+      "btc_price": 90232.46,
+      "eth_price": 3016.6,
+      "doge_price": 0.15424,
+      "source_reliability": 0.7752365846286121,
+      "error_metric": 0.2899137602018785,
+      "consistency_metric": 0.9999883379243548,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90232.46,
+          "doge_price": 0.15424,
+          "eth_price": 3016.6
+        },
+        "discrete": {}
+      },
+      "proof_id": "2f3b9eccecac30e5acfcef38ccae5d30b4b278583f90b1f43d0e60fdae5d9504",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 9,
+      "raw_line": "9. [agent-6] 第2条新闻简短摘要 -> Wolfe Research于2023年12月13日对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司计划在2023年11月15日宣布每股0.24美元的季度股息。",
+      "record_type": "text",
+      "website": "agent-6",
+      "fact": "Wolfe Research于2023年12月13日对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司计划在2023年11月15日宣布每股0.24美元的季度股息。",
+      "object": "第2条新闻简短摘要",
+      "response_value": "Wolfe Research于2023年12月13日对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司计划在2023年11月15日宣布每股0.24美元的季度股息。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.7742509584383896,
+      "error_metric": 0.2915557471445388,
+      "consistency_metric": 0.9999882751032697,
+      "global_truth": {
+        "numeric": {
+          "percentage_0": 3.12,
+          "value_0": 3.12
+        },
+        "discrete": {
+          "company": "Agilent Technologies"
+        }
+      },
+      "proof_id": "590decd11aae68ebbe57788f473c9e34f9062da1535ebe2b4dfe839bdb133ff5",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 10,
+      "raw_line": "10. [agent-6] 2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90232.46, \"DOGE\": 0.15424, \"ETH\": 3016.6}",
+      "record_type": "crypto_price",
+      "website": "agent-6",
+      "fact": "2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90232.46, ETH: 3016.6, DOGE: 0.15424",
+      "object": "2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90232.46,
+        "DOGE": 0.15424,
+        "ETH": 3016.6
+      },
+      "event_timestamp": "2025-11-27 00:30:00",
+      "btc_price": 90232.46,
+      "eth_price": 3016.6,
+      "doge_price": 0.15424,
+      "source_reliability": 0.7742509584383896,
+      "error_metric": 0.2915557471445388,
+      "consistency_metric": 0.9999882751032697,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90232.46,
+          "doge_price": 0.15424,
+          "eth_price": 3016.6
+        },
+        "discrete": {}
+      },
+      "proof_id": "2f3b9eccecac30e5acfcef38ccae5d30b4b278583f90b1f43d0e60fdae5d9504",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 11,
+      "raw_line": "11. [agent-10] 第2条新闻简短摘要 -> Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
+      "record_type": "text",
+      "website": "agent-10",
+      "fact": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
+      "object": "第2条新闻简短摘要",
+      "response_value": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
+      "event_timestamp": null,
+      "btc_price": null,
+      "eth_price": null,
+      "doge_price": null,
+      "source_reliability": 0.7752365846286121,
+      "error_metric": 0.2899137602018785,
+      "consistency_metric": 0.9999883379243548,
+      "global_truth": {
+        "numeric": {
+          "percentage_0": 3.12,
+          "value_0": 3.12
+        },
+        "discrete": {
+          "company": "Agilent Technologies"
+        }
+      },
+      "proof_id": "590decd11aae68ebbe57788f473c9e34f9062da1535ebe2b4dfe839bdb133ff5",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "claim_id": 12,
+      "raw_line": "12. [agent-10] 2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据 -> {\"BTC\": 90232.46, \"DOGE\": 0.15424, \"ETH\": 3016.6}",
+      "record_type": "crypto_price",
+      "website": "agent-10",
+      "fact": "2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据: BTC: 90232.46, ETH: 3016.6, DOGE: 0.15424",
+      "object": "2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据",
+      "response_value": {
+        "BTC": 90232.46,
+        "DOGE": 0.15424,
+        "ETH": 3016.6
+      },
+      "event_timestamp": "2025-11-27 00:30:00",
+      "btc_price": 90232.46,
+      "eth_price": 3016.6,
+      "doge_price": 0.15424,
+      "source_reliability": 0.7752365846286121,
+      "error_metric": 0.2899137602018785,
+      "consistency_metric": 0.9999883379243548,
+      "global_truth": {
+        "numeric": {
+          "btc_price": 90232.46,
+          "doge_price": 0.15424,
+          "eth_price": 3016.6
+        },
+        "discrete": {}
+      },
+      "proof_id": "2f3b9eccecac30e5acfcef38ccae5d30b4b278583f90b1f43d0e60fdae5d9504",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    }
+  ],
+  "proof_groups": [
+    {
+      "group_id": {
+        "object": "第2条新闻简短摘要"
+      },
+      "group_digest": "710ae8364db657bbd672f1d138519c474fdcbd6fe62d3acfc01e32f0922f6c9e",
+      "result_digest": "c61b5ab7050e1efdf9bc650da2a2cb9fa7cb97b27e246e90ad7e755b37339478",
+      "row_count": 6,
+      "proof_id": "590decd11aae68ebbe57788f473c9e34f9062da1535ebe2b4dfe839bdb133ff5",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_backend": "snarkjs_groth16",
+      "statement_hash": "4823163271",
+      "statement_digest_sha256": "d9119b0bdaac3af81fe4086e10ad600c6136e2eb0e68bae512e8e1762338dd5e",
+      "verification_key_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n6/verification_key.json",
+      "artifact_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n6",
+      "public_json": [
+        "4823163271",
+        "0",
+        "4801633",
+        "1",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "775237",
+        "775237",
+        "926434",
+        "775237",
+        "774251",
+        "775237",
+        "0",
+        "4801633",
+        "4823163271"
+      ],
+      "proof_json": {
+        "pi_a": [
+          "4750040200861737070548887811082410623878323145110291991675813100303576858657",
+          "11356660382425123656960968827180636146264283482368045007806995991151297221230",
+          "1"
+        ],
+        "pi_b": [
+          [
+            "11206411330136574980961864461221414747324760417024845614375735911414375188508",
+            "19870253427131919036709305569321717396055170720396179126395379343255350941083"
+          ],
+          [
+            "8545190942514862721218321142334353448509603933428273042020269160871397452251",
+            "5879067582851010179145767725353575240313163636996011545459419785117431635609"
+          ],
+          [
+            "1",
+            "0"
+          ]
+        ],
+        "pi_c": [
+          "1360547120839704210939293595061250078209207348300026793739271556554266768147",
+          "20097334583822184595481486192329363512217017234465411678935211480214118045225",
+          "1"
+        ],
+        "protocol": "groth16",
+        "curve": "bn128"
+      },
+      "contract_call": {
+        "a": [
+          4750040200861737070548887811082410623878323145110291991675813100303576858657,
+          11356660382425123656960968827180636146264283482368045007806995991151297221230
+        ],
+        "b": [
+          [
+            19870253427131919036709305569321717396055170720396179126395379343255350941083,
+            11206411330136574980961864461221414747324760417024845614375735911414375188508
+          ],
+          [
+            5879067582851010179145767725353575240313163636996011545459419785117431635609,
+            8545190942514862721218321142334353448509603933428273042020269160871397452251
+          ]
+        ],
+        "c": [
+          1360547120839704210939293595061250078209207348300026793739271556554266768147,
+          20097334583822184595481486192329363512217017234465411678935211480214118045225
+        ],
+        "pubSignals": [
+          4823163271,
+          0,
+          4801633,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          775237,
+          775237,
+          926434,
+          775237,
+          774251,
+          775237,
+          0,
+          4801633,
+          4823163271
+        ],
+        "publicSignalCount": 19,
+        "outputStatementHashField": 4823163271,
+        "outputWeightedSum": 0,
+        "outputTotalWeight": 4801633,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 0,
+        "claimedTotalWeight": 4801633,
+        "inputStatementHashField": 4823163271
+      },
+      "contract_submission": {
+        "experimentId": "0xf303d483e3807181a15c6b386a547058adec8aff2e70761bed9ad591676f607f",
+        "groupId": "0x710ae8364db657bbd672f1d138519c474fdcbd6fe62d3acfc01e32f0922f6c9e",
+        "resultDigest": "0xc61b5ab7050e1efdf9bc650da2a2cb9fa7cb97b27e246e90ad7e755b37339478",
+        "proofId": "0x590decd11aae68ebbe57788f473c9e34f9062da1535ebe2b4dfe839bdb133ff5",
+        "statementDigestSha256": "0xd9119b0bdaac3af81fe4086e10ad600c6136e2eb0e68bae512e8e1762338dd5e",
+        "a": [
+          4750040200861737070548887811082410623878323145110291991675813100303576858657,
+          11356660382425123656960968827180636146264283482368045007806995991151297221230
+        ],
+        "b": [
+          [
+            19870253427131919036709305569321717396055170720396179126395379343255350941083,
+            11206411330136574980961864461221414747324760417024845614375735911414375188508
+          ],
+          [
+            5879067582851010179145767725353575240313163636996011545459419785117431635609,
+            8545190942514862721218321142334353448509603933428273042020269160871397452251
+          ]
+        ],
+        "c": [
+          1360547120839704210939293595061250078209207348300026793739271556554266768147,
+          20097334583822184595481486192329363512217017234465411678935211480214118045225
+        ],
+        "pubSignals": [
+          4823163271,
+          0,
+          4801633,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          775237,
+          775237,
+          926434,
+          775237,
+          774251,
+          775237,
+          0,
+          4801633,
+          4823163271
+        ],
+        "publicSignalCount": 19,
+        "outputStatementHashField": 4823163271,
+        "outputWeightedSum": 0,
+        "outputTotalWeight": 4801633,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 0,
+        "claimedTotalWeight": 4801633,
+        "inputStatementHashField": 4823163271
+      },
+      "rows": null
+    },
+    {
+      "group_id": {
+        "object": "2025-11-27 00:30:00 的 BTC/ETH/DOGE 价格数据"
+      },
+      "group_digest": "327e482e3c1495ddf46183c206594158ed2463cb8ff971a204d3753b18eb944c",
+      "result_digest": "5ddc4b048ae7865fa9b1d50a8a4c90a2b95ecc8dec1ac632e08b0936df6dbb7e",
+      "row_count": 6,
+      "proof_id": "2f3b9eccecac30e5acfcef38ccae5d30b4b278583f90b1f43d0e60fdae5d9504",
+      "proof_scheme": "groth16_truth_aggregation_v1",
+      "proof_backend": "snarkjs_groth16",
+      "statement_hash": "9728172513271",
+      "statement_digest_sha256": "5df1232e428222fb11153b57daa8bffe2afcce45349bd806cf7af1b0c93bc546",
+      "verification_key_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n6/verification_key.json",
+      "artifact_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/../../decentralized_truth_discovery/core/circuits/snarkjs_artifacts/truth_aggregation_groth16_v2_n6",
+      "public_json": [
+        "9728172513271",
+        "9723306825000",
+        "4801633",
+        "1",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "2025000",
+        "775237",
+        "775237",
+        "926434",
+        "775237",
+        "774251",
+        "775237",
+        "9723306825000",
+        "4801633",
+        "9728172513271"
+      ],
+      "proof_json": {
+        "pi_a": [
+          "16447086955706300461209357123103651396179296465874864802256650826773187362704",
+          "10171810950061395620140096123199122510665976583412767446664716515683920427933",
+          "1"
+        ],
+        "pi_b": [
+          [
+            "12263165487709282294747847195322682653293693216239134915747846553640594297445",
+            "5546872936524138102307416384114675264317620976267494889478620672073699744325"
+          ],
+          [
+            "14212081665705623327898721552714788320726664027254959432072045777258664426897",
+            "18307008299061935924142987481431607202113172043441266159356453170455131894115"
+          ],
+          [
+            "1",
+            "0"
+          ]
+        ],
+        "pi_c": [
+          "3615324613777856029735003810185182049204259836270860815903873770143561188446",
+          "16756127587181889579516312862699120618230597361955986080892445313383440054161",
+          "1"
+        ],
+        "protocol": "groth16",
+        "curve": "bn128"
+      },
+      "contract_call": {
+        "a": [
+          16447086955706300461209357123103651396179296465874864802256650826773187362704,
+          10171810950061395620140096123199122510665976583412767446664716515683920427933
+        ],
+        "b": [
+          [
+            5546872936524138102307416384114675264317620976267494889478620672073699744325,
+            12263165487709282294747847195322682653293693216239134915747846553640594297445
+          ],
+          [
+            18307008299061935924142987481431607202113172043441266159356453170455131894115,
+            14212081665705623327898721552714788320726664027254959432072045777258664426897
+          ]
+        ],
+        "c": [
+          3615324613777856029735003810185182049204259836270860815903873770143561188446,
+          16756127587181889579516312862699120618230597361955986080892445313383440054161
+        ],
+        "pubSignals": [
+          9728172513271,
+          9723306825000,
+          4801633,
+          1,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          775237,
+          775237,
+          926434,
+          775237,
+          774251,
+          775237,
+          9723306825000,
+          4801633,
+          9728172513271
+        ],
+        "publicSignalCount": 19,
+        "outputStatementHashField": 9728172513271,
+        "outputWeightedSum": 9723306825000,
+        "outputTotalWeight": 4801633,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 9723306825000,
+        "claimedTotalWeight": 4801633,
+        "inputStatementHashField": 9728172513271
+      },
+      "contract_submission": {
+        "experimentId": "0xf303d483e3807181a15c6b386a547058adec8aff2e70761bed9ad591676f607f",
+        "groupId": "0x327e482e3c1495ddf46183c206594158ed2463cb8ff971a204d3753b18eb944c",
+        "resultDigest": "0x5ddc4b048ae7865fa9b1d50a8a4c90a2b95ecc8dec1ac632e08b0936df6dbb7e",
+        "proofId": "0x2f3b9eccecac30e5acfcef38ccae5d30b4b278583f90b1f43d0e60fdae5d9504",
+        "statementDigestSha256": "0x5df1232e428222fb11153b57daa8bffe2afcce45349bd806cf7af1b0c93bc546",
+        "a": [
+          16447086955706300461209357123103651396179296465874864802256650826773187362704,
+          10171810950061395620140096123199122510665976583412767446664716515683920427933
+        ],
+        "b": [
+          [
+            5546872936524138102307416384114675264317620976267494889478620672073699744325,
+            12263165487709282294747847195322682653293693216239134915747846553640594297445
+          ],
+          [
+            18307008299061935924142987481431607202113172043441266159356453170455131894115,
+            14212081665705623327898721552714788320726664027254959432072045777258664426897
+          ]
+        ],
+        "c": [
+          3615324613777856029735003810185182049204259836270860815903873770143561188446,
+          16756127587181889579516312862699120618230597361955986080892445313383440054161
+        ],
+        "pubSignals": [
+          9728172513271,
+          9723306825000,
+          4801633,
+          1,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          2025000,
+          775237,
+          775237,
+          926434,
+          775237,
+          774251,
+          775237,
+          9723306825000,
+          4801633,
+          9728172513271
+        ],
+        "publicSignalCount": 19,
+        "outputStatementHashField": 9728172513271,
+        "outputWeightedSum": 9723306825000,
+        "outputTotalWeight": 4801633,
+        "outputIsValid": 1,
+        "claimedWeightedSum": 9723306825000,
+        "claimedTotalWeight": 4801633,
+        "inputStatementHashField": 9728172513271
+      },
+      "rows": null
+    }
+  ]
+}

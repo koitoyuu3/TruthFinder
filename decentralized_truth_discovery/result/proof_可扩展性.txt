@@ -1,0 +1,6 @@
+                        method  composite_score  proof_bundle_bytes  verify_total_elapsed_sec  verify_peak_rss_mb
+    EnhancedTruthFinder-Hybrid          90.5856          30362.2857                    0.3059            160.3988
+              BasicTruthFinder          81.0961          28530.0000                    0.3016            160.3638
+              SenteTruthFinder          68.9199          28058.0952                    0.3005            160.4315
+SenFeedTruthFinder-CompositeTD          27.7019          42037.4286                    0.5811            160.7879
+ EnhancedTruthFinder-NonHybrid          21.3039          54547.1905                    0.6105            160.8832

@@ -1,0 +1,132 @@
+实验链上链下：序列图，截对应的结果
+真值发现：
+1.数值
+2.数值+离散
+3.真值发现（恶意节点比例）
+ - growth_rate_pct 不是传统的“增长百分比”，而是一个自定义的平滑增长分数，计算在 decentralized_truth_discovery/examples/byzantine_rmse_comparison.py:649，调用在 decentralized_truth_discovery/examples/
+    byzantine_rmse_comparison.py:737。
+  - 它先对每个方法求 clean_rmse 和 attacked_rmse 的均值：clean_mean、attacked_mean，见 decentralized_truth_discovery/examples/byzantine_rmse_comparison.py:726 到 decentralized_truth_discovery/examples/
+    byzantine_rmse_comparison.py:729。
+  - 然后计算：
+    delta = |attacked_mean - clean_mean|
+    denominator = max(clean_mean + attacked_mean + smoothing, floor)
+    growth_rate_pct = scale * sqrt(delta / denominator)
+
+4.真值发现（随着时间变化）
+- 默认没有恶意数据，计算agent可靠性
+- 混合-随着batch变化.txt
+- 数值-随着batch变化.txt
+5.真值发现（迭代次数不同）（中间某一轮次，节点变成恶意的）
+ 你应该持续记录：attack_induced_shock_mean
+  - 不用看 dynamic_score_mean、score_shock_peak_mean 这种汇总值
+  - 这些 *_mean 只是把整段过程压成一个数，不能表达“先稳→突刺→恢复”
+  这个指标怎么定义
+  - 先算每轮权重跳变量：
+  - score_shock_t = mean_i |w_i(t) - w_i(t-1)|
+  - 再减掉无攻击时的正常波动：
+  - attack_induced_shock_t = max(0, score_shock_attacked_t - score_shock_clean_t)
+  它为什么正好符合你的需求
+  - 攻击前：接近 0，比较平稳
+  - 攻击注入当轮：突然变大
+  - 后续几轮：逐步回落
+6.真值发现（agent数量）
+ method：方法名，比如 EnhancedTruthFinder-Hybrid、SenteTruthFinder
+  - run_count：这个方法总共跑了多少次 benchmark 子任务
+  - success_count：成功完成的 run 数量，success=True 的个数
+  - overall_mean_elapsed_sec：该方法所有 run 的平均执行耗时，单位秒；来自每次 worker 返回的 elapsed_sec
+  - overall_mean_peak_delta_rss_mb：平均峰值增量内存，单位 MB；等于运行期间 peak_rss_mb - baseline_rss_mb 的均值
+  - overall_mean_source_score_pct：平均“质量分”，是各 run 的 mean_source_score_pct 再取均值；它先把方法原生 source_scores 转成百分制后，再对网站分数求平均，见 decentralized_truth_discovery/examples/
+    agent_scalability_benchmark.py:343
+  - overall_mean_latency_rank：平均耗时排名；越小越好。单次 rank 是在同一个 workload/agent_count/subset 下，按 elapsed_sec 升序排名，见 decentralized_truth_discovery/examples/agent_scalability_benchmark.py:413
+  - overall_mean_memory_rank：平均内存排名；越小越好。单次 rank 按 peak_delta_rss_mb 升序排，见 decentralized_truth_discovery/examples/agent_scalability_benchmark.py:414
+  - overall_mean_quality_rank：平均质量排名；越小越好。单次 rank 按 mean_source_score_pct 降序排，所以质量最好的是 1，见 decentralized_truth_discovery/examples/agent_scalability_benchmark.py:415
+  - overall_mean_composite_rank：平均综合排名；越小越好。单次 composite_rank 来自综合分排序，见 decentralized_truth_discovery/examples/agent_scalability_benchmark.py:416
+  - overall_mean_composite_score：平均综合分；越大越好。单次综合分公式是
+    time_weight * latency_score + memory_weight * memory_score + quality_weight * quality_score
+    其中三个 score 都先被归一化到 0–100，见 decentralized_truth_discovery/examples/agent_scalability_benchmark.py:398 和 decentralized_truth_discovery/examples/agent_scalability_benchmark.py:402
+  - success_rate：成功率，等于 success_count / run_count，见 decentralized_truth_discovery/examples/agent_scalability_benchmark.py:496
+  - runtime_scaling_exponent：运行时间扩展指数。它不是直接从 raw run 算的，而是先按 method + agent_count 求 mean_elapsed_sec，再对 log(agent_count) 和 log(mean_elapsed_sec) 做一次线性拟合，斜率就是这个指数，见
+    decentralized_truth_discovery/examples/agent_scalability_benchmark.py:421 和 decentralized_truth_discovery/examples/agent_scalability_benchmark.py:498
+  - memory_scaling_exponent：内存扩展指数，算法同上，只是把耗时换成 mean_peak_delta_rss_mb，见 decentralized_truth_discovery/examples/agent_scalability_benchmark.py:473 和 decentralized_truth_discovery/
+    examples/agent_scalability_benchmark.py:504
+
+    这次实验的权重是 time=0.45、memory=0.35、quality=0.20，见 decentralized_truth_discovery/examples/agent_scalability_demo_1773561119/benchmark_summary.json:25
+  - Hybrid check 看的也是 hybrid_average_composite_rank <= top_k，不是“时间最小”或“内存最小”，见 decentralized_truth_discovery/examples/agent_scalability_demo_1773561119/benchmark_summary.json:68
+  - 综合分的公式是
+    0.45 * latency_score + 0.35 * memory_score + 0.20 * quality_score，见 decentralized_truth_discovery/examples/agent_scalability_benchmark.py:398 和 decentralized_truth_discovery/examples/
+    agent_scalability_benchmark.py:402
+  - 排名也是按这个 composite_score 来排的，不是按 overall_mean_elapsed_sec 或 overall_mean_peak_delta_rss_mb 单独排，见 decentralized_truth_discovery/examples/agent_scalability_benchmark.py:413 和
+    decentralized_truth_discovery/examples/agent_scalability_benchmark.py:416
+
+  你图里看到的事实
+
+  - Hybrid 的平均时间约 9.16s，不是最快
+  - Hybrid 的平均峰值增量内存约 2.00MB，反而是 5 个里最差
+  - 但它的质量分几乎拉满：我重算后 mean_quality_score = 100
+  - 对比之下，Sente 虽然更快、更省内存，但 mean_quality_score 只有大约 0.92
+  - 所以 Hybrid 靠质量分把综合分抬上去了：
+    Hybrid composite ≈ 63.19，Sente ≈ 62.61
+
+  还有一个容易混淆的点
+
+  - overall_mean_peak_delta_rss_mb 问的是：平均占多少内存
+  - memory_scaling_exponent 问的是：agent 变多时，内存涨得快不快
+  - 所以一个方法可以“平均内存更高，但增长更慢”
+  - 这正是 Hybrid：平均内存最差，但 memory_scaling_exponent ≈ 0.095 反而最好
+  - 相反，runtime_scaling_exponent ≈ 0.097 对 Hybrid 来说并不好，说明它的时间扩展性偏弱
+
+  - 按效率看：Hybrid 不强
+  - 按质量加权后的综合表现看：Hybrid 还能打，主要是质量把它托上去了
+
+
+零知识证明：
+改变恶意节点比例
+
+建议指标：ATPS
+
+  - 目标：奖励“能识别攻击并重估 source score”，同时强烈惩罚“最终 truth 被带偏”
+  - 定义：
+  - T = 1 - mean_truth_digest_change_ratio
+  - S = mean_source_score_digest_change_ratio
+  - R = mean(|mean_source_score_pct_delta|)
+  - C = R / (R + std(|mean_source_score_pct_delta|))
+  - P = 1 / (1 + (mean_proof_bundle_bytes_delta_pct + max(mean_verify_peak_rss_mb_delta_pct, 0))/100)
+
+  然后定义总分：
+
+  - ATPS = T^2 × S × (1 - exp(-R / 0.05)) × C × P
+
+  为什么这样定义
+
+  - T^2：对 truth 被带偏做平方惩罚，因为你的核心目标是“尽量不改变真值”
+  - S：要求算法内部确实对 source score 做了重估
+  - R：要求这种重估不是零响应
+  - C：要求这种响应在不同攻击比例下是稳定一致的
+  - P：把 proof 结构开销作为一个轻微正则项，符合你“结构影响很小”这个实验口径
+
+  按你这张表算出来的结果
+
+  - EnhancedTruthFinder-Hybrid = 0.460
+  - SenteTruthFinder = 0.280
+  - BasicTruthFinder = 0.042
+  - EnhancedTruthFinder-NonHybrid = 0.037
+  - SenFeedTruthFinder-CompositeTD = 0.002
+
+  所以在这个定义下：
+
+  - Hybrid 第一，而且领先幅度很明显
+  - 它的优势不是“完全不变”，而是：
+      - source score 明确重估
+      - truth 基本稳定
+      - proof 结构开销仍然很小
+
+可扩展性（proof size、memory内存、验证时间）
+ENABLE_SBERT=0 PYTHONDONTWRITEBYTECODE=1 python3 decentralized_truth_discovery/examples/proof_scalability_benchmark.py --start-batch 1 --batch-group-size 1 --num-workloads 3 --agent-counts 4,6,8,10 --subset-samples 2
+proof_bundle_bytes：整包 proof 文件大小
+      - verify_total_elapsed_sec：验证总耗时
+      - verify_peak_rss_mb：验证峰值内存
+      - proof_group_count：proof 分组数
+      - overall_mean_composite_rank：综合排名
+
+
+检查第四章写的对不对

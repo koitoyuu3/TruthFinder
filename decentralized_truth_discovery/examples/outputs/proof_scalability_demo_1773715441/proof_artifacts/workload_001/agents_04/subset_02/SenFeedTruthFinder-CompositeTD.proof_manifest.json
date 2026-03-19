@@ -1,0 +1,47 @@
+{
+  "experiment_id": "proof_scalability_demo_1773715441_w001_a04_s02",
+  "method": "SenFeedTruthFinder-CompositeTD",
+  "method_experiment_id": "proof_scalability_demo_1773715441_w001_a04_s02:SenFeedTruthFinder-CompositeTD",
+  "row_count": 16,
+  "proof_group_count": 4,
+  "bundle_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_02/SenFeedTruthFinder-CompositeTD.proof_bundle.json",
+  "chainmaker": {
+    "bundle_name": "SenFeedTruthFinder-CompositeTD",
+    "contract_file": "decentralized_truth_discovery/core/circuits/TruthSingleProofRegistryN4.sol",
+    "verify_method": "verifySelectedProofFlat",
+    "submit_method": "submitSelectedProofFlat",
+    "groups": [
+      {
+        "group_index": 0,
+        "proof_id": "5c3ca02776f0f17e2462bf23e74aadc0a2404494bf790762297239dab8365ff4",
+        "group_digest": "0ac5cfd4c121cce01f981ced9964c2b5418fc75bbf1dae6ffcdb474fed73ae22",
+        "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_02/SenFeedTruthFinder-CompositeTD.group_0.verifySelectedProofFlat.params.json",
+        "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_02/SenFeedTruthFinder-CompositeTD.group_0.submitSelectedProofFlat.params.json"
+      },
+      {
+        "group_index": 1,
+        "proof_id": "7eec6359204b78e207f37df095e6284711b4c5f8f08e291f45717f8cc2f1c676",
+        "group_digest": "4b50779604f4af55d964b4a4dacaa6f18ade17d37eadae8e21dab84dee9a98db",
+        "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_02/SenFeedTruthFinder-CompositeTD.group_1.verifySelectedProofFlat.params.json",
+        "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_02/SenFeedTruthFinder-CompositeTD.group_1.submitSelectedProofFlat.params.json"
+      },
+      {
+        "group_index": 2,
+        "proof_id": "1a33a33e8bf6d5f536cdb26632b7d67e660f354c5243436ae6c95bb2de3dfacd",
+        "group_digest": "1374692d3060ac109106393220ce5f6cc3403d4aa7d0a6f1ce22f501c2024426",
+        "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_02/SenFeedTruthFinder-CompositeTD.group_2.verifySelectedProofFlat.params.json",
+        "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_02/SenFeedTruthFinder-CompositeTD.group_2.submitSelectedProofFlat.params.json"
+      },
+      {
+        "group_index": 3,
+        "proof_id": "c63cb5687696b1a40a136cbcbf71d050e79cc3d6259054a4e58e76f8c99e2cb8",
+        "group_digest": "7b6f4761cede2850c905c0491f6aacec238d3de280ded666a0c8058c177c7f52",
+        "verify_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_02/SenFeedTruthFinder-CompositeTD.group_3.verifySelectedProofFlat.params.json",
+        "submit_params_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_02/SenFeedTruthFinder-CompositeTD.group_3.submitSelectedProofFlat.params.json"
+      }
+    ],
+    "manifest_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_04/subset_02/SenFeedTruthFinder-CompositeTD.chainmaker_manifest.json",
+    "exported": true,
+    "error": ""
+  }
+}

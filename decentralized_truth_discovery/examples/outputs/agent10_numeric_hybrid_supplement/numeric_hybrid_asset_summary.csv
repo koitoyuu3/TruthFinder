@@ -1,0 +1,10 @@
+scenario,asset,post_attack_mean_abs_pct_error,post_attack_max_abs_pct_error,final_round_mean_abs_pct_error,final_round_mean_signed_pct_error
+early,BTC,0.0,0.0,0.0,0.0
+early,ETH,0.0,0.0,0.0,0.0
+early,DOGE,0.0,0.0,0.0,0.0
+mid,BTC,0.0,0.0,0.0,0.0
+mid,ETH,0.0,0.0,0.0,0.0
+mid,DOGE,0.0,0.0,0.0,0.0
+late,BTC,0.0,0.0,0.0,0.0
+late,ETH,0.0,0.0,0.0,0.0
+late,DOGE,0.0,0.0,0.0,0.0

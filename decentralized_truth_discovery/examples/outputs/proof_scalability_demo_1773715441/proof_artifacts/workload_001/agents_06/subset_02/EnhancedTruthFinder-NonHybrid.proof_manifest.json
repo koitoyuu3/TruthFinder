@@ -1,0 +1,15 @@
+{
+  "experiment_id": "proof_scalability_demo_1773715441_w001_a06_s02",
+  "method": "EnhancedTruthFinder-NonHybrid",
+  "method_experiment_id": "proof_scalability_demo_1773715441_w001_a06_s02:EnhancedTruthFinder-NonHybrid",
+  "row_count": 24,
+  "proof_group_count": 4,
+  "bundle_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability_demo_1773715441/proof_artifacts/workload_001/agents_06/subset_02/EnhancedTruthFinder-NonHybrid.proof_bundle.json",
+  "chainmaker": {
+    "bundle_name": "EnhancedTruthFinder-NonHybrid",
+    "groups": [],
+    "manifest_path": "",
+    "exported": false,
+    "error": "submission.pubSignals must be a 15-element list for current n=4 Groth16 proof"
+  }
+}

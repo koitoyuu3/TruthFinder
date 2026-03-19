@@ -1,0 +1,95 @@
+{
+  "attack_rounds": {
+    "early": 5,
+    "mid": 25,
+    "late": 45
+  },
+  "seed_manifest": [
+    {
+      "seed": 1,
+      "malicious_agents": [
+        "agent-1",
+        "agent-2",
+        "agent-3",
+        "agent-4"
+      ],
+      "clean_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10/num_demo.json",
+      "attacked_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10/num_demo_4bad_agent.json",
+      "window_start_batch": 1,
+      "window_end_batch": 50,
+      "bad_agent_count": 4
+    },
+    {
+      "seed": 2,
+      "malicious_agents": [
+        "agent-1",
+        "agent-2",
+        "agent-3",
+        "agent-4"
+      ],
+      "clean_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10/num_demo.json",
+      "attacked_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10/num_demo_4bad_agent.json",
+      "window_start_batch": 2,
+      "window_end_batch": 51,
+      "bad_agent_count": 4
+    },
+    {
+      "seed": 3,
+      "malicious_agents": [
+        "agent-1",
+        "agent-2",
+        "agent-3",
+        "agent-4"
+      ],
+      "clean_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10/num_demo.json",
+      "attacked_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10/num_demo_4bad_agent.json",
+      "window_start_batch": 3,
+      "window_end_batch": 52,
+      "bad_agent_count": 4
+    },
+    {
+      "seed": 4,
+      "malicious_agents": [
+        "agent-1",
+        "agent-2",
+        "agent-3",
+        "agent-4"
+      ],
+      "clean_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10/num_demo.json",
+      "attacked_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10/num_demo_4bad_agent.json",
+      "window_start_batch": 4,
+      "window_end_batch": 53,
+      "bad_agent_count": 4
+    },
+    {
+      "seed": 5,
+      "malicious_agents": [
+        "agent-1",
+        "agent-2",
+        "agent-3",
+        "agent-4"
+      ],
+      "clean_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10/num_demo.json",
+      "attacked_path": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10/num_demo_4bad_agent.json",
+      "window_start_batch": 5,
+      "window_end_batch": 54,
+      "bad_agent_count": 4
+    }
+  ],
+  "config": {
+    "data_agent_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10",
+    "start_batch": 1,
+    "num_rounds": 50,
+    "num_seeds": 5,
+    "bad_agent_count": 4,
+    "max_iterations": 80,
+    "convergence_threshold": 1e-06,
+    "hybrid_numeric_weight": 0.5,
+    "hybrid_field_support_threshold": 0.5,
+    "attack_scale": 4.0,
+    "recovery_tolerance": 0.01,
+    "recovery_consecutive_rounds": 2,
+    "output_dir": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/agent10_numeric_hybrid_supplement",
+    "skip_plots": true
+  }
+}

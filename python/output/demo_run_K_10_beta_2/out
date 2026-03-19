@@ -1,0 +1,610 @@
+args:
+	exp_name: demo_run_K_10_beta_2
+	output_root: output
+	cpu: False
+	data:
+		name: PriceDataset
+		path: ['data/price_ETH_USD/coingecko_2025-11-27T00:00_2025-12-02T23:59.pk', 'data/price_DOGE_USD/cryptocompare_2025-11-27T00:00_2025-12-02T23:59.pk', 'data/price_ETH_USD/kucoin_2025-11-27T00:00_2025-12-02T23:59.pk', 'data/price_ETH_USD/kucoin_copy1.pk', 'data/price_ETH_USD/kucoin_copy2.pk', 'data/price_ETH_USD/kucoin_copy3.pk', 'data/price_ETH_USD/kucoin_copy4.pk', 'data/price_ETH_USD/kucoin_copy5.pk', 'data/price_ETH_USD/kucoin_copy6.pk', 'data/price_ETH_USD/kucoin_copy7.pk']
+		start_time: 2025-11-27T00:00
+		end_time: 2025-11-27T00:50
+		time_step_sec: 60
+		seed: 0
+		exp_name: demo_run_K_10_beta_2
+		output_root: output
+
+	model_base:
+		name: ['KF1D', 'KF1D', 'KF1D', 'KF1D', 'KF1D', 'KF1D', 'KF1D', 'KF1D', 'KF1D', 'KF1D']
+		score_min: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+		score_max: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+		lr: [0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
+		state_noise_init: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+		obs_noise_init: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+		exp_name: demo_run_K_10_beta_2
+		output_root: output
+
+	model_ps:
+		name: ['SpecialMVP', 'SpecialMVP', 'SpecialMVP', 'SpecialMVP', 'SpecialMVP', 'SpecialMVP', 'SpecialMVP', 'SpecialMVP', 'SpecialMVP', 'SpecialMVP']
+		n_bins: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
+		eta: 5
+		alpha: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
+		beta: 2
+		nonconsensus_param: 0
+		exp_name: demo_run_K_10_beta_2
+		output_root: output
+
+	train:
+		method: skip
+		exp_name: demo_run_K_10_beta_2
+		output_root: output
+
+
+[price data, data_path = data/price_ETH_USD/coingecko_2025-11-27T00:00_2025-12-02T23:59.pk] sequence length = 8640
+[price data, data_path = data/price_DOGE_USD/cryptocompare_2025-11-27T00:00_2025-12-02T23:59.pk] sequence length = 8640
+[price data, data_path = data/price_ETH_USD/kucoin_2025-11-27T00:00_2025-12-02T23:59.pk] sequence length = 8640
+[price data, data_path = data/price_ETH_USD/kucoin_copy1.pk] sequence length = 8640
+[price data, data_path = data/price_ETH_USD/kucoin_copy2.pk] sequence length = 8640
+[price data, data_path = data/price_ETH_USD/kucoin_copy3.pk] sequence length = 8640
+[price data, data_path = data/price_ETH_USD/kucoin_copy4.pk] sequence length = 8640
+[price data, data_path = data/price_ETH_USD/kucoin_copy5.pk] sequence length = 8640
+[price data, data_path = data/price_ETH_USD/kucoin_copy6.pk] sequence length = 8640
+[price data, data_path = data/price_ETH_USD/kucoin_copy7.pk] sequence length = 8640
+Namespace(name='KF1D', score_min=0.0, score_max=1.0, lr=0.001, state_noise_init=0.1, obs_noise_init=0.1, exp_name='demo_run_K_10_beta_2', output_root='output')
+Namespace(name='KF1D', score_min=0.0, score_max=1.0, lr=0.001, state_noise_init=0.1, obs_noise_init=0.1, exp_name='demo_run_K_10_beta_2', output_root='output')
+Namespace(name='KF1D', score_min=0.0, score_max=1.0, lr=0.001, state_noise_init=0.1, obs_noise_init=0.1, exp_name='demo_run_K_10_beta_2', output_root='output')
+Namespace(name='KF1D', score_min=0.0, score_max=1.0, lr=0.001, state_noise_init=0.1, obs_noise_init=0.1, exp_name='demo_run_K_10_beta_2', output_root='output')
+Namespace(name='KF1D', score_min=0.0, score_max=1.0, lr=0.001, state_noise_init=0.1, obs_noise_init=0.1, exp_name='demo_run_K_10_beta_2', output_root='output')
+Namespace(name='KF1D', score_min=0.0, score_max=1.0, lr=0.001, state_noise_init=0.1, obs_noise_init=0.1, exp_name='demo_run_K_10_beta_2', output_root='output')
+Namespace(name='KF1D', score_min=0.0, score_max=1.0, lr=0.001, state_noise_init=0.1, obs_noise_init=0.1, exp_name='demo_run_K_10_beta_2', output_root='output')
+Namespace(name='KF1D', score_min=0.0, score_max=1.0, lr=0.001, state_noise_init=0.1, obs_noise_init=0.1, exp_name='demo_run_K_10_beta_2', output_root='output')
+Namespace(name='KF1D', score_min=0.0, score_max=1.0, lr=0.001, state_noise_init=0.1, obs_noise_init=0.1, exp_name='demo_run_K_10_beta_2', output_root='output')
+Namespace(name='KF1D', score_min=0.0, score_max=1.0, lr=0.001, state_noise_init=0.1, obs_noise_init=0.1, exp_name='demo_run_K_10_beta_2', output_root='output')
+init th = 0.99001
+init th = 0.99001
+init th = 0.99001
+init th = 0.99001
+init th = 0.99001
+init th = 0.99001
+init th = 0.99001
+init th = 0.99001
+init th = 0.99001
+init th = 0.99001
+[MVP] threshold = 0.9900, score = 0.2150, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.2150, size = -inf, interval = [inf, -inf], obs = 0.1545, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.0067, size = -inf, interval = [inf, -inf], obs = 3021.2000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.0067, size = -inf, interval = [inf, -inf], obs = 3021.2000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.0067, size = -inf, interval = [inf, -inf], obs = 3021.2000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.0067, size = -inf, interval = [inf, -inf], obs = 3021.2000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.0067, size = -inf, interval = [inf, -inf], obs = 3021.2000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.0067, size = -inf, interval = [inf, -inf], obs = 3021.2000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.0067, size = -inf, interval = [inf, -inf], obs = 3021.2000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.0067, size = -inf, interval = [inf, -inf], obs = 3021.2000, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:02:00] median(obs) = 3021.2000, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1545, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.4892, size = -inf, interval = [inf, -inf], obs = 3022.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.4892, size = -inf, interval = [inf, -inf], obs = 3022.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.4892, size = -inf, interval = [inf, -inf], obs = 3022.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.4892, size = -inf, interval = [inf, -inf], obs = 3022.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.4892, size = -inf, interval = [inf, -inf], obs = 3022.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.4892, size = -inf, interval = [inf, -inf], obs = 3022.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.4892, size = -inf, interval = [inf, -inf], obs = 3022.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9900, score = 0.4892, size = -inf, interval = [inf, -inf], obs = 3022.5600, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:03:00] median(obs) = 3022.5600, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.9800, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9800, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1543, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9800, score = 0.2999, size = -inf, interval = [inf, -inf], obs = 3020.8900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9800, score = 0.2999, size = -inf, interval = [inf, -inf], obs = 3020.8900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9800, score = 0.2999, size = -inf, interval = [inf, -inf], obs = 3020.8900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9800, score = 0.2999, size = -inf, interval = [inf, -inf], obs = 3020.8900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9800, score = 0.2999, size = -inf, interval = [inf, -inf], obs = 3020.8900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9800, score = 0.2999, size = -inf, interval = [inf, -inf], obs = 3020.8900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9800, score = 0.2999, size = -inf, interval = [inf, -inf], obs = 3020.8900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9800, score = 0.2999, size = -inf, interval = [inf, -inf], obs = 3020.8900, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:04:00] median(obs) = 3020.8900, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.9700, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9700, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1543, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9700, score = 0.0398, size = -inf, interval = [inf, -inf], obs = 3017.5500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9700, score = 0.0398, size = -inf, interval = [inf, -inf], obs = 3017.5500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9700, score = 0.0398, size = -inf, interval = [inf, -inf], obs = 3017.5500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9700, score = 0.0398, size = -inf, interval = [inf, -inf], obs = 3017.5500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9700, score = 0.0398, size = -inf, interval = [inf, -inf], obs = 3017.5500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9700, score = 0.0398, size = -inf, interval = [inf, -inf], obs = 3017.5500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9700, score = 0.0398, size = -inf, interval = [inf, -inf], obs = 3017.5500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9700, score = 0.0398, size = -inf, interval = [inf, -inf], obs = 3017.5500, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:05:00] median(obs) = 3017.5500, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.9600, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9600, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1543, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9600, score = 0.4239, size = -inf, interval = [inf, -inf], obs = 3018.0600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9600, score = 0.4239, size = -inf, interval = [inf, -inf], obs = 3018.0600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9600, score = 0.4239, size = -inf, interval = [inf, -inf], obs = 3018.0600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9600, score = 0.4239, size = -inf, interval = [inf, -inf], obs = 3018.0600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9600, score = 0.4239, size = -inf, interval = [inf, -inf], obs = 3018.0600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9600, score = 0.4239, size = -inf, interval = [inf, -inf], obs = 3018.0600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9600, score = 0.4239, size = -inf, interval = [inf, -inf], obs = 3018.0600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9600, score = 0.4239, size = -inf, interval = [inf, -inf], obs = 3018.0600, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:06:00] median(obs) = 3018.0600, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.9500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9500, score = 0.4416, size = -inf, interval = [inf, -inf], obs = 3017.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9500, score = 0.4416, size = -inf, interval = [inf, -inf], obs = 3017.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9500, score = 0.4416, size = -inf, interval = [inf, -inf], obs = 3017.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9500, score = 0.4416, size = -inf, interval = [inf, -inf], obs = 3017.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9500, score = 0.4416, size = -inf, interval = [inf, -inf], obs = 3017.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9500, score = 0.4416, size = -inf, interval = [inf, -inf], obs = 3017.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9500, score = 0.4416, size = -inf, interval = [inf, -inf], obs = 3017.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9500, score = 0.4416, size = -inf, interval = [inf, -inf], obs = 3017.5600, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:07:00] median(obs) = 3017.5600, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.9400, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9400, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9400, score = 0.4642, size = -inf, interval = [inf, -inf], obs = 3017.2100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9400, score = 0.4642, size = -inf, interval = [inf, -inf], obs = 3017.2100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9400, score = 0.4642, size = -inf, interval = [inf, -inf], obs = 3017.2100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9400, score = 0.4642, size = -inf, interval = [inf, -inf], obs = 3017.2100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9400, score = 0.4642, size = -inf, interval = [inf, -inf], obs = 3017.2100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9400, score = 0.4642, size = -inf, interval = [inf, -inf], obs = 3017.2100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9400, score = 0.4642, size = -inf, interval = [inf, -inf], obs = 3017.2100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9400, score = 0.4642, size = -inf, interval = [inf, -inf], obs = 3017.2100, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:08:00] median(obs) = 3017.2100, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.9300, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9300, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9300, score = 0.4544, size = -inf, interval = [inf, -inf], obs = 3016.6900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9300, score = 0.4544, size = -inf, interval = [inf, -inf], obs = 3016.6900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9300, score = 0.4544, size = -inf, interval = [inf, -inf], obs = 3016.6900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9300, score = 0.4544, size = -inf, interval = [inf, -inf], obs = 3016.6900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9300, score = 0.4544, size = -inf, interval = [inf, -inf], obs = 3016.6900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9300, score = 0.4544, size = -inf, interval = [inf, -inf], obs = 3016.6900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9300, score = 0.4544, size = -inf, interval = [inf, -inf], obs = 3016.6900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9300, score = 0.4544, size = -inf, interval = [inf, -inf], obs = 3016.6900, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:09:00] median(obs) = 3016.6900, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.9200, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9200, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9200, score = 0.0062, size = -inf, interval = [inf, -inf], obs = 3011.6800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9200, score = 0.0062, size = -inf, interval = [inf, -inf], obs = 3011.6800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9200, score = 0.0062, size = -inf, interval = [inf, -inf], obs = 3011.6800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9200, score = 0.0062, size = -inf, interval = [inf, -inf], obs = 3011.6800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9200, score = 0.0062, size = -inf, interval = [inf, -inf], obs = 3011.6800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9200, score = 0.0062, size = -inf, interval = [inf, -inf], obs = 3011.6800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9200, score = 0.0062, size = -inf, interval = [inf, -inf], obs = 3011.6800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9200, score = 0.0062, size = -inf, interval = [inf, -inf], obs = 3011.6800, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:10:00] median(obs) = 3011.6800, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.9100, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9100, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1544, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9100, score = 0.3282, size = -inf, interval = [inf, -inf], obs = 3015.3600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9100, score = 0.3282, size = -inf, interval = [inf, -inf], obs = 3015.3600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9100, score = 0.3282, size = -inf, interval = [inf, -inf], obs = 3015.3600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9100, score = 0.3282, size = -inf, interval = [inf, -inf], obs = 3015.3600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9100, score = 0.3282, size = -inf, interval = [inf, -inf], obs = 3015.3600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9100, score = 0.3282, size = -inf, interval = [inf, -inf], obs = 3015.3600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9100, score = 0.3282, size = -inf, interval = [inf, -inf], obs = 3015.3600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9100, score = 0.3282, size = -inf, interval = [inf, -inf], obs = 3015.3600, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:11:00] median(obs) = 3015.3600, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.9000, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9000, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1543, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9000, score = 0.3849, size = -inf, interval = [inf, -inf], obs = 3013.4300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9000, score = 0.3849, size = -inf, interval = [inf, -inf], obs = 3013.4300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9000, score = 0.3849, size = -inf, interval = [inf, -inf], obs = 3013.4300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9000, score = 0.3849, size = -inf, interval = [inf, -inf], obs = 3013.4300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9000, score = 0.3849, size = -inf, interval = [inf, -inf], obs = 3013.4300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9000, score = 0.3849, size = -inf, interval = [inf, -inf], obs = 3013.4300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9000, score = 0.3849, size = -inf, interval = [inf, -inf], obs = 3013.4300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.9000, score = 0.3849, size = -inf, interval = [inf, -inf], obs = 3013.4300, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:12:00] median(obs) = 3013.4300, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.8900, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8900, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8900, score = 0.4880, size = -inf, interval = [inf, -inf], obs = 3013.5300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8900, score = 0.4880, size = -inf, interval = [inf, -inf], obs = 3013.5300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8900, score = 0.4880, size = -inf, interval = [inf, -inf], obs = 3013.5300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8900, score = 0.4880, size = -inf, interval = [inf, -inf], obs = 3013.5300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8900, score = 0.4880, size = -inf, interval = [inf, -inf], obs = 3013.5300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8900, score = 0.4880, size = -inf, interval = [inf, -inf], obs = 3013.5300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8900, score = 0.4880, size = -inf, interval = [inf, -inf], obs = 3013.5300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8900, score = 0.4880, size = -inf, interval = [inf, -inf], obs = 3013.5300, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:13:00] median(obs) = 3013.5300, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.8800, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8800, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1541, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8800, score = 0.4129, size = -inf, interval = [inf, -inf], obs = 3012.5700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8800, score = 0.4129, size = -inf, interval = [inf, -inf], obs = 3012.5700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8800, score = 0.4129, size = -inf, interval = [inf, -inf], obs = 3012.5700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8800, score = 0.4129, size = -inf, interval = [inf, -inf], obs = 3012.5700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8800, score = 0.4129, size = -inf, interval = [inf, -inf], obs = 3012.5700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8800, score = 0.4129, size = -inf, interval = [inf, -inf], obs = 3012.5700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8800, score = 0.4129, size = -inf, interval = [inf, -inf], obs = 3012.5700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8800, score = 0.4129, size = -inf, interval = [inf, -inf], obs = 3012.5700, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:14:00] median(obs) = 3012.5700, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.8700, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8700, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1541, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8700, score = 0.3237, size = -inf, interval = [inf, -inf], obs = 3011.3200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8700, score = 0.3237, size = -inf, interval = [inf, -inf], obs = 3011.3200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8700, score = 0.3237, size = -inf, interval = [inf, -inf], obs = 3011.3200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8700, score = 0.3237, size = -inf, interval = [inf, -inf], obs = 3011.3200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8700, score = 0.3237, size = -inf, interval = [inf, -inf], obs = 3011.3200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8700, score = 0.3237, size = -inf, interval = [inf, -inf], obs = 3011.3200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8700, score = 0.3237, size = -inf, interval = [inf, -inf], obs = 3011.3200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8700, score = 0.3237, size = -inf, interval = [inf, -inf], obs = 3011.3200, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:15:00] median(obs) = 3011.3200, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.8600, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8600, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1541, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8600, score = 0.4186, size = -inf, interval = [inf, -inf], obs = 3013.0300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8600, score = 0.4186, size = -inf, interval = [inf, -inf], obs = 3013.0300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8600, score = 0.4186, size = -inf, interval = [inf, -inf], obs = 3013.0300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8600, score = 0.4186, size = -inf, interval = [inf, -inf], obs = 3013.0300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8600, score = 0.4186, size = -inf, interval = [inf, -inf], obs = 3013.0300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8600, score = 0.4186, size = -inf, interval = [inf, -inf], obs = 3013.0300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8600, score = 0.4186, size = -inf, interval = [inf, -inf], obs = 3013.0300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8600, score = 0.4186, size = -inf, interval = [inf, -inf], obs = 3013.0300, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:16:00] median(obs) = 3013.0300, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.8500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1541, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3012.6000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3012.6000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3012.6000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3012.6000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3012.6000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3012.6000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3012.6000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3012.6000, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:17:00] median(obs) = 3012.6000, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.8400, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8400, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8400, score = 0.0176, size = -inf, interval = [inf, -inf], obs = 3017.2500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8400, score = 0.0176, size = -inf, interval = [inf, -inf], obs = 3017.2500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8400, score = 0.0176, size = -inf, interval = [inf, -inf], obs = 3017.2500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8400, score = 0.0176, size = -inf, interval = [inf, -inf], obs = 3017.2500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8400, score = 0.0176, size = -inf, interval = [inf, -inf], obs = 3017.2500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8400, score = 0.0176, size = -inf, interval = [inf, -inf], obs = 3017.2500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8400, score = 0.0176, size = -inf, interval = [inf, -inf], obs = 3017.2500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8400, score = 0.0176, size = -inf, interval = [inf, -inf], obs = 3017.2500, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:18:00] median(obs) = 3017.2500, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.8300, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8300, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8300, score = 0.2045, size = -inf, interval = [inf, -inf], obs = 3017.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8300, score = 0.2045, size = -inf, interval = [inf, -inf], obs = 3017.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8300, score = 0.2045, size = -inf, interval = [inf, -inf], obs = 3017.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8300, score = 0.2045, size = -inf, interval = [inf, -inf], obs = 3017.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8300, score = 0.2045, size = -inf, interval = [inf, -inf], obs = 3017.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8300, score = 0.2045, size = -inf, interval = [inf, -inf], obs = 3017.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8300, score = 0.2045, size = -inf, interval = [inf, -inf], obs = 3017.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8300, score = 0.2045, size = -inf, interval = [inf, -inf], obs = 3017.8800, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:19:00] median(obs) = 3017.8800, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.8200, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8200, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8200, score = 0.1593, size = -inf, interval = [inf, -inf], obs = 3014.2400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8200, score = 0.1593, size = -inf, interval = [inf, -inf], obs = 3014.2400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8200, score = 0.1593, size = -inf, interval = [inf, -inf], obs = 3014.2400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8200, score = 0.1593, size = -inf, interval = [inf, -inf], obs = 3014.2400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8200, score = 0.1593, size = -inf, interval = [inf, -inf], obs = 3014.2400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8200, score = 0.1593, size = -inf, interval = [inf, -inf], obs = 3014.2400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8200, score = 0.1593, size = -inf, interval = [inf, -inf], obs = 3014.2400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8200, score = 0.1593, size = -inf, interval = [inf, -inf], obs = 3014.2400, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:20:00] median(obs) = 3014.2400, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.8100, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8100, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1541, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8100, score = 0.3252, size = -inf, interval = [inf, -inf], obs = 3013.6100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8100, score = 0.3252, size = -inf, interval = [inf, -inf], obs = 3013.6100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8100, score = 0.3252, size = -inf, interval = [inf, -inf], obs = 3013.6100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8100, score = 0.3252, size = -inf, interval = [inf, -inf], obs = 3013.6100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8100, score = 0.3252, size = -inf, interval = [inf, -inf], obs = 3013.6100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8100, score = 0.3252, size = -inf, interval = [inf, -inf], obs = 3013.6100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8100, score = 0.3252, size = -inf, interval = [inf, -inf], obs = 3013.6100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8100, score = 0.3252, size = -inf, interval = [inf, -inf], obs = 3013.6100, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:21:00] median(obs) = 3013.6100, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.8000, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8000, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8000, score = 0.2317, size = -inf, interval = [inf, -inf], obs = 3016.4800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8000, score = 0.2317, size = -inf, interval = [inf, -inf], obs = 3016.4800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8000, score = 0.2317, size = -inf, interval = [inf, -inf], obs = 3016.4800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8000, score = 0.2317, size = -inf, interval = [inf, -inf], obs = 3016.4800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8000, score = 0.2317, size = -inf, interval = [inf, -inf], obs = 3016.4800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8000, score = 0.2317, size = -inf, interval = [inf, -inf], obs = 3016.4800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8000, score = 0.2317, size = -inf, interval = [inf, -inf], obs = 3016.4800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.8000, score = 0.2317, size = -inf, interval = [inf, -inf], obs = 3016.4800, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:22:00] median(obs) = 3016.4800, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.7900, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7900, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7900, score = 0.4951, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7900, score = 0.4951, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7900, score = 0.4951, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7900, score = 0.4951, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7900, score = 0.4951, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7900, score = 0.4951, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7900, score = 0.4951, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7900, score = 0.4951, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:23:00] median(obs) = 3015.8800, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.7800, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7800, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1541, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7800, score = 0.4844, size = -inf, interval = [inf, -inf], obs = 3015.3300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7800, score = 0.4844, size = -inf, interval = [inf, -inf], obs = 3015.3300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7800, score = 0.4844, size = -inf, interval = [inf, -inf], obs = 3015.3300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7800, score = 0.4844, size = -inf, interval = [inf, -inf], obs = 3015.3300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7800, score = 0.4844, size = -inf, interval = [inf, -inf], obs = 3015.3300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7800, score = 0.4844, size = -inf, interval = [inf, -inf], obs = 3015.3300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7800, score = 0.4844, size = -inf, interval = [inf, -inf], obs = 3015.3300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7800, score = 0.4844, size = -inf, interval = [inf, -inf], obs = 3015.3300, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:24:00] median(obs) = 3015.3300, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.7700, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7700, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7700, score = 0.4943, size = -inf, interval = [inf, -inf], obs = 3015.2300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7700, score = 0.4943, size = -inf, interval = [inf, -inf], obs = 3015.2300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7700, score = 0.4943, size = -inf, interval = [inf, -inf], obs = 3015.2300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7700, score = 0.4943, size = -inf, interval = [inf, -inf], obs = 3015.2300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7700, score = 0.4943, size = -inf, interval = [inf, -inf], obs = 3015.2300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7700, score = 0.4943, size = -inf, interval = [inf, -inf], obs = 3015.2300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7700, score = 0.4943, size = -inf, interval = [inf, -inf], obs = 3015.2300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7700, score = 0.4943, size = -inf, interval = [inf, -inf], obs = 3015.2300, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:25:00] median(obs) = 3015.2300, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.7600, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7600, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1543, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7600, score = 0.4950, size = -inf, interval = [inf, -inf], obs = 3015.5900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7600, score = 0.4950, size = -inf, interval = [inf, -inf], obs = 3015.5900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7600, score = 0.4950, size = -inf, interval = [inf, -inf], obs = 3015.5900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7600, score = 0.4950, size = -inf, interval = [inf, -inf], obs = 3015.5900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7600, score = 0.4950, size = -inf, interval = [inf, -inf], obs = 3015.5900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7600, score = 0.4950, size = -inf, interval = [inf, -inf], obs = 3015.5900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7600, score = 0.4950, size = -inf, interval = [inf, -inf], obs = 3015.5900, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7600, score = 0.4950, size = -inf, interval = [inf, -inf], obs = 3015.5900, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:26:00] median(obs) = 3015.5900, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.7500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1543, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7500, score = 0.4704, size = -inf, interval = [inf, -inf], obs = 3016.1200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7500, score = 0.4704, size = -inf, interval = [inf, -inf], obs = 3016.1200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7500, score = 0.4704, size = -inf, interval = [inf, -inf], obs = 3016.1200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7500, score = 0.4704, size = -inf, interval = [inf, -inf], obs = 3016.1200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7500, score = 0.4704, size = -inf, interval = [inf, -inf], obs = 3016.1200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7500, score = 0.4704, size = -inf, interval = [inf, -inf], obs = 3016.1200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7500, score = 0.4704, size = -inf, interval = [inf, -inf], obs = 3016.1200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7500, score = 0.4704, size = -inf, interval = [inf, -inf], obs = 3016.1200, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:27:00] median(obs) = 3016.1200, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.7400, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7400, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7400, score = 0.4998, size = -inf, interval = [inf, -inf], obs = 3015.8300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7400, score = 0.4998, size = -inf, interval = [inf, -inf], obs = 3015.8300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7400, score = 0.4998, size = -inf, interval = [inf, -inf], obs = 3015.8300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7400, score = 0.4998, size = -inf, interval = [inf, -inf], obs = 3015.8300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7400, score = 0.4998, size = -inf, interval = [inf, -inf], obs = 3015.8300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7400, score = 0.4998, size = -inf, interval = [inf, -inf], obs = 3015.8300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7400, score = 0.4998, size = -inf, interval = [inf, -inf], obs = 3015.8300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7400, score = 0.4998, size = -inf, interval = [inf, -inf], obs = 3015.8300, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:28:00] median(obs) = 3015.8300, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.7300, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7300, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7300, score = 0.4268, size = -inf, interval = [inf, -inf], obs = 3016.8600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7300, score = 0.4268, size = -inf, interval = [inf, -inf], obs = 3016.8600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7300, score = 0.4268, size = -inf, interval = [inf, -inf], obs = 3016.8600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7300, score = 0.4268, size = -inf, interval = [inf, -inf], obs = 3016.8600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7300, score = 0.4268, size = -inf, interval = [inf, -inf], obs = 3016.8600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7300, score = 0.4268, size = -inf, interval = [inf, -inf], obs = 3016.8600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7300, score = 0.4268, size = -inf, interval = [inf, -inf], obs = 3016.8600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7300, score = 0.4268, size = -inf, interval = [inf, -inf], obs = 3016.8600, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:29:00] median(obs) = 3016.8600, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.7200, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7200, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7200, score = 0.4961, size = -inf, interval = [inf, -inf], obs = 3016.7000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7200, score = 0.4961, size = -inf, interval = [inf, -inf], obs = 3016.7000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7200, score = 0.4961, size = -inf, interval = [inf, -inf], obs = 3016.7000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7200, score = 0.4961, size = -inf, interval = [inf, -inf], obs = 3016.7000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7200, score = 0.4961, size = -inf, interval = [inf, -inf], obs = 3016.7000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7200, score = 0.4961, size = -inf, interval = [inf, -inf], obs = 3016.7000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7200, score = 0.4961, size = -inf, interval = [inf, -inf], obs = 3016.7000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7200, score = 0.4961, size = -inf, interval = [inf, -inf], obs = 3016.7000, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:30:00] median(obs) = 3016.7000, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.7100, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7100, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1543, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7100, score = 0.4599, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7100, score = 0.4599, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7100, score = 0.4599, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7100, score = 0.4599, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7100, score = 0.4599, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7100, score = 0.4599, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7100, score = 0.4599, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7100, score = 0.4599, size = -inf, interval = [inf, -inf], obs = 3015.8800, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:31:00] median(obs) = 3015.8800, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.7000, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7000, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1543, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7000, score = 0.4737, size = -inf, interval = [inf, -inf], obs = 3016.7500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7000, score = 0.4737, size = -inf, interval = [inf, -inf], obs = 3016.7500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7000, score = 0.4737, size = -inf, interval = [inf, -inf], obs = 3016.7500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7000, score = 0.4737, size = -inf, interval = [inf, -inf], obs = 3016.7500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7000, score = 0.4737, size = -inf, interval = [inf, -inf], obs = 3016.7500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7000, score = 0.4737, size = -inf, interval = [inf, -inf], obs = 3016.7500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7000, score = 0.4737, size = -inf, interval = [inf, -inf], obs = 3016.7500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.7000, score = 0.4737, size = -inf, interval = [inf, -inf], obs = 3016.7500, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:32:00] median(obs) = 3016.7500, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.6900, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6900, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1543, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6900, score = 0.4994, size = -inf, interval = [inf, -inf], obs = 3016.4400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6900, score = 0.4994, size = -inf, interval = [inf, -inf], obs = 3016.4400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6900, score = 0.4994, size = -inf, interval = [inf, -inf], obs = 3016.4400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6900, score = 0.4994, size = -inf, interval = [inf, -inf], obs = 3016.4400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6900, score = 0.4994, size = -inf, interval = [inf, -inf], obs = 3016.4400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6900, score = 0.4994, size = -inf, interval = [inf, -inf], obs = 3016.4400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6900, score = 0.4994, size = -inf, interval = [inf, -inf], obs = 3016.4400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6900, score = 0.4994, size = -inf, interval = [inf, -inf], obs = 3016.4400, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:33:00] median(obs) = 3016.4400, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.6800, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6800, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1544, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6800, score = 0.0754, size = -inf, interval = [inf, -inf], obs = 3019.9600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6800, score = 0.0754, size = -inf, interval = [inf, -inf], obs = 3019.9600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6800, score = 0.0754, size = -inf, interval = [inf, -inf], obs = 3019.9600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6800, score = 0.0754, size = -inf, interval = [inf, -inf], obs = 3019.9600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6800, score = 0.0754, size = -inf, interval = [inf, -inf], obs = 3019.9600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6800, score = 0.0754, size = -inf, interval = [inf, -inf], obs = 3019.9600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6800, score = 0.0754, size = -inf, interval = [inf, -inf], obs = 3019.9600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6800, score = 0.0754, size = -inf, interval = [inf, -inf], obs = 3019.9600, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:34:00] median(obs) = 3019.9600, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.6700, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6700, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1542, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6700, score = 0.4929, size = -inf, interval = [inf, -inf], obs = 3018.9300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6700, score = 0.4929, size = -inf, interval = [inf, -inf], obs = 3018.9300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6700, score = 0.4929, size = -inf, interval = [inf, -inf], obs = 3018.9300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6700, score = 0.4929, size = -inf, interval = [inf, -inf], obs = 3018.9300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6700, score = 0.4929, size = -inf, interval = [inf, -inf], obs = 3018.9300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6700, score = 0.4929, size = -inf, interval = [inf, -inf], obs = 3018.9300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6700, score = 0.4929, size = -inf, interval = [inf, -inf], obs = 3018.9300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6700, score = 0.4929, size = -inf, interval = [inf, -inf], obs = 3018.9300, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:35:00] median(obs) = 3018.9300, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.6600, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6600, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1543, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6600, score = 0.3267, size = -inf, interval = [inf, -inf], obs = 3020.4700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6600, score = 0.3267, size = -inf, interval = [inf, -inf], obs = 3020.4700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6600, score = 0.3267, size = -inf, interval = [inf, -inf], obs = 3020.4700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6600, score = 0.3267, size = -inf, interval = [inf, -inf], obs = 3020.4700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6600, score = 0.3267, size = -inf, interval = [inf, -inf], obs = 3020.4700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6600, score = 0.3267, size = -inf, interval = [inf, -inf], obs = 3020.4700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6600, score = 0.3267, size = -inf, interval = [inf, -inf], obs = 3020.4700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6600, score = 0.3267, size = -inf, interval = [inf, -inf], obs = 3020.4700, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:36:00] median(obs) = 3020.4700, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.6500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1544, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6500, score = 0.4717, size = -inf, interval = [inf, -inf], obs = 3020.4500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6500, score = 0.4717, size = -inf, interval = [inf, -inf], obs = 3020.4500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6500, score = 0.4717, size = -inf, interval = [inf, -inf], obs = 3020.4500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6500, score = 0.4717, size = -inf, interval = [inf, -inf], obs = 3020.4500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6500, score = 0.4717, size = -inf, interval = [inf, -inf], obs = 3020.4500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6500, score = 0.4717, size = -inf, interval = [inf, -inf], obs = 3020.4500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6500, score = 0.4717, size = -inf, interval = [inf, -inf], obs = 3020.4500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6500, score = 0.4717, size = -inf, interval = [inf, -inf], obs = 3020.4500, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:37:00] median(obs) = 3020.4500, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.6400, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6400, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1544, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6400, score = 0.4577, size = -inf, interval = [inf, -inf], obs = 3020.9700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6400, score = 0.4577, size = -inf, interval = [inf, -inf], obs = 3020.9700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6400, score = 0.4577, size = -inf, interval = [inf, -inf], obs = 3020.9700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6400, score = 0.4577, size = -inf, interval = [inf, -inf], obs = 3020.9700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6400, score = 0.4577, size = -inf, interval = [inf, -inf], obs = 3020.9700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6400, score = 0.4577, size = -inf, interval = [inf, -inf], obs = 3020.9700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6400, score = 0.4577, size = -inf, interval = [inf, -inf], obs = 3020.9700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6400, score = 0.4577, size = -inf, interval = [inf, -inf], obs = 3020.9700, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:38:00] median(obs) = 3020.9700, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.6300, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6300, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1544, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6300, score = 0.4996, size = -inf, interval = [inf, -inf], obs = 3020.6100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6300, score = 0.4996, size = -inf, interval = [inf, -inf], obs = 3020.6100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6300, score = 0.4996, size = -inf, interval = [inf, -inf], obs = 3020.6100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6300, score = 0.4996, size = -inf, interval = [inf, -inf], obs = 3020.6100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6300, score = 0.4996, size = -inf, interval = [inf, -inf], obs = 3020.6100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6300, score = 0.4996, size = -inf, interval = [inf, -inf], obs = 3020.6100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6300, score = 0.4996, size = -inf, interval = [inf, -inf], obs = 3020.6100, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6300, score = 0.4996, size = -inf, interval = [inf, -inf], obs = 3020.6100, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:39:00] median(obs) = 3020.6100, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.6200, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6200, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1545, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6200, score = 0.0825, size = -inf, interval = [inf, -inf], obs = 3024.0400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6200, score = 0.0825, size = -inf, interval = [inf, -inf], obs = 3024.0400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6200, score = 0.0825, size = -inf, interval = [inf, -inf], obs = 3024.0400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6200, score = 0.0825, size = -inf, interval = [inf, -inf], obs = 3024.0400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6200, score = 0.0825, size = -inf, interval = [inf, -inf], obs = 3024.0400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6200, score = 0.0825, size = -inf, interval = [inf, -inf], obs = 3024.0400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6200, score = 0.0825, size = -inf, interval = [inf, -inf], obs = 3024.0400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6200, score = 0.0825, size = -inf, interval = [inf, -inf], obs = 3024.0400, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:40:00] median(obs) = 3024.0400, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.6100, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6100, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1545, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6100, score = 0.4433, size = -inf, interval = [inf, -inf], obs = 3023.6200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6100, score = 0.4433, size = -inf, interval = [inf, -inf], obs = 3023.6200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6100, score = 0.4433, size = -inf, interval = [inf, -inf], obs = 3023.6200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6100, score = 0.4433, size = -inf, interval = [inf, -inf], obs = 3023.6200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6100, score = 0.4433, size = -inf, interval = [inf, -inf], obs = 3023.6200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6100, score = 0.4433, size = -inf, interval = [inf, -inf], obs = 3023.6200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6100, score = 0.4433, size = -inf, interval = [inf, -inf], obs = 3023.6200, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6100, score = 0.4433, size = -inf, interval = [inf, -inf], obs = 3023.6200, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:41:00] median(obs) = 3023.6200, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.6000, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6000, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1545, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6000, score = 0.4941, size = -inf, interval = [inf, -inf], obs = 3023.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6000, score = 0.4941, size = -inf, interval = [inf, -inf], obs = 3023.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6000, score = 0.4941, size = -inf, interval = [inf, -inf], obs = 3023.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6000, score = 0.4941, size = -inf, interval = [inf, -inf], obs = 3023.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6000, score = 0.4941, size = -inf, interval = [inf, -inf], obs = 3023.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6000, score = 0.4941, size = -inf, interval = [inf, -inf], obs = 3023.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6000, score = 0.4941, size = -inf, interval = [inf, -inf], obs = 3023.5600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.6000, score = 0.4941, size = -inf, interval = [inf, -inf], obs = 3023.5600, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:42:00] median(obs) = 3023.5600, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.5900, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5900, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1544, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5900, score = 0.4107, size = -inf, interval = [inf, -inf], obs = 3022.3300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5900, score = 0.4107, size = -inf, interval = [inf, -inf], obs = 3022.3300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5900, score = 0.4107, size = -inf, interval = [inf, -inf], obs = 3022.3300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5900, score = 0.4107, size = -inf, interval = [inf, -inf], obs = 3022.3300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5900, score = 0.4107, size = -inf, interval = [inf, -inf], obs = 3022.3300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5900, score = 0.4107, size = -inf, interval = [inf, -inf], obs = 3022.3300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5900, score = 0.4107, size = -inf, interval = [inf, -inf], obs = 3022.3300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5900, score = 0.4107, size = -inf, interval = [inf, -inf], obs = 3022.3300, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:43:00] median(obs) = 3022.3300, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.5800, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5800, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1544, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5800, score = 0.4883, size = -inf, interval = [inf, -inf], obs = 3023.1500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5800, score = 0.4883, size = -inf, interval = [inf, -inf], obs = 3023.1500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5800, score = 0.4883, size = -inf, interval = [inf, -inf], obs = 3023.1500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5800, score = 0.4883, size = -inf, interval = [inf, -inf], obs = 3023.1500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5800, score = 0.4883, size = -inf, interval = [inf, -inf], obs = 3023.1500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5800, score = 0.4883, size = -inf, interval = [inf, -inf], obs = 3023.1500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5800, score = 0.4883, size = -inf, interval = [inf, -inf], obs = 3023.1500, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5800, score = 0.4883, size = -inf, interval = [inf, -inf], obs = 3023.1500, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:44:00] median(obs) = 3023.1500, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.5700, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5700, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1544, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5700, score = 0.4987, size = -inf, interval = [inf, -inf], obs = 3023.1300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5700, score = 0.4987, size = -inf, interval = [inf, -inf], obs = 3023.1300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5700, score = 0.4987, size = -inf, interval = [inf, -inf], obs = 3023.1300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5700, score = 0.4987, size = -inf, interval = [inf, -inf], obs = 3023.1300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5700, score = 0.4987, size = -inf, interval = [inf, -inf], obs = 3023.1300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5700, score = 0.4987, size = -inf, interval = [inf, -inf], obs = 3023.1300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5700, score = 0.4987, size = -inf, interval = [inf, -inf], obs = 3023.1300, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5700, score = 0.4987, size = -inf, interval = [inf, -inf], obs = 3023.1300, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:45:00] median(obs) = 3023.1300, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.5600, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5600, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1544, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5600, score = 0.4962, size = -inf, interval = [inf, -inf], obs = 3022.8600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5600, score = 0.4962, size = -inf, interval = [inf, -inf], obs = 3022.8600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5600, score = 0.4962, size = -inf, interval = [inf, -inf], obs = 3022.8600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5600, score = 0.4962, size = -inf, interval = [inf, -inf], obs = 3022.8600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5600, score = 0.4962, size = -inf, interval = [inf, -inf], obs = 3022.8600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5600, score = 0.4962, size = -inf, interval = [inf, -inf], obs = 3022.8600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5600, score = 0.4962, size = -inf, interval = [inf, -inf], obs = 3022.8600, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5600, score = 0.4962, size = -inf, interval = [inf, -inf], obs = 3022.8600, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:46:00] median(obs) = 3022.8600, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.5500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5500, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1546, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5500, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3033.3700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5500, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3033.3700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5500, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3033.3700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5500, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3033.3700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5500, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3033.3700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5500, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3033.3700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5500, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3033.3700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5500, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3033.3700, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:47:00] median(obs) = 3033.3700, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.5400, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5400, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1548, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5400, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3041.5400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5400, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3041.5400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5400, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3041.5400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5400, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3041.5400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5400, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3041.5400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5400, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3041.5400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5400, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3041.5400, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5400, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3041.5400, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:48:00] median(obs) = 3041.5400, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.5300, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5300, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1548, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5300, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3045.1000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5300, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3045.1000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5300, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3045.1000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5300, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3045.1000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5300, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3045.1000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5300, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3045.1000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5300, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3045.1000, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5300, score = 0.0000, size = -inf, interval = [inf, -inf], obs = 3045.1000, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:49:00] median(obs) = 3045.1000, interval = [inf, -inf], length = -inf, error = 1.0000
+[MVP] threshold = 0.5200, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 3024.6787, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5200, score = 0.5000, size = -inf, interval = [inf, -inf], obs = 0.1548, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5200, score = 0.0081, size = -inf, interval = [inf, -inf], obs = 3047.2700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5200, score = 0.0081, size = -inf, interval = [inf, -inf], obs = 3047.2700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5200, score = 0.0081, size = -inf, interval = [inf, -inf], obs = 3047.2700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5200, score = 0.0081, size = -inf, interval = [inf, -inf], obs = 3047.2700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5200, score = 0.0081, size = -inf, interval = [inf, -inf], obs = 3047.2700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5200, score = 0.0081, size = -inf, interval = [inf, -inf], obs = 3047.2700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5200, score = 0.0081, size = -inf, interval = [inf, -inf], obs = 3047.2700, error_cur = 1.0, error = 1.0000
+[MVP] threshold = 0.5200, score = 0.0081, size = -inf, interval = [inf, -inf], obs = 3047.2700, error_cur = 1.0, error = 1.0000
+[time = 2025-11-27T00:50:00] median(obs) = 3047.2700, interval = [inf, -inf], length = -inf, error = 1.0000
+[profiling] total runtime = 664.5 ms

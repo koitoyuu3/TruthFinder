@@ -1,0 +1,31 @@
+batch = 10
+         EnhancedTruthFinder-Hybrid  EnhancedTruthFinder-NonHybrid  SenteTruthFinder  BasicTruthFinder  SenFeedTruthFinder-CompositeTD
+website
+agent-1                      100.0                           100.0             100.0              100.0                         100.0
+agent-2                      100.0                           100.0             100.0              100.0                         100.0
+agent-3                      100.0                           100.0             100.0              100.0                         100.0
+agent-4                      100.0                           100.0             100.0              100.0                         100.0
+
+batch = 50
+         EnhancedTruthFinder-Hybrid  EnhancedTruthFinder-NonHybrid  SenteTruthFinder  BasicTruthFinder  SenFeedTruthFinder-CompositeTD
+website
+agent-1                      100.0                           100.0             100.0              100.0                         100.0
+agent-2                      100.0                           100.0             100.0              100.0                         100.0
+agent-3                      100.0                           100.0             100.0              100.0                         100.0
+agent-4                      100.0                           100.0             100.0              100.0                         100.0
+
+batch = 90
+         EnhancedTruthFinder-Hybrid  EnhancedTruthFinder-NonHybrid  SenteTruthFinder  BasicTruthFinder  SenFeedTruthFinder-CompositeTD
+website
+agent-1                      100.0                           100.0             100.0              100.0                         100.0
+agent-2                      100.0                           100.0             100.0              100.0                         100.0
+agent-3                      100.0                           100.0             100.0              100.0                         100.0
+agent-4                      100.0                           100.0             100.0              100.0                         100.0
+
+batch = 130
+         EnhancedTruthFinder-Hybrid  EnhancedTruthFinder-NonHybrid  SenteTruthFinder  BasicTruthFinder  SenFeedTruthFinder-CompositeTD
+website
+agent-1                      100.0                           100.0             100.0              100.0                         100.0
+agent-2                      100.0                           100.0             100.0              100.0                         100.0
+agent-3                      100.0                           100.0             100.0              100.0                         100.0
+agent-4                      100.0                           100.0             100.0              100.0                         100.0
