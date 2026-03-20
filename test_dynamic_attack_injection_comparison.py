@@ -69,11 +69,19 @@ class TestDynamicAttackInjectionComparison(unittest.TestCase):
             skip_plots=True,
         )
 
-    def test_mixed_dynamic_script_is_hybrid_only(self):
+    def test_mixed_dynamic_script_builds_all_five_methods(self):
         runners = build_runners(self._config())
-        self.assertEqual(METHOD_ORDER, ["EnhancedTruthFinder-Hybrid"])
-        self.assertEqual(len(runners), 1)
-        self.assertEqual(runners[0].method_name, "EnhancedTruthFinder-Hybrid")
+        self.assertEqual(
+            METHOD_ORDER,
+            [
+                "EnhancedTruthFinder-Hybrid",
+                "EnhancedTruthFinder-NonHybrid",
+                "SenteTruthFinder",
+                "BasicTruthFinder",
+                "SenFeedTruthFinder-CompositeTD",
+            ],
+        )
+        self.assertEqual([runner.method_name for runner in runners], METHOD_ORDER)
 
     def test_load_agent10_stream_infers_malicious_agents_from_repo_files(self):
         config = ExperimentConfig(

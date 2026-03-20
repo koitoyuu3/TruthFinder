@@ -37,6 +37,9 @@ BATCH_STYLES = {
     90: {"color": "#B9BDC7", "hatch": "//", "label": "batch = 90"},
     130: {"color": "#8E95A5", "hatch": "xx", "label": "batch = 130"},
 }
+VALUE_LABEL_FORMAT = "{:.2f}"
+VALUE_LABEL_FONT_SIZE = 6.5
+VALUE_LABEL_PADDING = 2
 
 
 def parse_args() -> argparse.Namespace:
@@ -150,7 +153,7 @@ def plot_figure(summary: pd.DataFrame, output_dir: Path, dpi: int) -> tuple[Path
         style = BATCH_STYLES[batch]
         subset = summary[summary["batch"] == batch].set_index("method").reindex(methods)
         positions = x_positions + (index - 1.5) * bar_width
-        ax.bar(
+        bars = ax.bar(
             positions,
             subset["mean_score"],
             width=bar_width,
@@ -160,6 +163,13 @@ def plot_figure(summary: pd.DataFrame, output_dir: Path, dpi: int) -> tuple[Path
             hatch=style["hatch"],
             label=style["label"],
             zorder=3,
+        )
+        ax.bar_label(
+            bars,
+            labels=[VALUE_LABEL_FORMAT.format(value) for value in subset["mean_score"]],
+            padding=VALUE_LABEL_PADDING,
+            fontsize=VALUE_LABEL_FONT_SIZE,
+            rotation=0,
         )
 
     ax.set_xticks(x_positions)

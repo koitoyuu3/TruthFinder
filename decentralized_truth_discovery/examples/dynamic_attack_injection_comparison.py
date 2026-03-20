@@ -44,6 +44,7 @@ from decentralized_truth_discovery.examples.five_methods_comparison import (  # 
     _build_asset_truth_preview,
     _build_hybrid_coverage_scores,
     _build_method_input,
+    _native_score_to_percentage,
     _build_object_balanced_source_details,
     _build_senfeed_input,
     _run_quietly,
@@ -57,11 +58,15 @@ from decentralized_truth_discovery.examples.five_methods_comparison import (  # 
 ASSETS = ("BTC", "ETH", "DOGE")
 METHOD_ORDER = [
     "EnhancedTruthFinder-Hybrid",
+    "EnhancedTruthFinder-NonHybrid",
+    "SenteTruthFinder",
+    "BasicTruthFinder",
+    "SenFeedTruthFinder-CompositeTD",
 ]
 DEFAULT_ATTACK_TIMINGS = {
     "early": 0.10,
     "mid": 0.50,
-    "late": 0.90,
+    "late": 0.82,
 }
 TEXT_OBJECT_SPECS = (
     {
@@ -269,10 +274,18 @@ class SenteReplayRunner:
 
     def __init__(self, config: ExperimentConfig):
         self.config = config
+        self._history_frames: List[pd.DataFrame] = []
+
+    def _build_replay_window(self, text_df: pd.DataFrame) -> pd.DataFrame:
+        self._history_frames.append(text_df.copy())
+        if len(self._history_frames) > self.config.replay_window:
+            self._history_frames = self._history_frames[-self.config.replay_window :]
+        return pd.concat(self._history_frames, ignore_index=True, sort=False)
 
     def step(self, text_df: pd.DataFrame, epoch: int) -> MethodResult:
         del epoch
         current_objects = text_df["object"].astype(str).unique().tolist()
+        replay_df = self._build_replay_window(text_df)
 
         def _train() -> tuple[SenteTruthFinder, pd.DataFrame]:
             finder = SenteTruthFinder(
@@ -285,7 +298,7 @@ class SenteReplayRunner:
                 enable_zk_proof=False,
             )
             result_df = finder.train(
-                text_df.copy(),
+                replay_df.copy(),
                 max_iterations=self.config.max_iterations,
                 threshold=self.config.convergence_threshold,
             )
@@ -322,13 +335,21 @@ class BasicReplayRunner:
 
     def __init__(self, config: ExperimentConfig):
         self.config = config
+        self._history_frames: List[pd.DataFrame] = []
+
+    def _build_replay_window(self, text_df: pd.DataFrame) -> pd.DataFrame:
+        self._history_frames.append(text_df.copy())
+        if len(self._history_frames) > self.config.replay_window:
+            self._history_frames = self._history_frames[-self.config.replay_window :]
+        return pd.concat(self._history_frames, ignore_index=True, sort=False)
 
     def step(self, text_df: pd.DataFrame, epoch: int) -> MethodResult:
         del epoch
         current_objects = text_df["object"].astype(str).unique().tolist()
-        mixed_record_types = text_df.get("record_type", pd.Series(dtype=object)).astype(str).nunique() > 1
+        replay_df = self._build_replay_window(text_df)
+        mixed_record_types = replay_df.get("record_type", pd.Series(dtype=object)).astype(str).nunique() > 1
 
-        implication = create_implication_function_from_texts(text_df["fact"].astype(str).tolist())
+        implication = create_implication_function_from_texts(replay_df["fact"].astype(str).tolist())
         finder = BasicTruthFinder(
             implication=implication,
             dampening_factor=0.3,
@@ -338,7 +359,7 @@ class BasicReplayRunner:
 
         start = time.perf_counter()
         result_df = finder.train(
-            text_df.copy(),
+            replay_df.copy(),
             max_iterations=self.config.max_iterations,
             threshold=self.config.convergence_threshold,
             initial_trustworthiness=0.7,
@@ -348,7 +369,7 @@ class BasicReplayRunner:
         source_details = _build_object_balanced_source_details(
             result_df,
             {"trustworthiness": "trustworthiness"},
-            expected_websites=text_df["website"].astype(str).drop_duplicates().tolist(),
+            expected_websites=replay_df["website"].astype(str).drop_duplicates().tolist(),
         )
         representation_fidelity = 0.75 if mixed_record_types else 1.0
         source_scores: Dict[str, float] = {}
@@ -1034,6 +1055,10 @@ def _round_truth_rmse(predictions: Dict[str, Any], truth_map: Dict[str, Any]) ->
 def build_runners(config: ExperimentConfig) -> List[Any]:
     return [
         HybridStreamingRunner(config),
+        NonHybridStreamingRunner(config),
+        SenteReplayRunner(config),
+        BasicReplayRunner(config),
+        SenFeedStreamingRunner(config),
     ]
 
 
@@ -1238,6 +1263,13 @@ def compute_source_shock_tables(
     working = source_df.copy()
     if "method" not in working.columns:
         working["method"] = default_method or "EnhancedTruthFinder-Hybrid"
+    comparable_frames: List[pd.DataFrame] = []
+    for method, method_df in working.groupby("method", sort=False):
+        method_frame = method_df.copy()
+        method_frame["raw_score"] = pd.to_numeric(method_frame["score"], errors="coerce")
+        method_frame["score"] = _native_score_to_percentage(method_frame["raw_score"], str(method)) / 100.0
+        comparable_frames.append(method_frame)
+    working = pd.concat(comparable_frames, ignore_index=True, sort=False)
     group_cols = ["seed", "scenario", "track", "method", "website"]
     working = working.sort_values(group_cols + ["round"]).reset_index(drop=True)
     working["score_prev"] = working.groupby(group_cols, sort=False)["score"].shift(1)
@@ -1624,7 +1656,7 @@ def run_experiment(config: ExperimentConfig) -> tuple[pd.DataFrame, pd.DataFrame
 
 
 def _print_summary(summary_df: pd.DataFrame, attack_round_map: Dict[str, int]):
-    print("\nHybrid-only mixed dynamic attack summary")
+    print("\nFive-method mixed dynamic attack summary")
     print(
         f"Attack rounds: early={attack_round_map['early']}, mid={attack_round_map['mid']}, late={attack_round_map['late']}"
     )

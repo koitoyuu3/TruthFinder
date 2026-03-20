@@ -1,93 +1,108 @@
 @startuml
 !pragma teoz true
 
-title Sequence Diagram of On-Chain/Off-Chain Trusted Inference with Multi-Agent Truth Discovery and ZKP Verification
+title Agent-Enabled Verifiable Semantic Oracle Workflow
 
 hide footbox
 autonumber
 
-skinparam monochrome true
+skinparam backgroundColor white
 skinparam shadowing false
 skinparam sequenceMessageAlign center
 skinparam responseMessageBelowArrow true
-skinparam ParticipantPadding 18
-skinparam BoxPadding 10
+skinparam ParticipantPadding 30
+skinparam BoxPadding 12
 skinparam ArrowThickness 1
 skinparam RoundCorner 6
+skinparam SequenceBoxBackgroundColor white
+skinparam SequenceBoxBorderColor #555555
+skinparam SequenceGroupBodyBackgroundColor white
+skinparam SequenceGroupBorderColor #555555
+skinparam ParticipantBackgroundColor white
+skinparam ParticipantBorderColor #555555
+skinparam NoteBackgroundColor white
+skinparam NoteBorderColor #555555
+skinparam SequenceMessageAlignment center
+skinparam MaxMessageSize 200
+
+box "On-chain Domain"
+participant "User Contract" as UC
+participant "Oracle Contract" as OC
+end box
 
 box "Off-chain Domain"
-actor User
-participant "Off-chain Coordinator" as Coord
-participant "Multi-Agent Network" as Agents
-participant "Truth Discovery Engine" as TD
+participant "Oracle Network" as Network
+participant "Oracle Node\n(Autonomous Agent)" as Agent
+participant "Truth Discovery" as TD
 participant "ZKP Prover" as Prover
 end box
 
-box "On-chain Domain"
-participant "Task Contract" as Task
-participant "Verification Contract" as Verifier
-end box
-
-group Task submission and event emission
-User -> Task : submitQuery(Q)
-activate Task
-Task -> Task : registerTask(taskId, QHash)
-Task -> Task : emit TaskPosted(taskId, QHash)
-Task --> Coord : notify task event
+group Query submission and event emission
+UC -> OC : submit oracle query
+activate OC
+OC -> OC : record query metadata and emit event
+OC --> Network : notify query event
 end
 
-note over Task, Coord
-The smart contract anchors the task on-chain and emits an event.
-The off-chain coordinator listens to the event and dispatches agents.
-end note
+activate Network
 
-activate Coord
-Coord -> Coord : load query metadata and execution policy
-
-group Parallel multi-agent reasoning
-par Agent 1 branch
-Coord -> Agents : dispatch(taskId, Q, agent_1)
-Agents --> Coord : return candidate result R1
-else Agent 2 branch
-Coord -> Agents : dispatch(taskId, Q, agent_2)
-Agents --> Coord : return candidate result R2
-else Agent n branch
-Coord -> Agents : dispatch(taskId, Q, agent_n)
-Agents --> Coord : return candidate result Rn
+group Parallel agent evidence collection (for each oracle node n)
+par
+note over Network, Agent #FFFFFF: **Agent 1**
+Network -> Agent : dispatch query
+activate Agent
+Agent -> Agent : RetrieveEvidence
+Agent -> Agent : AgentExtractClaims
+Agent --> Network : return claim report
+deactivate Agent
+else
+note over Network, Agent #FFFFFF: **Agent 2**
+Network -> Agent : dispatch query
+activate Agent
+Agent -> Agent : RetrieveEvidence
+Agent -> Agent : AgentExtractClaims
+Agent --> Network : return claim report
+deactivate Agent
+else
+note over Network, Agent #FFFFFF: **Agent n**
+Network -> Agent : dispatch query
+activate Agent
+Agent -> Agent : RetrieveEvidence
+Agent -> Agent : AgentExtractClaims
+Agent --> Network : return claim report
+deactivate Agent
 end
 end
 
-group Truth discovery and aggregation
-Coord -> TD : submit candidate set {R1, R2, ..., Rn}
+group Robust truth discovery aggregation
+Network -> TD : submit heterogeneous claim reports
 activate TD
-TD -> TD : compute credibility weights\nand aggregate candidate results
-TD --> Coord : output highest-confidence result R*
+TD -> TD : build TF-IDF vocabulary over textual claims
+TD -> TD : TruthDiscoveryAggregate
+TD --> Network : output aggregated result and node reliabilities
 deactivate TD
 end
 
 group Zero-knowledge proof generation
-Coord -> Prover : generateProof(taskId, {Ri}, R*)
+Network -> Prover : GenerateProof
 activate Prover
-Prover -> Prover : encode public inputs\nand proving witness
-Prover --> Coord : return proof π
+Prover -> Prover : encode truth discovery pipeline as Circom circuit
+Prover -> Prover : construct witness from per-node reports\nand intermediate states
+Prover --> Network : return proof
 deactivate Prover
 end
 
-group On-chain verification and result release
-Coord -> Verifier : submitResult(taskId, R*, π)
-activate Verifier
-Verifier -> Verifier : verifyProof(π, taskId, R*)
+group On-chain submission and verification
+Network -> OC : reporter submits aggregated result and proof
+OC -> OC : VerifyProof
 alt verification succeeds
-Verifier -> Verifier : storeVerifiedResult(taskId, R*)
-Verifier --> Coord : verification success
-Coord --> User : return verified result R*
+OC -> OC : store finalized claim-level results
+OC --> UC : finalized semantic output available
 else verification fails
-Verifier --> Coord : verification failure
-Coord --> User : return failure status
+OC --> Network : reject submission
 end
-deactivate Verifier
+deactivate OC
 end
 
-deactivate Coord
-deactivate Task
+deactivate Network
 @enduml
