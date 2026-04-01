@@ -1,0 +1,847 @@
+SemanticTruthFinder 详细说明
+============================
+
+本文档以当前代码实现为准：
+
+- 核心实现文件：`decentralized_truth_discovery/core/semantic_truth_finder.py`
+- 文本/数字混合辅助：`decentralized_truth_discovery/core/hybrid_text_alignment.py`
+- 文本向量化辅助：`decentralized_truth_discovery/core/text_vectorization.py`
+- 对比方法：`decentralized_truth_discovery/core/sente_truth_finder.py`
+
+
+一、SemanticTruth 在解决什么问题
+------------------------------
+
+给定多个 source / agent 对同一个对象的报告：
+
+- 数值场景：价格、温度、汇率、指标值
+- 文本场景：新闻摘要、事件描述、问答结果、自然语言结论
+
+目标是：
+
+1. 在当前 batch 内找出该对象最可信的真值。
+2. 在多个 batch 之间累计学习：哪些 source 历史上更可靠，哪些 source 经常偏离共识。
+3. 对文本场景，不仅看语义是否相近，还看文本里提到的数字是否一致。
+
+一句话概括：
+
+`SemanticTruth = 当前批次鲁棒聚合 + 跨批次 source 信誉累计 + 文本中的语义/数字联合一致性判断`
+
+二、整体结构
+------------
+
+`SemanticTruthFinder.process_batch()` 的主流程可以概括为三层：
+
+1. 数值管道 `_numeric_pipeline()`
+2. 文本管道 `_text_pipeline()`
+3. 跨 batch 信誉更新 `_update_reliability()`
+
+逻辑框架如下：
+
+```python
+process_batch(numeric_df, text_df):
+    numeric_df = normalize_numeric_df(numeric_df)
+    text_df = normalize_text_df(text_df)
+
+    sources = union(all sources in numeric_df and text_df)
+    ensure source_state exists for each source
+
+    reliabilities[source] = alpha / (alpha + beta)
+
+    numeric_truth, cons_num = _numeric_pipeline(numeric_df, reliabilities)
+    text_truth, cons_txt = _text_pipeline(text_df, reliabilities)
+
+    _update_reliability(sources, cons_num, cons_txt)
+
+    return decorated numeric output, decorated text output
+```
+
+这里最关键的设计点是：
+
+- 数值真值和文本真值分别算
+- 但它们共享同一套 source reliability 状态
+
+也就是说，同一个 source 在数值侧报得差，会连带影响它在文本侧下一轮的权重；反之亦然。
+
+
+三、输入输出与 batch 语义
+-------------------------
+
+### 1. 输入表结构
+
+无论数值表还是文本表，都会被标准化成以下字段：
+
+- `website`：source 标识
+- `object`：对象标识
+- `fact`：报告内容
+- `batch_index`：批次编号
+
+### 2. `batch_index` 的真实作用
+
+一个常见误区是：以为 `SemanticTruthFinder` 会在单次 `process_batch()` 内自动按 `batch_index` 递推学习。
+
+实际不是。
+
+当前实现里，跨 batch 学习依赖的是：
+
+- 外部代码反复调用同一个 `SemanticTruthFinder` 实例
+- 每次调用时，类内部的 `source_state` 会保留下来
+
+所以真正的跨 batch 用法是：
+
+```python
+model = SemanticTruthFinder(...)
+for each_batch in batches:
+    model.process_batch(batch_numeric_df, batch_text_df)
+```
+
+也就是说：
+
+- `batch_index` 更像结果记录字段和附加元信息
+- 跨 batch 记忆来自类实例状态，而不是来自 DataFrame 内部自动滚动
+
+
+四、跨 batch reliability 的核心状态
+----------------------------------
+
+每个 source 都维护一个 Beta 状态：
+
+```python
+source_state[source] = {
+    "alpha": initial_alpha,
+    "beta": initial_beta,
+}
+```
+
+默认是：
+
+- `initial_alpha = 1.0`
+- `initial_beta = 1.0`
+
+因此初始 reliability 为：
+
+```text
+reliability = alpha / (alpha + beta) = 1 / (1 + 1) = 0.5
+```
+
+含义是：
+
+- 一开始不信任任何人，也不怀疑任何人
+- 所有 source 先给中性权重 0.5
+
+之后每一轮处理完，会根据本轮 consistency 更新：
+
+```text
+alpha += eta * consistency
+beta  += eta * (1 - consistency)
+```
+
+其中：
+
+- `eta` 默认是 1.0
+- `consistency` 在 `[0, 1]` 之间
+
+于是：
+
+- 如果某 source 本轮很一致，`consistency` 接近 1，那么 alpha 增长更快
+- 如果某 source 本轮很不一致，`consistency` 接近 0，那么 beta 增长更快
+
+最后 reliability 始终取 Beta 分布期望：
+
+```text
+reliability = alpha / (alpha + beta)
+```
+
+这是一种很稳定的“软计数”式信誉学习机制。
+
+
+五、数值管道：鲁棒数值真值发现
+------------------------------
+
+数值部分的入口是 `_numeric_pipeline(df, reliabilities)`。
+
+它的任务是：
+
+1. 对每个对象 `object` 的多个数值报告做鲁棒聚合
+2. 得到该对象的数值真值
+3. 给每个 source 产出本轮 numeric consistency，供跨 batch reliability 更新
+
+
+六、数值管道的完整步骤
+----------------------
+
+### 第 1 步：按 object 分组
+
+对于同一个对象，收集：
+
+- `values = [x_1, x_2, ..., x_n]`
+- `sources = [s_1, s_2, ..., s_n]`
+- `base_weights = [reliability(s_1), ..., reliability(s_n)]`
+
+这里的 `base_weights` 不是统计意义上的“观测置信区间权重”，而是“历史信誉权重”。
+
+### 第 2 步：reliability 门控预过滤
+
+当前实现有一个很实用的设计：
+
+```text
+gate = mean(base_weights) * rel_gate_frac
+仅保留 reliability >= gate 的 source 进入 IRLS 主估计
+```
+
+默认：
+
+- `rel_gate_frac = 0.3`
+
+这一步的意义是：
+
+- 在早期，大家 reliability 差不多，几乎不会误删
+- 在后期，如果某些 source 长期极差，会在进入主鲁棒估计前先被挡掉
+
+注意：
+
+- 真值估计阶段可能先把低信誉 source 挡掉
+- 但 consistency 评分阶段仍然会回到全量 source 上计算
+
+因此门控不会让恶意 source “消失”，只是先降低它们对真值的扰动。
+
+### 第 3 步：初始化真值
+
+真值初值是：
+
+```text
+truth_estimate = 加权平均(v_irls, w_irls)
+```
+
+这里的权重就是通过 reliability 门控之后的权重。
+
+### 第 4 步：IRLS 迭代
+
+IRLS 即 Iteratively Reweighted Least Squares。
+
+当前代码实现是：
+
+1. 用加权中位数找一个鲁棒中心 `robust_center`
+2. 用 MAD 估计尺度 `scale`
+3. 计算每个样本相对于中心的标准化偏离 `u`
+4. 用 Tukey biweight 把偏离大的点降权
+5. 用新权重重新计算加权平均
+6. 直到收敛或达到最大迭代轮数
+
+公式如下：
+
+```text
+robust_center = weighted_median(v, w)
+mad = median(|v_i - robust_center|)
+scale = max(1.4826 * mad, convergence_tol)
+
+u_i = (v_i - robust_center) / (tukey_c * scale)
+```
+
+### 第 5 步：Tukey biweight
+
+Tukey biweight 函数为：
+
+```text
+w_tukey(u) = (1 - u^2)^2,   if |u| <= 1
+             0,             if |u| > 1
+```
+
+最终鲁棒权重：
+
+```text
+robust_weight_i = reliability_weight_i * w_tukey(u_i)
+```
+
+然后更新真值：
+
+```text
+truth = sum(robust_weight_i * v_i) / sum(robust_weight_i)
+```
+
+它的直觉非常直接：
+
+- 离中心近：保留投票权
+- 离中心远：快速降权
+- 偏得太远：直接归零
+
+这比普通均值强得多，因为极端离群值不会继续把中心硬拉过去。
+
+### 第 6 步：特殊情况处理
+
+当前实现额外做了两个很关键的鲁棒修复：
+
+1. 如果 `MAD` 近似为 0，则直接返回 `robust_center`，而不是继续取均值。
+2. 如果 Tukey 权重求和接近 0，也直接回退到 `robust_center`。
+
+这两个修复的意义是：
+
+- 当大多数 honest source 报同一个值时，中位数天然是最稳的
+- 不能再让均值把少数 Byzantine outlier 混回去
+
+
+七、数值 consistency 如何计算
+----------------------------
+
+数值真值算完后，还要给每个 source 一个“这一轮它报得准不准”的分数。
+
+这里不是简单的 0/1，而是连续打分：
+
+```text
+residual_i = x_i - truth_estimate
+```
+
+然后构造一个稳健尺度：
+
+```text
+residual_mad = median(|residual_i - median(residuals)|)
+score_scale = max(1.4826 * residual_mad, std(residuals), convergence_tol)
+```
+
+最后通过高斯核变成 consistency：
+
+```text
+consistency_i = exp(-0.5 * (residual_i / score_scale)^2)
+```
+
+它有几个好处：
+
+- 偏差越小，分数越接近 1
+- 偏差越大，分数平滑下降
+- 不会像硬阈值那样对边界样本过于敏感
+
+最终，一个 source 在多个 object 上的数值 consistency 会取平均，形成 `cons_num[source]`。
+
+
+八、为什么数值管道是鲁棒的
+--------------------------
+
+数值管道的鲁棒性来自三层叠加：
+
+1. 历史层：低 reliability source 先在权重上吃亏
+2. 预过滤层：极低 reliability source 甚至可能先被 gate 掉
+3. 当前批层：即便混入 IRLS，也会被 Tukey biweight 大幅降权
+
+如果有 10 个 source：
+
+- 7 个 honest 在 `100` 左右
+- 3 个恶意在 `180` 左右
+
+普通均值会被拉偏。
+
+而当前实现中：
+
+- honest 群体在中位数附近
+- malicious 群体偏离很远
+- Tukey 会让恶意点的权重趋近 0
+
+结果真值会稳定落在 honest 群体附近。
+
+
+九、文本管道：语义与数字混合的真值发现
+--------------------------------------
+
+文本部分的入口是 `_text_pipeline(df, reliabilities)`。
+
+这是当前 `SemanticTruthFinder` 与纯语义方法最大的差异所在。
+
+它不只是比较文本 embedding，而是同时利用两路信号：
+
+1. 语义相似度
+2. 文本中数字的一致性
+
+并通过“pairwise affinity + reliability 加权软投票”决定赢家。
+
+
+十、文本管道的完整步骤
+----------------------
+
+### 第 1 步：文本编码
+
+每条文本先转成向量：
+
+- 如果 `use_sbert=True` 且模型加载成功，使用 `SentenceTransformer`
+- 否则退化为 TF-IDF
+
+编码后统一做 L2 归一化，因此向量点积就等价于余弦相似度。
+
+### 第 2 步：SBERT 与 TF-IDF 的使用方式
+
+#### 1. SBERT 模式
+
+默认模型：
+
+- `paraphrase-multilingual-MiniLM-L12-v2`
+
+这意味着：
+
+- 中英文都能处理
+- 对同义改写、句式变化更稳
+
+如果启用 `local_files_only=True`，代码会优先从本地缓存加载模型。
+
+#### 2. TF-IDF 回退模式
+
+如果 SBERT 不可用，使用 `build_tfidf_vectorizer(texts, max_features=1000)`。
+
+这里不是无脑默认词袋，而是做了语言适配：
+
+- 如果包含 CJK 字符，使用字符 n-gram
+- 如果文本很短，也倾向于字符 n-gram
+- 否则使用词级 unigram + bigram
+
+这使得回退模式比普通英文词袋更适合中文、短句和格式化文本。
+
+### 第 3 步：计算语义相似度矩阵
+
+编码后得到：
+
+```text
+peer_sims[i, j] = embedding_i · embedding_j
+```
+
+由于向量已归一化，实际就是 cosine similarity。
+
+### 第 4 步：从文本中抽数字
+
+`extract_numeric_values(text)` 会从自由文本里抽出：
+
+- 整数
+- 小数
+- 带负号的数
+
+例如：
+
+- `"BTC rises to 30500.5"` -> `[30500.5]`
+- `"put 125 and call 150"` -> `[125.0, 150.0]`
+
+注意：当前实现只抽“表面数字”，不做单位归一化，也不做实体对齐。
+
+### 第 5 步：计算 pairwise affinity
+
+这是当前文本真值发现的核心。
+
+对任意两条文本 `i, j`：
+
+如果两边至少有一边含数字，就把语义和数字一起融合：
+
+```text
+affinity(i, j) = alpha * semantic_sim(i, j) + (1 - alpha) * numeric_sim(i, j)
+```
+
+如果两边都不含数字：
+
+```text
+affinity(i, j) = semantic_sim(i, j)
+```
+
+其中：
+
+- `semantic_sim(i, j)` 是余弦相似度
+- `numeric_sim(i, j)` 是对称数值匹配率
+- `alpha = semantic_numeric_alpha`
+- 默认 `alpha = 0.5`
+
+所以默认是：
+
+- 语义 50%
+- 数字 50%
+
+这一步的直觉是：
+
+- “语义像 + 数字也对” 才是真支持
+- “语义像但数字错” 不能算高支持
+
+
+十一、数字匹配率怎么定义
+------------------------
+
+数字匹配不是简单的“完全相等”，而是容忍一定相对误差。
+
+默认容忍度：
+
+- `numeric_tol = 0.02`
+
+也就是默认 2% 相对误差。
+
+`numeric_match_ratio(reference, candidate)` 的定义是：
+
+- 以 `reference` 中每个数字槽位为基准
+- 如果 `candidate` 中存在某个值与它相对误差不超过 `tol`
+- 这个槽位就算匹配
+
+最后：
+
+```text
+match_ratio = matched_slots / len(reference)
+```
+
+而 pairwise affinity 用的是对称版本：
+
+```text
+symmetric_match = 0.5 * (
+    numeric_match_ratio(left, right) +
+    numeric_match_ratio(right, left)
+)
+```
+
+这样做的原因是：
+
+- 文本 A 和文本 B 的数字个数可能不同
+- 不能让相似度依赖参数顺序
+
+
+十二、文本真值如何选出
+----------------------
+
+在得到 affinity 矩阵后，当前实现不是硬聚类，不是找几何中位数，也不是显式算 collude_score。
+
+而是做 reliability 加权软投票：
+
+```text
+score(i) = Σ_{j != i} affinity(i, j) * reliability(j)
+winner = argmax_i score(i)
+```
+
+含义是：
+
+- 候选文本 `i` 获得的支持来自其他文本 `j`
+- 支持强度由 `affinity(i, j)` 决定
+- 支持票权由 `reliability(j)` 决定
+
+因此，一条文本想赢，需要满足：
+
+1. 它与多数文本足够相近
+2. 支持它的那些文本背后的 source 本身也要够可靠
+
+这一步有两个特别强的效果：
+
+### 情况 A：honest 文本表述不同但意思一致
+
+它们之间：
+
+- 语义相似度高
+- 若关键数字一致，则数字匹配率也高
+
+所以它们会互相抬分。
+
+### 情况 B：恶意文本语义很像，但数字故意篡改
+
+例如 honest 文本都在说：
+
+- `put 125`
+- `call 150`
+
+恶意文本故意写：
+
+- `put 1000`
+- `call 1`
+
+即使恶意文本在句式上也很像，数字通道仍会把它们和 honest 群体之间的 affinity 拉低。
+
+这就是当前实现能防“语义接近但数值被篡改”攻击的关键。
+
+
+十三、文本 consistency 如何计算
+------------------------------
+
+选出 winner 之后，还要给每个 source 一个 text consistency，供跨 batch reliability 更新。
+
+当前做法是两部分：
+
+### 1. 语义一致性
+
+把每条文本与 winner 的 embedding 做点积：
+
+```text
+sem_score_i = cosine(embedding_i, embedding_winner)
+```
+
+并截断到 `[0, 1]`。
+
+### 2. 数值一致性
+
+文本中的数字，不是直接只和 winner 比，而是先构造“全局数字共识”。
+
+`_cluster_numeric_consensus(numeric_lists)` 的逻辑是：
+
+1. 收集所有非空数字列表
+2. 优先选择“长度最常见”的那一类列表做对齐
+3. 对每个位置取中位数
+
+例如：
+
+- `[125, 150]`
+- `[125, 150]`
+- `[124.8, 149.9]`
+- `[1000, 1]`
+
+那么位置中位数大致还是：
+
+- `[125, 150]`
+
+然后每条文本与这个全局数字共识做 `numeric_match_ratio`。
+
+### 3. 最终 text consistency
+
+如果文本不含数字：
+
+```text
+consistency = sem_score
+```
+
+如果文本含数字：
+
+```text
+consistency = alpha * sem_score + (1 - alpha) * num_score
+```
+
+默认依然是 0.5 / 0.5 融合。
+
+
+十四、为什么文本管道比纯 SBERT 更强
+-----------------------------------
+
+和 `SenteTruthFinder` 相比，当前 `SemanticTruthFinder` 的文本侧更强，原因不在于它用了更复杂的 embedding，而在于它多了一条“数字一致性”通道。
+
+纯语义方法容易出现的问题是：
+
+- 两段文本句式极像
+- 但关键数字被故意改掉
+- 纯语义相似度仍然会把它们判得很近
+
+当前实现中，这类样本会发生：
+
+- `semantic_sim` 高
+- `numeric_sim` 低
+- `affinity` 被拉低
+
+所以它更适合 oracle / 金融 / 报价 / 事件摘要这类“文字中带关键数值”的任务。
+
+
+十五、跨模态共享 reliability 的意义
+----------------------------------
+
+这是 `SemanticTruthFinder` 很关键的一点。
+
+当前实现不是：
+
+- 数值做一套信誉账本
+- 文本再做另一套账本
+
+而是：
+
+- 数值 consistency 和文本 consistency 最后都写回同一个 `source_state`
+
+优势是：
+
+1. 恶意 source 很难只在一个模态上作恶而不付出代价
+2. 历史经验能在两个模态之间迁移
+3. 越到后期，可靠 source 的“票权”越明显
+
+现实场景里，一个节点如果既报价格又报新闻摘要，这种共享账本尤其有意义。
+
+
+十六、输出里每一列代表什么
+--------------------------
+
+返回结果经过 `_decorate_output()` 修饰后，会带上以下关键字段：
+
+- `global_truth`：该 object 的最终真值
+- `source_reliability`：该行 source 当前轮更新后的 reliability
+- `consistency_score`：该 source 在当前模态下的 consistency 平均值
+- `alpha_state`：当前 source 的 alpha
+- `beta_state`：当前 source 的 beta
+
+所以输出不仅能看真值，也能顺手看 source 信誉状态演化。
+
+
+十七、当前实现里的“遗留但未用”部分
+----------------------------------
+
+为了避免误读，这里单独列出来。
+
+以下元素当前仍存在于类中，但不参与主决策：
+
+1. `weiszfeld_max_iter`
+2. `inner_iter`
+3. `diversity_bonus`
+4. `_build_semantic_clusters()`
+5. `_find_connected_components()`
+6. `semantic_cluster_threshold`
+
+这说明当前类是从更早的文本聚类 / 几何中位数版本演化来的。
+
+但只要你追主流程，就会发现：
+
+- 当前文本侧没有调用 Weiszfeld
+- 当前文本侧没有调用显式簇构建
+- 当前文本侧的主逻辑是 affinity + soft voting
+
+
+十八、与旧设计稿的差异
+----------------------
+
+旧版本笔记里常见的说法包括：
+
+1. 文本侧用 Weiszfeld 求几何中位数
+2. 文本侧显式构造 `collude_score`
+3. 再从接近几何中心的文本中选真值
+
+这些说法描述的是早期设计思路，不是当前代码真实执行路径。
+
+当前实现的等价替代思想是：
+
+- 不直接估几何中心
+- 不显式写出 `collude_score`
+- 而是把“你和别人有多一致”写成 pairwise affinity
+- 再让其他 source 用自己的 reliability 给你投票
+
+从效果上看，这仍然在做“多数可靠支持 + 异常数字惩罚”，只是实现形式更直接。
+
+
+十九、与 SenteTruth 的关系
+-------------------------
+
+可以把两者理解成：
+
+### SenteTruth
+
+- 主打纯语义聚合
+- 主要依赖文本 embedding 相似度
+- 更贴近论文中的原始文本真值发现形式
+
+### SemanticTruth
+
+- 主打混合证据聚合
+- 文本侧同时使用语义和数字
+- 数值侧用 IRLS + Tukey 做鲁棒估计
+- 两侧共享跨 batch reliability
+
+所以：
+
+- 如果任务是纯自由文本、没有关键数字，二者差距会缩小
+- 如果任务文本中带关键数字，SemanticTruth 通常更合适
+- 如果任务既有 numeric oracle 又有 text oracle，SemanticTruth 优势更大
+
+
+二十、一个简化示例
+-----------------
+
+假设同一个对象有 5 条文本：
+
+1. `BTC closes near 30500, up 2%.`
+2. `Bitcoin ends around 30480 after gaining 2 percent.`
+3. `BTC settled close to 30520 with a 2% rise.`
+4. `BTC closes near 45000, up 2%.`
+5. `BTC closes near 45000, up 2%.`
+
+前 3 条是 honest，后 2 条是恶意。
+
+当前实现会出现：
+
+- 1/2/3 之间 `semantic_sim` 高，数字也接近，因此 `affinity` 高
+- 4/5 之间相似度高，但与 1/2/3 的数字不一致，因此跨群体 `affinity` 下降
+- 若历史上 4/5 对应 source reliability 也更差，则它们票权更低
+
+最终 winner 通常会从 1/2/3 中产生，而不是从 4/5 中产生。
+
+若换成纯语义方法，因为四五句式也和前三句很像，误判风险会更高。
+
+
+二十一、参数解释：哪些真的重要
+------------------------------
+
+当前实现里，真正影响结果的核心参数主要有：
+
+### 1. `tukey_c`
+
+- 控制数值 outlier 的截断强度
+- 越小，越激进
+- 默认 1.5，明显偏对抗场景
+
+### 2. `irls_max_iter`
+
+- 数值 IRLS 最大迭代轮数
+
+### 3. `rel_gate_frac`
+
+- reliability 门控比例
+- 决定低信誉 source 多快被预过滤
+
+### 4. `numeric_tol`
+
+- 文本中数字匹配时允许的相对误差
+- 默认 2%
+
+### 5. `semantic_numeric_alpha`
+
+- 文本侧语义和数字的融合比例
+- 默认 0.5
+
+### 6. `eta`
+
+- reliability 更新步长
+- 越大，信誉变化越快
+
+而以下参数当前只是保留字段，不影响主流程：
+
+- `weiszfeld_max_iter`
+- `inner_iter`
+- `diversity_bonus`
+
+
+二十二、方法的优势
+-----------------
+
+当前 `SemanticTruthFinder` 的主要优势有：
+
+1. 数值侧足够鲁棒，能抗明显离群值和长期恶意 source。
+2. 文本侧不仅看语义，还看文本中的数字是否一致。
+3. 跨 batch 有记忆，不是每一批都从零开始。
+4. 数值和文本共享信誉账本，更符合真实 oracle 场景。
+5. SBERT 不可用时还能退回 TF-IDF，不至于彻底不可用。
+
+
+二十三、方法的局限
+-----------------
+
+当前实现也有一些明确局限：
+
+1. 文本中的数字只做正则抽取，不理解单位、上下文角色、币种或实体语义。
+2. 多个数字之间的“哪个数字代表什么”仅靠位置近似对齐，不做深层实体槽位对齐。
+3. 如果恶意 source 数量已经形成压倒性多数，再鲁棒的方法也会失效。
+4. 文本侧当前未使用显式聚类或显式共谋分数，更多依赖软投票结构自然体现多数支持关系。
+5. 文档和仓库中某些实验说明仍保留旧版本表述，阅读时必须以主代码为准。
+
+
+二十四、最终总结
+----------------
+
+当前代码里的 `SemanticTruthFinder`，本质上不是“单纯语义相似度方法”，而是一套面向对抗场景的混合真值发现框架：
+
+### 当前 batch 内
+
+- 数值：`reliability 加权 + IRLS + Tukey biweight`
+- 文本：`embedding 相似度 + 文本数字匹配 + reliability 加权软投票`
+
+### 跨 batch
+
+- `Beta(alpha, beta)` 持续累计 source 表现
+- 下一批继续把历史表现反映到权重上
+
+### 最重要的区别点
+
+它不是只看“谁说得像多数人”，而是看：
+
+- 你说的话和别人是否语义一致
+- 你提到的数字和别人是否一致
+- 支持你的那些人过去是不是可靠
+
+因此，SemanticTruth 的核心可以压缩成一句话：
+
+`谁被更多可靠 source 以语义和数值两条证据共同支持，谁就更可能是真值。`
+
+
+解释一下semantic可以扛住的理论极限：
+设有n个善意节点，有m个恶意节点，有x种攻击方向，每种攻击方向的节点有m1、m2、...、mx个，则有：只要n > max(m1, m2, ..., mx)，就可以扛住

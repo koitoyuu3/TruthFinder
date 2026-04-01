@@ -1,0 +1,4 @@
+dataset,attack,target_model,target_label,substitute_model,substitute_label,bad_count,bad_ratio,question_count,method,data_accuracy
+BASE,incorrect,gpt,ChatGPT,,,4,0.4,60,SenteTruth,0.7666666666666667
+BASE,incorrect,gpt,ChatGPT,,,4,0.4,60,BasicTruth,0.8
+BASE,incorrect,gpt,ChatGPT,,,4,0.4,60,SemanticTruth,0.8833333333333333
