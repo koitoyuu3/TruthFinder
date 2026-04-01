@@ -1,4 +1,5 @@
-from .enhanced_truth_finder import EnhancedTruthFinder
+from .decent_truth_finder import EnhancedTruthFinder
+from .semantic_truth_finder import SemanticTruthFinder, SemanticTruthDiscovery
 from .sente_truth_finder import SenteTruthFinder
 from .basic_truth_finder import BasicTruthFinder, create_implication_function_from_texts
 from .senfeed_truth_finder import (
@@ -27,6 +28,8 @@ from .chainmaker_evm import (
 
 __all__ = [
     'EnhancedTruthFinder',
+    'SemanticTruthFinder',
+    'SemanticTruthDiscovery',
     'SenteTruthFinder',
     'BasicTruthFinder',
     'create_implication_function_from_texts',

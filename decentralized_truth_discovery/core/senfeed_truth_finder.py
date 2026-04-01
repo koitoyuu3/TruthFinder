@@ -92,6 +92,8 @@ class SenFeedTruthDiscovery:
         self.previous_truth: Dict[str, float] = {}
         # 增量 MAP 所需累计误差项 Σ(Δv)^2（用于 Eq.6 分母）
         self.cumulative_squared_error: Dict[str, float] = {}
+        # 增量 MAP 所需累计观测数 Σ_{t=1}^T Σ_o 𝟙_{s,o}（用于 Eq.6 分子）
+        self.cumulative_obs_count: Dict[str, int] = {}
         # 记录最近一次迭代使用的轮数
         self.last_iteration_count: int = 0
         self.zk_proof_engine = ZKProofEngine(
@@ -104,6 +106,7 @@ class SenFeedTruthDiscovery:
         self.source_weights = {}
         self.previous_truth = {}
         self.cumulative_squared_error = {}
+        self.cumulative_obs_count = {}
         self.last_iteration_count = 0
 
     def get_source_reliability(self, website: Optional[str] = None) -> Dict:
@@ -151,7 +154,7 @@ class SenFeedTruthDiscovery:
                     td_mode = "iterative"
                     weight_evolution = self._compute_weight_evolution(old_weights, self.source_weights)
                 else:
-                    truth_inc, sq_error_this_step, _ = self._run_incremental_map_update(current_df)
+                    truth_inc, sq_error_this_step, obs_count_this_step = self._run_incremental_map_update(current_df)
                     weight_evolution = self._compute_weight_evolution(old_weights, self.source_weights)
 
                     # 根据论文中的权重波动思想触发“增量->迭代”切换：
@@ -167,6 +170,10 @@ class SenFeedTruthDiscovery:
                         for s, e2 in sq_error_this_step.items():
                             self.cumulative_squared_error[s] = max(
                                 0.0, self.cumulative_squared_error.get(s, 0.0) - e2
+                            )
+                        for s, cnt in obs_count_this_step.items():
+                            self.cumulative_obs_count[s] = max(
+                                0, self.cumulative_obs_count.get(s, 0) - cnt
                             )
 
                         truth_map = self._run_iterative_truth_discovery(current_df)
@@ -234,6 +241,8 @@ class SenFeedTruthDiscovery:
                 self.source_weights[source] = self.initial_weight
             if source not in self.cumulative_squared_error:
                 self.cumulative_squared_error[source] = 0.0
+            if source not in self.cumulative_obs_count:
+                self.cumulative_obs_count[source] = 0
 
     def _compute_weighted_truth(
         self, object_df: pd.DataFrame, include_history_truth: bool
@@ -350,7 +359,7 @@ class SenFeedTruthDiscovery:
         增量 MAP 更新（Eq.6），并使用 Eq.7 计算当前真值。
 
         Eq. (6):
-            w_{t,s} = (2a - 2 + 2*Σ_o I_{s,o}) / (2β + γ*Σ_{τ<=t}Σ_o (Δv_{τ,s,o})^2)
+            w_{t,s} = (2a - 2 + Σ_{τ<=t}Σ_o I_{τ,s,o}) / (2β + γ*Σ_{τ<=t}Σ_o (Δv_{τ,s,o})^2)
         """
         truth_map = self._estimate_truth_map(df_t, include_history_truth=True)
         _, squared_err, obs_count = self._collect_error_statistics(df_t, truth_map)
@@ -359,8 +368,11 @@ class SenFeedTruthDiscovery:
             self.cumulative_squared_error[source] = (
                 self.cumulative_squared_error.get(source, 0.0) + squared_err.get(source, 0.0)
             )
+            self.cumulative_obs_count[source] = (
+                self.cumulative_obs_count.get(source, 0) + obs_count.get(source, 0)
+            )
 
-            numerator = (2.0 * self.map_shape_a - 2.0) + 2.0 * float(obs_count.get(source, 0))
+            numerator = (2.0 * self.map_shape_a - 2.0) + float(self.cumulative_obs_count[source])
             denominator = (2.0 * self.map_scale_beta) + self.gamma * self.cumulative_squared_error[source]
 
             if denominator <= self.weight_floor:

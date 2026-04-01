@@ -252,3 +252,124 @@ similarity = (cosine_similarity + 1) / 2  # 从[-1, 1]归一化到[0, 1]
 - **SenteTruth**的公式4在低相似度情况下容易出现数值不稳定，导致可信度评估不准确
 
 因此，对于包含结构化信息的文本数据，混合模式是更好的选择。SenteTruth 方法更适合处理纯文本数据，且节点间语义相似度较高的场景。
+
+
+1. 他们先搭了一个本地区块链原型。环境是 Ganache + Solidity + Web3.py，系统里有 user contract、oracle contract 和一个由 10 个 oracle 节点组成的 oracle network。用户合约发起请求，节点去调 LLM，最后把结果回传链上。
+  2. 被测对象其实是“聚合器”而不是 LLM 本身。每个节点拿到一条文本答案后，SenteTruth 先用 SBERT 把答案编码成向量，算每个答案和其他答案的平均语义相似度，再乘上该节点的历史信誉权重，选出分数最高的答案作为最终结果；下一轮再根据这轮表现更
+     新节点权重。也就是“语义相似度 + 历史信誉”的组合。
+  3. 数据集分三类。BASE 有 60 题，分成 事实一致性 Q1、逻辑一致性 Q2、开放问题 Q3，每类 20 题；MIX 有 100 题，覆盖 10 个领域；PRO 基于 C-Eval 的物理题，初中、高中、大学各 20 题，总共 60 题。论文还让 10 个节点分别去问 5 个模型：
+     ChatGPT-4o-mini、Gemini-1.5-flash、Llama3-8b、ChatGLM-4-flash、Hunyuan-lite。
+  4. 他们专门模拟了三种恶意节点。Random Response 是节点根本不认真调模型，直接回随机废话；Model Substitution 是本来该问指定模型，却偷偷换成更便宜的模型；Incorrect Response 是通过恶意 prompt 诱导模型输出错误内容。实验主表都用 40% 恶意
+     节点，也就是 10 个节点里有 4 个作恶。
+  5. 对比方法有三类。第一类是 oracle 里常见的 Majority Voting；第二类是 TF-IDF Similarity；第三类是 SBERT Similarity。有些表里还加了 TF-IDF + TD，相当于一个消融，看看“真值发现”如果配弱一点的文本表示会怎样。
+  6. 他们把实验拆成四个研究问题。RQ1 先研究“不一致从哪来”，比较了不同模型、不同题型、中英文提问、temperature、以及“只输出答案”还是“答案+解释”这类 prompt 设计；结论是：题目越开放越不一致，模型差异很大，temperature 调低、更约束输出格
+     式，都能明显提升一致性，题目难度反而影响不大。RQ2 再正式比性能，在三种攻击下看最终聚合准确率；这里的 Accuracy 不是传统 QA 正确率，而是“最终结果有没有被恶意篡改带偏”。RQ3 看机制为什么有效，他们跟踪多轮迭代里每个节点的权重变化，
+     发现恶意节点的权重会逐步下降，所以哪怕某次它的答案表面上和别人挺像，最后也不容易被选中。RQ4 测可用性，统计链上 Gas 和可扩展性。
+  7. 结果上，论文最想强调的是：在 40% 恶意节点时，SenteTruth 比同条件下最好的 baseline 平均再提升 17.74%。BASE 上，随机响应攻击下它基本都是 1.0；错误响应下大多是 0.983~1.0；模型替换下仍明显优于基线。附录里的 MIX 和 PRO 基本也维持在
+     0.99~1.0。另外有两个细节值得你注意：第一，这篇论文的“truth”更接近“多数诚实节点的未篡改答案”，不完全等于外部客观真值；第二，Table 5 的 Gas 表按它自己给的公式算，单次调用更接近几美元，不太像正文说的“约 $0.3/次”，这里有明显数值不
+     一致。
+
+
+
+当前方法在 decentralized_truth_discovery/examples/compare_cllm_text_methods.py:1 里，特点完全不同：
+
+  1. 它先把 datas_CLLM 读出来，变成统一的 clean_df / noisy_df
+     见 decentralized_truth_discovery/examples/compare_cllm_text_methods.py:189
+  2. 它显式注入三类攻击：
+      - random
+      - incorrect
+      - substitution
+        见 decentralized_truth_discovery/examples/compare_cllm_text_methods.py:255
+  3. 它不是只跑一个聚合器，而是比较三种方法：
+      - SenteTruth
+      - BasicTruth
+      - SemanticTruth
+  4. 它不走链，不测合约回调，不测 gas，只测离线鲁棒性
+  5. 它最后按 data_accuracy 打分并导出 CSV
+     见 decentralized_truth_discovery/examples/compare_cllm_text_methods.py:375
+
+  最核心的方法学差异
+
+  1. CLLM 是“在线系统实验”，你现在的是“离线对比实验”
+
+  - CLLM 关注：节点取数后，链上 oracle 最终回什么
+  - 现在这个脚本关注：在同一批 clean/noisy 数据上，不同 truth-finder 谁更稳
+
+  2. CLLM 默认只有一个聚合器，当前实验是多方法对比
+
+  - CLLM 聚合逻辑本质上就是“平均语义相似度最高 + 节点权重修正” /Users/huabowen/CLLM/node/utils/aggre.py:102
+  - 当前脚本把 SenteTruth / BasicTruth / SemanticTruth 都跑一遍
+
+  3. CLLM 没有显式的 clean-vs-noisy 评估框架，当前方法有
+
+  - 当前 eval_text() 明确把
+      - X = clean 上的方法输出
+      - Y = noisy 上的方法输出
+        做对比
+        见 decentralized_truth_discovery/examples/exp_utils.py:836
+
+  4. 当前实验的指标比 CLLM 原型更严格、也更可复现
+
+  - 当前 metric_data_accuracy() 明确计算语义一致性，必要时再混合数值一致性
+    见 decentralized_truth_discovery/examples/exp_utils.py:646
+  - CLLM 代码里没有一个成体系的“批量统计指标”实现，更多是运行原型
+
+  5. 当前实验已经偏离了论文原始 baseline 设计
+
+  - 论文原始对比更偏向 Majority / TF-IDF / SBERT / Ours
+  - 你现在做的是 SenteTruth / BasicTruth / SemanticTruth
+  - 所以现在这个实验回答的问题是：
+    “在同一数据和攻击下注入下，三个 truth-finder 谁更稳？”
+  - 不是：
+    “原论文 Ours 相对传统 baseline 提升多少？”
+
+  一句话概括
+
+  - /Users/huabowen/CLLM 的实验方法更像“原论文系统原型的在线执行方式”
+  - TruthFinder 里的当前方法更像“把同一份数据集离线化、标准化后做公平对比的 benchmark”
+
+  所以两者不是谁替代谁，而是在回答不同问题：
+
+  - CLLM：系统能不能跑起来，原始聚合器怎么在 oracle 网络里工作
+  - 当前脚本：在固定攻击和固定数据下，三种方法的鲁棒性谁更强
+
+Random Response (BASE, 40%)
+
+  | Target Model | SenteTruth | BasicTruth | SemanticTruth |
+  |---|---:|---:|---:|
+  | ChatGPT | 0.8500 | 0.8667 | 0.9500 |
+  | ChatGLM | 0.8000 | 0.9500 | 0.9500 |
+  | Llama | 0.8833 | 0.7333 | 0.8167 |
+  | Gemini | 0.7500 | 0.8667 | 0.9500 |
+  | Hunyuan | 0.9333 | 0.9833 | 0.9833 |
+
+  Incorrect Response (BASE, 40%)
+
+  | Target Model | SenteTruth | BasicTruth | SemanticTruth |
+  |---|---:|---:|---:|
+  | ChatGPT | 0.7667 | 0.8000 | 0.8833 |
+  | ChatGLM | 0.7500 | 0.8667 | 0.8833 |
+  | Llama | 0.8833 | 0.7167 | 0.7000 |
+  | Gemini | 0.8667 | 0.7500 | 0.7667 |
+  | Hunyuan | 0.9167 | 0.9500 | 0.9333 |
+
+  Model Substitution (BASE, 40%, Target = ChatGPT)
+
+  | Substitute Model | SenteTruth | BasicTruth | SemanticTruth |
+  |---|---:|---:|---:|
+  | ChatGLM | 0.8333 | 0.8500 | 0.8500 |
+  | Llama | 0.8333 | 0.6000 | 0.8833 |
+  | Gemini | 0.8333 | 0.6833 | 0.7500 |
+  | Hunyuan | 0.8167 | 0.6167 | 0.8000 |
+
+  | 场景 | Majority | TF-IDF | SBERT | Ours |
+  |---|---:|---:|---:|---:|
+  | BASE random | 0.9767 | 0.9367 | 0.9767 | 0.9167 |
+  | BASE incorrect | 0.9900 | 0.8800 | 0.9233 | 0.9167 |
+  | BASE substitution | 0.9250 | 0.8083 | 0.9292 | 0.9292 |
+  | MIX random | 0.9900 | 0.9640 | 0.9780 | 0.9780 |
+  | MIX incorrect | 0.9900 | 0.9300 | 0.9600 | 0.9640 |
+  | MIX substitution | 0.8250 | 0.7575 | 0.9775 | 0.9850 |
+  | PRO random | 0.9867 | 0.9233 | 0.9433 | 0.9000 |
+  | PRO substitution | 0.9417 | 0.7625 | 0.9500 | 0.9833 |
+  | PRO-single incorrect | 0.9500 | 0.9000 | 0.8800 | 0.8833 |

@@ -25,7 +25,7 @@ import numpy as np
 from numpy.linalg import norm
 import math
 import pandas as pd
-from typing import Dict, Optional, Callable
+from typing import Dict, Optional, Callable, Union, List
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 from .zk_proof import ZKProofEngine, attach_grouped_proofs
@@ -86,6 +86,7 @@ class BasicTruthFinder:
         self.influence_related = influence_related
         self.enable_zk_proof = enable_zk_proof
         self.last_iteration_count = 0
+        self.website_trustworthiness: Dict[str, float] = {}
         self.zk_proof_engine = ZKProofEngine(
             prover_id="BasicTruthFinder",
             secret_seed=zk_proof_secret,
@@ -267,11 +268,30 @@ class BasicTruthFinder:
             truth_map[str(object_id)] = str(dataframe.loc[best_idx, "fact"])
         return truth_map
 
+    def _initialize_trustworthiness(
+        self,
+        dataframe: pd.DataFrame,
+        initial_trustworthiness: Union[float, Dict[str, float]],
+        default_trustworthiness: float,
+    ) -> pd.Series:
+        if isinstance(initial_trustworthiness, dict):
+            values = dataframe["website"].astype(str).map(
+                lambda website: float(initial_trustworthiness.get(str(website), default_trustworthiness))
+            )
+        else:
+            values = pd.Series(
+                np.ones(len(dataframe.index)) * float(initial_trustworthiness),
+                index=dataframe.index,
+                dtype=float,
+            )
+        return values.clip(lower=0.001, upper=0.999)
+
     def train(self, 
               dataframe: pd.DataFrame,
               max_iterations: int = 200,
               threshold: float = 1e-6,
-              initial_trustworthiness: float = 0.9) -> pd.DataFrame:
+              initial_trustworthiness: Union[float, Dict[str, float]] = 0.9,
+              default_trustworthiness: float = 0.9) -> pd.DataFrame:
         """
         训练模型（批量处理）
         
@@ -288,9 +308,16 @@ class BasicTruthFinder:
         """
         # 创建副本
         dataframe = dataframe.copy()
+        dataframe["website"] = dataframe["website"].astype(str)
+        dataframe["fact"] = dataframe["fact"].astype(str)
+        dataframe["object"] = dataframe["object"].astype(str)
         
         # 初始化trustworthiness和fact_confidence
-        dataframe["trustworthiness"] = np.ones(len(dataframe.index)) * initial_trustworthiness
+        dataframe["trustworthiness"] = self._initialize_trustworthiness(
+            dataframe,
+            initial_trustworthiness,
+            default_trustworthiness,
+        )
         dataframe["fact_confidence"] = np.zeros(len(dataframe.index))
 
         # 迭代
@@ -334,6 +361,63 @@ class BasicTruthFinder:
 
         return dataframe
 
+    def process_batch(
+        self,
+        dataframe: pd.DataFrame,
+        implication_texts: Optional[List[str]] = None,
+        max_iterations: int = 200,
+        threshold: float = 1e-6,
+        initial_trustworthiness: float = 0.9,
+    ) -> pd.DataFrame:
+        """
+        在线处理单个 batch：
+        - 跨 batch 保留 website -> trustworthiness
+        - 当前 batch 内按 BasicTruth 原始迭代规则收敛
+        - implication 仅基于当前可见文本（当前 batch 或当前 prefix）拟合
+        """
+        if dataframe is None or dataframe.empty:
+            columns = ["website", "fact", "object", "trustworthiness", "fact_confidence", "global_truth"]
+            if dataframe is not None:
+                columns = list(dict.fromkeys(list(dataframe.columns) + columns))
+            return pd.DataFrame(columns=columns)
+
+        dataframe = dataframe.copy()
+        dataframe["website"] = dataframe["website"].astype(str)
+        dataframe["fact"] = dataframe["fact"].astype(str)
+        dataframe["object"] = dataframe["object"].astype(str)
+
+        visible_texts = implication_texts
+        if visible_texts is None:
+            visible_texts = dataframe["fact"].tolist()
+        visible_texts = [str(text) for text in visible_texts]
+        if visible_texts:
+            self.implication = create_implication_function_from_texts(visible_texts)
+
+        init = self.website_trustworthiness if self.website_trustworthiness else initial_trustworthiness
+        out = self.train(
+            dataframe,
+            max_iterations=max_iterations,
+            threshold=threshold,
+            initial_trustworthiness=init,
+            default_trustworthiness=initial_trustworthiness,
+        )
+
+        truth_map = self._estimate_global_truth_text(out)
+        out["global_truth"] = out["object"].map(truth_map)
+        out["source_reliability"] = out["website"].map(
+            lambda website: float(out.loc[out["website"] == website, "trustworthiness"].iloc[-1])
+        )
+
+        latest_scores = (
+            out[["website", "trustworthiness"]]
+            .drop_duplicates(subset=["website"], keep="last")
+            .set_index("website")["trustworthiness"]
+            .astype(float)
+            .to_dict()
+        )
+        self.website_trustworthiness.update(latest_scores)
+        return out
+
     def get_source_reliability(self, website: Optional[str] = None) -> Dict:
         """
         获取数据源可靠性信息
@@ -345,10 +429,17 @@ class BasicTruthFinder:
             如果指定website，返回这个源的可靠性
             如果不指定，返回所有源的可靠性字典
         """
-        # 这个方法需要从DataFrame中提取，所以需要先训练
-        # 为了保持接口一致性，返回空字典
-        # 实际使用时应该从训练后的DataFrame中获取
-        return {}
+        if website is not None:
+            if str(website) not in self.website_trustworthiness:
+                return {}
+            return {"trustworthiness": float(self.website_trustworthiness[str(website)])}
+        return {
+            str(source): {"trustworthiness": float(score)}
+            for source, score in self.website_trustworthiness.items()
+        }
+
+    def reset_history(self) -> None:
+        self.website_trustworthiness = {}
 
 
 def create_implication_function_from_texts(texts: list, 

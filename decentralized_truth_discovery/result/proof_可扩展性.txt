@@ -1,6 +1,0 @@
-                        method  proof_size  verify_memory  quality
-    EnhancedTruthFinder-Hybrid  30362.2857       160.3988  96.2830
-              BasicTruthFinder  28530.0000       160.3638  72.6626
-              SenteTruthFinder  28058.0952       160.4315  50.0000
-SenFeedTruthFinder-CompositeTD  42037.4286       160.7879  58.4602
- EnhancedTruthFinder-NonHybrid  54547.1905       160.8832  80.8934

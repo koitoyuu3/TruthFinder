@@ -20,6 +20,7 @@ import os
 import pandas as pd
 from typing import Dict, Optional, Union, List
 import warnings
+from huggingface_hub import snapshot_download
 from sentence_transformers import SentenceTransformer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -116,10 +117,30 @@ class SenteTruthFinder:
         if self.use_sbert:
             model_name = sbert_model or 'paraphrase-multilingual-MiniLM-L12-v2'
             try:
-                self.encoder = SentenceTransformer(
-                    model_name,
-                    local_files_only=self.local_files_only,
-                )
+                model_source = model_name
+                if self.local_files_only and not os.path.isdir(model_name):
+                    repo_id = model_name if "/" in model_name else f"sentence-transformers/{model_name}"
+                    model_source = snapshot_download(repo_id, local_files_only=True)
+                old_hf_offline = os.environ.get("HF_HUB_OFFLINE")
+                old_tf_offline = os.environ.get("TRANSFORMERS_OFFLINE")
+                if self.local_files_only:
+                    os.environ["HF_HUB_OFFLINE"] = "1"
+                    os.environ["TRANSFORMERS_OFFLINE"] = "1"
+                try:
+                    self.encoder = SentenceTransformer(
+                        model_source,
+                        local_files_only=self.local_files_only,
+                    )
+                finally:
+                    if self.local_files_only:
+                        if old_hf_offline is None:
+                            os.environ.pop("HF_HUB_OFFLINE", None)
+                        else:
+                            os.environ["HF_HUB_OFFLINE"] = old_hf_offline
+                        if old_tf_offline is None:
+                            os.environ.pop("TRANSFORMERS_OFFLINE", None)
+                        else:
+                            os.environ["TRANSFORMERS_OFFLINE"] = old_tf_offline
                 print(f"Using SBERT model: {model_name}")
             except Exception as e:
                 if self.strict_sbert:
@@ -387,12 +408,59 @@ class SenteTruthFinder:
             # 更新可信度
             self._update_credibility(obj_data, embeddings, similarity_matrix, all_truth)
         
+        self.global_truth_history.update({str(k): str(v) for k, v in all_truth.items()})
+
         # 更新DataFrame
         dataframe['source_reliability'] = dataframe['website'].map(
             lambda w: self.node_credibility.get(w, self.initial_credibility)
         )
         dataframe['global_truth'] = dataframe['object'].map(all_truth)
         
+        return dataframe
+
+    def process_batch(self,
+                      dataframe: pd.DataFrame,
+                      epoch: Optional[int] = None) -> pd.DataFrame:
+        """
+        按论文语义处理单个 batch：
+        - 保留历史 node_credibility
+        - 当前 batch 仅执行一次 aggregation/update
+        - 不在 batch 内反复迭代到稳态
+
+        Args:
+            dataframe: 单个 batch 的输入数据
+            epoch: 可选的 batch 序号；若输入缺少 batch_index 列，则写入该值
+
+        Returns:
+            更新后的 DataFrame，包含 source_reliability 和 global_truth 列
+        """
+        if dataframe is None or dataframe.empty:
+            columns = ["website", "fact", "object", "source_reliability", "global_truth"]
+            if dataframe is not None:
+                columns = list(dict.fromkeys(list(dataframe.columns) + columns))
+            return pd.DataFrame(columns=columns)
+
+        dataframe = dataframe.copy()
+        dataframe['fact'] = dataframe['fact'].astype(str)
+        if "batch_index" not in dataframe.columns and epoch is not None:
+            dataframe["batch_index"] = int(epoch)
+
+        dataframe = self.iteration(dataframe)
+        self.last_iteration_count = 1
+
+        if self.enable_zk_proof:
+            source_scores = {website: float(score) for website, score in self.node_credibility.items()}
+            dataframe = attach_grouped_proofs(
+                dataframe,
+                method_name="SenteTruthFinder",
+                source_scores=source_scores,
+                group_columns=("object",),
+                truth_column="global_truth",
+                iteration_count=self.last_iteration_count,
+                proof_engine=self.zk_proof_engine,
+                extra_public_data={"use_sbert": bool(self.use_sbert)},
+            )
+
         return dataframe
 
     def train(self,
