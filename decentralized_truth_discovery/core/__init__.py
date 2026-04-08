@@ -2,12 +2,7 @@ from .decent_truth_finder import EnhancedTruthFinder
 from .semantic_truth_finder import SemanticTruthFinder, SemanticTruthDiscovery
 from .sente_truth_finder import SenteTruthFinder
 from .basic_truth_finder import BasicTruthFinder, create_implication_function_from_texts
-from .senfeed_truth_finder import (
-    SenFeedTruthDiscovery,
-    SenFeedCompositeTD,
-    SenFeedIterativeTD,
-    SenFeedIncrementalTD,
-)
+from .senfeed_truth_finder import SenFeedTruthDiscovery
 from .zk_proof import (
     ZKProofEngine,
     Groth16TruthAggregationEngine,
@@ -34,9 +29,6 @@ __all__ = [
     'BasicTruthFinder',
     'create_implication_function_from_texts',
     'SenFeedTruthDiscovery',
-    'SenFeedCompositeTD',
-    'SenFeedIterativeTD',
-    'SenFeedIncrementalTD',
     'ZKProofEngine',
     'Groth16TruthAggregationEngine',
     'verify_proof_package',

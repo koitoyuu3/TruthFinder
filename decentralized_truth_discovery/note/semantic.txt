@@ -842,6 +842,15 @@ consistency = alpha * sem_score + (1 - alpha) * num_score
 
 `谁被更多可靠 source 以语义和数值两条证据共同支持，谁就更可能是真值。`
 
+Bundle Size / proof_size_bytes
+整个 proof bundle JSON 文件大小。包括结果行、digest、metadata、proof payload 等全部内容。这个值反映“最终要存/传的完整证明包有多大”。
+Proof Payload Size / proof_payload_bytes
+纯 proof 对象本身的大小，不含结果行和外围 metadata。这个值更接近“密码学证明本体有多大”。你现在看到它们都在 2541 到 2555 左右，是因为这里各方法用的是同一套 schnorr_nizk_v1 / schnorr 证明后端，所以天然差异很小。
+Verify Peak RSS Delta / verify_peak_delta_rss_mb_mean
+验证过程中，进程峰值内存相对起始基线多了多少 MB，取多次重复的平均值。这个值反映“验证 proof 时额外吃了多少内存”。
+Verify Time / verify_elapsed_sec_mean
+单次验证耗时，取多次重复平均。这里包含读取 bundle、校验 proof、校验 digest 的总 wall-clock 时间。这个值反映“验证一次要多久”。
+
 
 解释一下semantic可以扛住的理论极限：
 设有n个善意节点，有m个恶意节点，有x种攻击方向，每种攻击方向的节点有m1、m2、...、mx个，则有：只要n > max(m1, m2, ..., mx)，就可以扛住

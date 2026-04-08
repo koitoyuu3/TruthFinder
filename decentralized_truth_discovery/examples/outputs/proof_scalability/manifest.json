@@ -1,0 +1,18 @@
+{
+  "numeric_input": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10/num_demo.json",
+  "text_input": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/data_agent-10/demo.json",
+  "output_root": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability",
+  "batch_counts": [
+    150
+  ],
+  "domains": [
+    "numeric",
+    "text"
+  ],
+  "repeats": 3,
+  "memory_sample_interval": 0.01,
+  "artifacts": {
+    "raw_results_csv": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability/raw_results.csv",
+    "summary_csv": "/Users/huabowen/TruthFinder/decentralized_truth_discovery/examples/outputs/proof_scalability/summary.csv"
+  }
+}

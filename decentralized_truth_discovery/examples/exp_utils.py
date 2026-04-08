@@ -1,7 +1,7 @@
 """
-exp_utils.py — 四实验共享工具库
+exp_utils.py — 在线实验共享工具库
 ================================================
-评估框架（对齐论文 Section VI）:
+评估框架（单次在线前向，对齐按 batch 顺序持续更新的协议）:
   preds = 方法在实验数据（含恶意节点）上的真值发现结果
   gt    = 干净数据（0 恶意节点）中的真实值
 
@@ -49,7 +49,7 @@ from decentralized_truth_discovery.core import (
     SemanticTruthFinder,
     SenFeedTruthDiscovery,
     SenteTruthFinder,
-    create_implication_function_from_texts,
+    attach_grouped_proofs,
 )
 from decentralized_truth_discovery.core.hybrid_text_alignment import (
     DEFAULT_NUMERIC_MATCH_TOL,
@@ -88,6 +88,8 @@ NUMERIC_COLLUDE_DEMO_FILES: Dict[int, Path] = {
     2: DATA_DIR / "num_demo_2bad_collude.json",
     3: DATA_DIR / "num_demo_3bad_collude.json",
     4: DATA_DIR / "num_demo_4bad_collude.json",
+    5: DATA_DIR / "num_demo_5bad_collude.json",
+    6: DATA_DIR / "num_demo_6bad_collude.json",
 }
 
 COLLUDE_DEMO_FILES: Dict[int, Path] = {
@@ -107,7 +109,9 @@ ATTACK_PROFILE_DEMO_FILES: Dict[str, Dict[int, Path]] = {
 
 NUMERIC_AGENT_DEMO_FILES: Dict[int, Path] = NUMERIC_DEMO_FILES
 
+TEXT_AGENT_DEMO_FILES: Dict[int, Path] = DEMO_FILES
 TEXT_COLLUDE_DEMO_FILES: Dict[int, Path] = COLLUDE_DEMO_FILES
+EXP1_BAD_COUNTS: List[int] = [0, 1, 2, 3, 4]
 
 N_AGENTS = 10
 
@@ -147,23 +151,26 @@ def get_demo_files(attack_profile: str = "agent") -> Dict[int, Path]:
 
 
 def get_numeric_demo_files(mode: str = "collude") -> Dict[int, Path]:
-    """Return numeric experiment files. mode='collude' (default) or 'rotate'."""
+    """Return numeric experiment files. mode='collude' (default) or 'agent'."""
     if mode == "collude":
         return NUMERIC_COLLUDE_DEMO_FILES
     return NUMERIC_AGENT_DEMO_FILES
 
 
-def get_text_demo_files() -> Dict[int, Path]:
-    """Text experiments always use demo_*bad_collude.json files."""
+def get_text_demo_files(mode: str = "collude") -> Dict[int, Path]:
+    """Return text experiment files. mode='collude' (default) or 'agent'."""
+    if mode == "agent":
+        return TEXT_AGENT_DEMO_FILES
     return TEXT_COLLUDE_DEMO_FILES
 
 
 def get_shared_bad_counts() -> List[int]:
     """
     Bad-count values available to both numeric and text experiment datasets.
-    This keeps combined experiment plots aligned on the same x-axis.
+    Exp1 is currently restricted to the <=40% malicious regime.
     """
-    return sorted(set(NUMERIC_AGENT_DEMO_FILES) & set(TEXT_COLLUDE_DEMO_FILES))
+    shared = set(NUMERIC_AGENT_DEMO_FILES) & set(TEXT_COLLUDE_DEMO_FILES)
+    return [k for k in EXP1_BAD_COUNTS if k in shared]
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # 一、数据加载
@@ -298,19 +305,240 @@ def _basic_truth_map(out_df: pd.DataFrame) -> Dict[str, str]:
     return truth_map
 
 
+def _scalar_numeric_similarity(
+    left: float,
+    right: float,
+    tol: float = DEFAULT_NUMERIC_MATCH_TOL,
+) -> float:
+    """Smooth numeric similarity based on relative distance."""
+    denom = max(abs(float(left)), abs(float(right)), 1e-8)
+    rel_error = abs(float(left) - float(right)) / denom
+    bandwidth = max(float(tol), 1e-8)
+    return float(np.exp(-rel_error / bandwidth))
+
+
+class _NumericSenteTruthFinder(SenteTruthFinder):
+    """Numeric adapter for SenteTruth that operates directly on floats."""
+
+    def __init__(self, numeric_tol: float = DEFAULT_NUMERIC_MATCH_TOL, **kwargs):
+        kwargs.setdefault("use_sbert", False)
+        super().__init__(**kwargs)
+        self.numeric_tol = max(float(numeric_tol), 1e-8)
+
+    def _calculate_numeric_similarity_matrix(self, values: np.ndarray) -> np.ndarray:
+        n = len(values)
+        if n == 0:
+            return np.zeros((0, 0), dtype=float)
+
+        matrix = np.eye(n, dtype=float)
+        for i in range(n):
+            for j in range(i + 1, n):
+                similarity = _scalar_numeric_similarity(values[i], values[j], tol=self.numeric_tol)
+                matrix[i, j] = similarity
+                matrix[j, i] = similarity
+        return matrix
+
+    def _aggregate_truth(
+        self,
+        df: pd.DataFrame,
+        embeddings: np.ndarray,
+        similarity_matrix: np.ndarray,
+    ) -> Dict[str, float]:
+        if df.empty:
+            return {}
+
+        object_id = str(df["object"].iloc[0])
+        phi_values = self._calculate_trustworthiness_scores(similarity_matrix)
+        scores: List[float] = []
+        values: List[float] = []
+
+        for idx, (_, row) in enumerate(df.iterrows()):
+            website = str(row["website"])
+            value = float(row["fact"])
+            credibility = self.node_credibility.get(website, self.initial_credibility)
+            scores.append(float(credibility) * float(phi_values[idx]))
+            values.append(value)
+
+        best_idx = int(np.argmax(scores))
+        return {object_id: float(values[best_idx])}
+
+    def iteration(self, dataframe: pd.DataFrame) -> pd.DataFrame:
+        self._initialize_credibility(dataframe)
+        all_truth: Dict[str, float] = {}
+
+        for object_id in dataframe["object"].unique():
+            obj_data = dataframe[dataframe["object"] == object_id].copy()
+            values = obj_data["fact"].astype(float).to_numpy()
+            similarity_matrix = self._calculate_numeric_similarity_matrix(values)
+            truth = self._aggregate_truth(obj_data, values.reshape(-1, 1), similarity_matrix)
+            all_truth.update(truth)
+            self._update_credibility(obj_data, values.reshape(-1, 1), similarity_matrix, all_truth)
+
+        self.global_truth_history.update({str(k): float(v) for k, v in all_truth.items()})
+        dataframe["source_reliability"] = dataframe["website"].map(
+            lambda website: self.node_credibility.get(str(website), self.initial_credibility)
+        )
+        dataframe["global_truth"] = dataframe["object"].map(all_truth)
+        return dataframe
+
+    def process_batch(
+        self,
+        dataframe: pd.DataFrame,
+        epoch: Optional[int] = None,
+    ) -> pd.DataFrame:
+        if dataframe is None or dataframe.empty:
+            columns = ["website", "fact", "object", "source_reliability", "global_truth"]
+            if dataframe is not None:
+                columns = list(dict.fromkeys(list(dataframe.columns) + columns))
+            return pd.DataFrame(columns=columns)
+
+        dataframe = dataframe.copy()
+        dataframe["website"] = dataframe["website"].astype(str)
+        dataframe["object"] = dataframe["object"].astype(str)
+        dataframe["fact"] = pd.to_numeric(dataframe["fact"], errors="coerce")
+        dataframe = dataframe.dropna(subset=["fact"])
+        if dataframe.empty:
+            return pd.DataFrame(columns=["website", "fact", "object", "source_reliability", "global_truth"])
+
+        if "batch_index" not in dataframe.columns and epoch is not None:
+            dataframe["batch_index"] = int(epoch)
+
+        dataframe = self.iteration(dataframe)
+        self.last_iteration_count = 1
+
+        if self.enable_zk_proof:
+            source_scores = {website: float(score) for website, score in self.node_credibility.items()}
+            dataframe = attach_grouped_proofs(
+                dataframe,
+                method_name="SenteTruthFinder[numeric]",
+                source_scores=source_scores,
+                group_columns=("object",),
+                truth_column="global_truth",
+                iteration_count=self.last_iteration_count,
+                proof_engine=self.zk_proof_engine,
+                extra_public_data={"numeric_tol": float(self.numeric_tol)},
+            )
+
+        return dataframe
+
+
+class _NumericBasicTruthFinder(BasicTruthFinder):
+    """Numeric adapter for BasicTruth that avoids text implication fitting."""
+
+    def __init__(self, numeric_tol: float = DEFAULT_NUMERIC_MATCH_TOL, **kwargs):
+        super().__init__(implication=lambda _f1, _f2: 0.0, **kwargs)
+        self.numeric_tol = max(float(numeric_tol), 1e-8)
+        self.implication = self._numeric_implication
+
+    def _numeric_implication(self, left: float, right: float) -> float:
+        return _scalar_numeric_similarity(left, right, tol=self.numeric_tol)
+
+    def calculate_confidence(self, df: pd.DataFrame) -> pd.DataFrame:
+        def trustworthiness_score(x: float) -> float:
+            x = min(0.999, max(0.001, float(x)))
+            return -np.log(1 - x)
+
+        rows = [
+            (idx, float(row["fact"]), trustworthiness_score(float(row["trustworthiness"])))
+            for idx, row in df.iterrows()
+        ]
+
+        for idx_i, fact_i, _ in rows:
+            confidence = 0.0
+            for _, fact_j, trust_score_j in rows:
+                confidence += trust_score_j * self.implication(fact_j, fact_i)
+            df.at[idx_i, "fact_confidence"] = float(confidence)
+        return df
+
+    def _estimate_global_truth_numeric(self, dataframe: pd.DataFrame) -> Dict[str, float]:
+        truth_map: Dict[str, float] = {}
+        for object_id in dataframe["object"].unique():
+            obj_df = dataframe[dataframe["object"] == object_id]
+            if obj_df.empty:
+                continue
+            best_idx = obj_df["fact_confidence"].astype(float).idxmax()
+            truth_map[str(object_id)] = float(dataframe.loc[best_idx, "fact"])
+        return truth_map
+
+    def process_batch(
+        self,
+        dataframe: pd.DataFrame,
+        implication_texts: Optional[List[str]] = None,
+        initial_trustworthiness: float = 0.5,
+    ) -> pd.DataFrame:
+        del implication_texts
+
+        if dataframe is None or dataframe.empty:
+            columns = ["website", "fact", "object", "trustworthiness", "fact_confidence", "global_truth"]
+            if dataframe is not None:
+                columns = list(dict.fromkeys(list(dataframe.columns) + columns))
+            return pd.DataFrame(columns=columns)
+
+        dataframe = dataframe.copy()
+        dataframe["website"] = dataframe["website"].astype(str)
+        dataframe["object"] = dataframe["object"].astype(str)
+        dataframe["fact"] = pd.to_numeric(dataframe["fact"], errors="coerce")
+        dataframe = dataframe.dropna(subset=["fact"])
+        if dataframe.empty:
+            return pd.DataFrame(columns=["website", "fact", "object", "trustworthiness", "fact_confidence", "global_truth"])
+
+        self.implication = self._numeric_implication
+        init = self.website_trustworthiness if self.website_trustworthiness else initial_trustworthiness
+        dataframe["trustworthiness"] = self._initialize_trustworthiness(
+            dataframe,
+            init,
+            initial_trustworthiness,
+        )
+        dataframe["fact_confidence"] = np.zeros(len(dataframe.index))
+
+        out = self.iteration(dataframe)
+        self.last_iteration_count = 1
+
+        truth_map = self._estimate_global_truth_numeric(out)
+        out["global_truth"] = out["object"].map(truth_map)
+
+        latest_scores = (
+            out[["website", "trustworthiness"]]
+            .drop_duplicates(subset=["website"], keep="last")
+            .set_index("website")["trustworthiness"]
+            .astype(float)
+            .to_dict()
+        )
+        self.website_trustworthiness.update(latest_scores)
+        out["source_reliability"] = out["website"].map(
+            lambda website: float(self.website_trustworthiness[str(website)])
+        )
+
+        if self.enable_zk_proof:
+            out = attach_grouped_proofs(
+                out,
+                method_name="BasicTruthFinder[numeric]",
+                source_scores=latest_scores,
+                group_columns=("object",),
+                truth_column="global_truth",
+                iteration_count=self.last_iteration_count,
+                proof_engine=self.zk_proof_engine,
+                extra_public_data={"numeric_tol": float(self.numeric_tol)},
+            )
+        return out
+
+
 # ── 数值方法 ──────────────────────────────────────────────────────────────────
 
 def _run_senfeed(df: pd.DataFrame) -> Dict[Tuple[int, str], float]:
     """
     SenFeedTruth (CompositeTD): batch_index → timestamp，
-    一次 train() 跨 batch 增量处理（Eq.2/3 初始化 + Eq.6 MAP 更新）。
+    一次 train() 按 timestamp 顺序运行论文式 CompositeTD：
+    - 首个 timestamp 做 iterative 初始化
+    - 常规阶段做 incremental MAP
+    - 当 source weight evolution 突变时回退到 batch 内迭代收敛
     """
     if df.empty:
         return {}
     inp = df[["website", "fact", "object", "batch_index"]].rename(
         columns={"batch_index": "timestamp"})
     try:
-        model = SenFeedTruthDiscovery(mode="composite", enable_zk_proof=False)
+        model = SenFeedTruthDiscovery(enable_zk_proof=False)
         out   = model.train(inp)
         return _preds_numeric(out)
     except Exception as e:
@@ -340,30 +568,23 @@ def _run_decent(df: pd.DataFrame) -> Dict[Tuple[int, str], float]:
 
 def _run_sente_num(df: pd.DataFrame) -> Dict[Tuple[int, str], float]:
     """
-    SenteTruth (数值模式): 数值→字符串，TF-IDF 相似度选多数值，再还原为 float。
+    SenteTruth (数值模式): 直接对 float 计算相对距离相似度。
     按论文语义跨 batch 保留 node_credibility，每个 batch 只做一次更新。
     """
     if df.empty:
         return {}
     preds: Dict[Tuple[int, str], float] = {}
     model = _run_silently(
-        lambda: SenteTruthFinder(enable_zk_proof=False, use_sbert=False)
+        lambda: _NumericSenteTruthFinder(enable_zk_proof=False)
     )
     for bi in sorted(df["batch_index"].unique()):
-        grp = df[df["batch_index"] == bi].copy()
-        grp["fact"] = grp["fact"].map(lambda x: f"{float(x):.8g}")
+        grp = df[df["batch_index"] == bi][["website", "fact", "object", "batch_index"]].copy()
         try:
             def _process():
-                return model.process_batch(grp[["website", "fact", "object", "batch_index"]])
+                return model.process_batch(grp)
 
             out = _run_silently(_process)
-            for _, row in out.drop_duplicates("object").iterrows():
-                v = row.get("global_truth")
-                if pd.notna(v):
-                    try:
-                        preds[(int(bi), str(row["object"]))] = float(str(v))
-                    except (ValueError, TypeError):
-                        pass
+            preds.update(_preds_numeric(out))
         except Exception as e:
             warnings.warn(f"SenteTruth-num batch {bi}: {e}")
     return preds
@@ -371,38 +592,23 @@ def _run_sente_num(df: pd.DataFrame) -> Dict[Tuple[int, str], float]:
 
 def _run_basic_num(df: pd.DataFrame) -> Dict[Tuple[int, str], float]:
     """
-    BasicTruth (数值模式): 数值→字符串，TF-IDF implication 选置信度最高值。
-    跨 batch 保留 website -> trustworthiness，implication 仅用当前 prefix 拟合。
+    BasicTruth (数值模式): 直接对 float 计算数值蕴含与簇支持度。
+    跨 batch 保留 website -> trustworthiness，不再拟合文本 implication。
     """
     if df.empty:
         return {}
     preds: Dict[Tuple[int, str], float] = {}
     model = _run_silently(
-        lambda: BasicTruthFinder(implication=lambda _f1, _f2: 0.0, enable_zk_proof=False)
+        lambda: _NumericBasicTruthFinder(enable_zk_proof=False)
     )
     for bi in sorted(df["batch_index"].unique()):
-        grp = df[df["batch_index"] == bi].copy()
-        grp["fact"] = grp["fact"].map(lambda x: f"{float(x):.8g}")
-        prefix_texts = (
-            df[df["batch_index"] <= bi]["fact"]
-            .map(lambda x: f"{float(x):.8g}")
-            .astype(str)
-            .tolist()
-        )
+        grp = df[df["batch_index"] == bi][["website", "fact", "object", "batch_index"]].copy()
         try:
             def _process():
-                return model.process_batch(
-                    grp[["website", "fact", "object", "batch_index"]],
-                    implication_texts=prefix_texts,
-                )
+                return model.process_batch(grp)
 
             out = _run_silently(_process)
-            truth_map = _basic_truth_map(out)
-            for object_id, truth in truth_map.items():
-                try:
-                    preds[(int(bi), object_id)] = float(truth)
-                except (ValueError, TypeError):
-                    pass
+            preds.update(_preds_numeric(out))
         except Exception as e:
             warnings.warn(f"BasicTruth-num batch {bi}: {e}")
     return preds
@@ -572,7 +778,7 @@ def _filter_last_pct(
 ) -> Dict[Tuple[int, str], float]:
     """
     保留最后 pct 比例的 batch（论文 Section VI：last 10% batches）。
-    对齐论文：只用收敛后的稳态结果评估长期精度，过滤冷启动阶段的噪声。
+    对齐在线协议：只取后段 batch 评估长期表现，避免冷启动阶段主导指标。
     """
     if not d:
         return d
@@ -661,36 +867,61 @@ def metric_data_accuracy(
     X = 方法在干净数据上的输出（ground truth 代理）
     Y = 方法在含噪数据上的输出（预测结果）
     """
+    combined = _hybrid_text_scores(x_preds, y_preds, alpha=alpha, num_tol=num_tol)
+    if combined.size == 0:
+        return float("nan")
+    return float(np.mean(combined >= threshold))
+
+
+def metric_mean_hybrid_score(
+    x_preds: Dict[Tuple[int, str], str],
+    y_preds: Dict[Tuple[int, str], str],
+    alpha: float = DEFAULT_SEMANTIC_NUMERIC_ALPHA,
+    num_tol: float = DEFAULT_NUMERIC_MATCH_TOL,
+) -> float:
+    """
+    返回 clean/noisy 输出之间的平均混合分数，不做阈值化。
+    用于更平滑地观察文本鲁棒性随 batch 的变化。
+    """
+    combined = _hybrid_text_scores(x_preds, y_preds, alpha=alpha, num_tol=num_tol)
+    if combined.size == 0:
+        return float("nan")
+    return float(np.mean(combined))
+
+
+def _hybrid_text_scores(
+    x_preds: Dict[Tuple[int, str], str],
+    y_preds: Dict[Tuple[int, str], str],
+    alpha: float = DEFAULT_SEMANTIC_NUMERIC_ALPHA,
+    num_tol: float = DEFAULT_NUMERIC_MATCH_TOL,
+) -> np.ndarray:
     keys = [k for k in x_preds if k in y_preds]
     if not keys:
-        return float("nan")
+        return np.array([], dtype=float)
     x_txts = [x_preds[k] for k in keys]
     y_txts = [y_preds[k] for k in keys]
 
-    # A: SBERT 语义相似度；若本地缓存模型不可用，则退化为 char-ngram TF-IDF 余弦
     encoder = _get_metric_sbert_encoder()
     if encoder is not None:
         x_emb = encoder.encode(x_txts, convert_to_numpy=True, show_progress_bar=False)
         y_emb = encoder.encode(y_txts, convert_to_numpy=True, show_progress_bar=False)
         x_norm = x_emb / (np.linalg.norm(x_emb, axis=1, keepdims=True) + 1e-12)
         y_norm = y_emb / (np.linalg.norm(y_emb, axis=1, keepdims=True) + 1e-12)
-        A = np.clip((x_norm * y_norm).sum(axis=1), -1.0, 1.0)
+        sem_scores = np.clip((x_norm * y_norm).sum(axis=1), -1.0, 1.0)
     else:
         vect = TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 4), min_df=1)
         mat = vect.fit_transform(x_txts + y_txts)
         n = len(keys)
-        A = np.clip(sk_cosine(mat[:n], mat[n:]).diagonal(), 0.0, 1.0)
+        sem_scores = np.clip(sk_cosine(mat[:n], mat[n:]).diagonal(), 0.0, 1.0)
 
-    # B: 数值匹配率。若 clean/reference 本身不含数字，则关闭数值通道，仅按语义评估。
-    combined = np.array([
+    return np.array([
         blend_semantic_numeric_scores(
             sem_score=float(sem_score),
             num_score=_numeric_text_score_for_accuracy(x, y, tol=num_tol),
             alpha=alpha,
         )
-        for sem_score, x, y in zip(A, x_txts, y_txts)
-    ])
-    return float(np.mean(combined >= threshold))
+        for sem_score, x, y in zip(sem_scores, x_txts, y_txts)
+    ], dtype=float)
 
 
 def _get_metric_sbert_encoder():
@@ -833,6 +1064,15 @@ def eval_numeric_per_batch(
     return out
 
 
+def _group_preds_by_batch(
+    preds: Dict[Tuple[int, str], object],
+) -> Dict[int, Dict[Tuple[int, str], object]]:
+    grouped: Dict[int, Dict[Tuple[int, str], object]] = {}
+    for key, value in preds.items():
+        grouped.setdefault(int(key[0]), {})[key] = value
+    return grouped
+
+
 def eval_text(
     clean_df: pd.DataFrame,
     noisy_df: pd.DataFrame,
@@ -867,6 +1107,117 @@ def eval_text(
     return out
 
 
+def eval_text_per_batch(
+    clean_df: pd.DataFrame,
+    noisy_df: pd.DataFrame,
+    accuracy_threshold: float = 0.85,
+) -> Dict[str, Dict[int, float]]:
+    """
+    对各文本方法按 batch 逐个计算 DataAccuracy(X_b, Y_b)。
+    返回 {method: {batch_index: data_accuracy}}。
+    """
+    runners = {
+        "SenteTruth": _run_sente_txt,
+        "BasicTruth": _run_basic_txt,
+    }
+    batch_indices = sorted(
+        set(clean_df.get("batch_index", pd.Series(dtype=int)).astype(int).tolist())
+        | set(noisy_df.get("batch_index", pd.Series(dtype=int)).astype(int).tolist())
+    )
+    out: Dict[str, Dict[int, float]] = {}
+    for name, fn in runners.items():
+        print(f"    [{name}] text per-batch ...", end=" ", flush=True)
+        x = fn(clean_df)
+        y = fn(noisy_df)
+        x_by_batch = _group_preds_by_batch(x)
+        y_by_batch = _group_preds_by_batch(y)
+        out[name] = {
+            bi: metric_data_accuracy(
+                x_by_batch.get(bi, {}),
+                y_by_batch.get(bi, {}),
+                threshold=accuracy_threshold,
+            )
+            for bi in batch_indices
+        }
+        print(f"{len(out[name])} batches")
+
+    print("    [SemanticTruth] text per-batch ...", end=" ", flush=True)
+    x_sem, y_sem = _run_semantic_txt(clean_df, noisy_df)
+    x_sem_by_batch = _group_preds_by_batch(x_sem)
+    y_sem_by_batch = _group_preds_by_batch(y_sem)
+    out["SemanticTruth"] = {
+        bi: metric_data_accuracy(
+            x_sem_by_batch.get(bi, {}),
+            y_sem_by_batch.get(bi, {}),
+            threshold=accuracy_threshold,
+        )
+        for bi in batch_indices
+    }
+    print(f"{len(out['SemanticTruth'])} batches")
+    return out
+
+
+def eval_text_metrics_per_batch(
+    clean_df: pd.DataFrame,
+    noisy_df: pd.DataFrame,
+    accuracy_threshold: float = 0.85,
+) -> Tuple[Dict[str, Dict[int, float]], Dict[str, Dict[int, float]]]:
+    """
+    对各文本方法按 batch 逐个计算：
+      1. DataAccuracy(X_b, Y_b)
+      2. MeanHybridScore(X_b, Y_b)
+    返回 (accuracy_results, hybrid_score_results)。
+    """
+    runners = {
+        "SenteTruth": _run_sente_txt,
+        "BasicTruth": _run_basic_txt,
+    }
+    batch_indices = sorted(
+        set(clean_df.get("batch_index", pd.Series(dtype=int)).astype(int).tolist())
+        | set(noisy_df.get("batch_index", pd.Series(dtype=int)).astype(int).tolist())
+    )
+    acc_out: Dict[str, Dict[int, float]] = {}
+    score_out: Dict[str, Dict[int, float]] = {}
+
+    for name, fn in runners.items():
+        print(f"    [{name}] text per-batch ...", end=" ", flush=True)
+        x = fn(clean_df)
+        y = fn(noisy_df)
+        x_by_batch = _group_preds_by_batch(x)
+        y_by_batch = _group_preds_by_batch(y)
+        acc_out[name] = {}
+        score_out[name] = {}
+        for bi in batch_indices:
+            x_b = x_by_batch.get(bi, {})
+            y_b = y_by_batch.get(bi, {})
+            acc_out[name][bi] = metric_data_accuracy(
+                x_b,
+                y_b,
+                threshold=accuracy_threshold,
+            )
+            score_out[name][bi] = metric_mean_hybrid_score(x_b, y_b)
+        print(f"{len(acc_out[name])} batches")
+
+    print("    [SemanticTruth] text per-batch ...", end=" ", flush=True)
+    x_sem, y_sem = _run_semantic_txt(clean_df, noisy_df)
+    x_sem_by_batch = _group_preds_by_batch(x_sem)
+    y_sem_by_batch = _group_preds_by_batch(y_sem)
+    acc_out["SemanticTruth"] = {}
+    score_out["SemanticTruth"] = {}
+    for bi in batch_indices:
+        x_b = x_sem_by_batch.get(bi, {})
+        y_b = y_sem_by_batch.get(bi, {})
+        acc_out["SemanticTruth"][bi] = metric_data_accuracy(
+            x_b,
+            y_b,
+            threshold=accuracy_threshold,
+        )
+        score_out["SemanticTruth"][bi] = metric_mean_hybrid_score(x_b, y_b)
+    print(f"{len(acc_out['SemanticTruth'])} batches")
+
+    return acc_out, score_out
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # 五、可视化 & CSV 导出
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -878,17 +1229,23 @@ def plot_numeric(
     title_prefix: str,
     out_dir: Path,
     metric_scope_label: str = "last 10% batches",
+    metric_name_prefix: str = "",
 ) -> None:
     """绘制数值实验图（两列：RMSE | MAE）。"""
+    plt.rcParams["font.family"] = ["Arial Unicode MS", "Hiragino Sans GB", "Songti SC", "DejaVu Sans"]
+    plt.rcParams["font.sans-serif"] = ["Arial Unicode MS", "Hiragino Sans GB", "Songti SC", "DejaVu Sans"]
+    plt.rcParams["axes.unicode_minus"] = False
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+    rmse_name = f"{metric_name_prefix}RMSE".strip()
+    mae_name = f"{metric_name_prefix}MAE".strip()
     for m in NUM_METHODS:
         kw = dict(color=COLORS[m], marker=MARKERS[m], label=m,
                   linewidth=1.8, markersize=6)
         ax1.plot(x_vals, results[m]["rmse"], **kw)
         ax2.plot(x_vals, results[m]["mae"],  **kw)
     for ax, ylabel, suffix in [
-        (ax1, f"RMSE (vs ground truth, {metric_scope_label})", "RMSE（数值场景）"),
-        (ax2, f"MAE (vs ground truth, {metric_scope_label})",  "MAE（数值场景）"),
+        (ax1, f"{rmse_name} (vs ground truth, {metric_scope_label})", f"{rmse_name}（数值场景）"),
+        (ax2, f"{mae_name} (vs ground truth, {metric_scope_label})",  f"{mae_name}（数值场景）"),
     ]:
         ax.set_xlabel(xlabel)
         ax.set_ylabel(ylabel)
@@ -910,6 +1267,9 @@ def plot_text(
     out_dir: Path,
 ) -> None:
     """绘制文本实验图（Data Accuracy）。"""
+    plt.rcParams["font.family"] = ["Arial Unicode MS", "Hiragino Sans GB", "Songti SC", "DejaVu Sans"]
+    plt.rcParams["font.sans-serif"] = ["Arial Unicode MS", "Hiragino Sans GB", "Songti SC", "DejaVu Sans"]
+    plt.rcParams["axes.unicode_minus"] = False
     fig, ax = plt.subplots(figsize=(7, 5))
     for m in TEXT_METHODS:
         ax.plot(x_vals, results[m]["data_accuracy"],
@@ -934,6 +1294,7 @@ def save_csv(
     num_res: Dict[str, Dict[str, List]],
     txt_res: Dict[str, Dict[str, List]],
     out_dir: Path,
+    metric_scale: Optional[str] = None,
 ) -> None:
     """将所有指标合并为一个 CSV 文件。"""
     rows = []
@@ -946,6 +1307,7 @@ def save_csv(
                 "rmse":      num_res[m]["rmse"][i]     if i < len(num_res[m]["rmse"])     else float("nan"),
                 "mae":       num_res[m]["mae"][i]      if i < len(num_res[m]["mae"])      else float("nan"),
                 "data_accuracy":  float("nan"),
+                "metric_scale": metric_scale,
             })
         for m in TEXT_METHODS:
             rows.append({
@@ -955,15 +1317,170 @@ def save_csv(
                 "rmse":      float("nan"),
                 "mae":       float("nan"),
                 "data_accuracy":  txt_res[m]["data_accuracy"][i] if i < len(txt_res[m]["data_accuracy"]) else float("nan"),
+                "metric_scale": metric_scale,
             })
     path = out_dir / "results.csv"
     pd.DataFrame(rows).to_csv(path, index=False, encoding="utf-8-sig")
     print(f"  → 已保存 {path}")
 
 
+def plot_stage_metric_panels(
+    stages: List[Tuple[str, int]],
+    results_by_stage: Dict[str, Dict[str, Dict[int, float]]],
+    methods: List[str],
+    ylabel: str,
+    title_prefix: str,
+    out_path: Path,
+    y_lim: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Plot one subplot per injection stage, with batch on x-axis and metric on y-axis.
+    """
+    plt.rcParams["font.family"] = ["Arial Unicode MS", "Hiragino Sans GB", "Songti SC", "DejaVu Sans"]
+    plt.rcParams["font.sans-serif"] = ["Arial Unicode MS", "Hiragino Sans GB", "Songti SC", "DejaVu Sans"]
+    plt.rcParams["axes.unicode_minus"] = False
+
+    n_cols = max(1, len(stages))
+    fig, axes = plt.subplots(1, n_cols, figsize=(6 * n_cols, 4.8), sharey=True)
+    if n_cols == 1:
+        axes = [axes]
+
+    for ax, (stage_label, injection_start) in zip(axes, stages):
+        stage_results = results_by_stage.get(stage_label, {})
+        for method in methods:
+            series = stage_results.get(method, {})
+            x_vals = sorted(series)
+            y_vals = [series[x] for x in x_vals]
+            ax.plot(
+                x_vals,
+                y_vals,
+                color=COLORS[method],
+                marker=MARKERS[method],
+                label=method,
+                linewidth=1.8,
+                markersize=4,
+            )
+        ax.axvline(
+            injection_start,
+            color="#666666",
+            linestyle="--",
+            linewidth=1.2,
+            alpha=0.8,
+        )
+        ax.set_title(f"{stage_label} (start={injection_start})")
+        ax.set_xlabel("Batch")
+        ax.grid(True, alpha=0.3)
+        if y_lim is not None:
+            ax.set_ylim(*y_lim)
+
+    axes[0].set_ylabel(ylabel)
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="upper center", ncol=len(methods), frameon=False)
+    fig.suptitle(title_prefix)
+    fig.tight_layout(rect=(0, 0, 1, 0.92))
+    fig.savefig(out_path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"  → 已保存 {out_path}")
+
+
+def plot_temporal_metric(
+    results_by_method: Dict[str, Dict[int, float]],
+    methods: List[str],
+    ylabel: str,
+    title: str,
+    out_path: Path,
+    event_lines: Optional[List[Tuple[int, str]]] = None,
+    y_lim: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Plot a single temporal metric curve panel with optional attack-event markers.
+    """
+    plt.rcParams["font.family"] = ["Arial Unicode MS", "Hiragino Sans GB", "Songti SC", "DejaVu Sans"]
+    plt.rcParams["font.sans-serif"] = ["Arial Unicode MS", "Hiragino Sans GB", "Songti SC", "DejaVu Sans"]
+    plt.rcParams["axes.unicode_minus"] = False
+
+    fig, ax = plt.subplots(figsize=(10.5, 4.8))
+    for method in methods:
+        series = results_by_method.get(method, {})
+        x_vals = sorted(series)
+        y_vals = [series[x] for x in x_vals]
+        ax.plot(
+            x_vals,
+            y_vals,
+            color=COLORS[method],
+            marker=MARKERS[method],
+            label=method,
+            linewidth=1.8,
+            markersize=4,
+        )
+
+    if event_lines:
+        for x_pos, label in event_lines:
+            ax.axvline(
+                x_pos,
+                color="#666666",
+                linestyle="--",
+                linewidth=1.2,
+                alpha=0.85,
+            )
+            ax.text(
+                x_pos + 1,
+                0.98,
+                label,
+                transform=ax.get_xaxis_transform(),
+                ha="left",
+                va="top",
+                fontsize=9,
+                color="#444444",
+            )
+
+    ax.set_xlabel("Batch")
+    ax.set_ylabel(ylabel)
+    ax.set_title(title)
+    ax.grid(True, alpha=0.3)
+    if y_lim is not None:
+        ax.set_ylim(*y_lim)
+
+    handles, labels = ax.get_legend_handles_labels()
+    fig.legend(handles, labels, loc="upper center", ncol=len(methods), frameon=False)
+    fig.tight_layout(rect=(0, 0, 1, 0.92))
+    fig.savefig(out_path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"  → 已保存 {out_path}")
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # 六、E3 专用：构造注入数据集
 # ═══════════════════════════════════════════════════════════════════════════════
+
+def get_injection_stages(n_batches: int) -> List[Tuple[str, int]]:
+    """
+    Return coarse injection stages for Exp3.
+
+    Fixed injection starts:
+
+    - 早: 第 20 个 batch
+    - 中: 第 70 个 batch
+    - 晚: 第 120 个 batch
+    """
+    n_batches = max(int(n_batches), 0)
+    if n_batches <= 0:
+        return []
+
+    candidates = [
+        ("早", min(n_batches, 20)),
+        ("中", min(n_batches, 70)),
+        ("晚", min(n_batches, 120)),
+    ]
+
+    stages: List[Tuple[str, int]] = []
+    seen_starts = set()
+    for label, start in candidates:
+        if start in seen_starts:
+            continue
+        stages.append((label, start))
+        seen_starts.add(start)
+    return stages
 
 def build_injection_df(
     clean_batches: List[Dict],
@@ -987,6 +1504,50 @@ def build_injection_df(
     for k in range(1, n_total + 1):
         src   = clean_idx if k < inj_start else mal_idx
         batch = src.get(k)
+        if batch is None:
+            continue
+        parts.append(fn([batch]))
+
+    valid = [p for p in parts if not p.empty]
+    return pd.concat(valid, ignore_index=True) if valid else pd.DataFrame(
+        columns=["website", "object", "fact", "batch_index"])
+
+
+def build_phase_switched_df(
+    phase_batches: List[Tuple[int, List[Dict]]],
+    n_total: int,
+    mode: str,
+) -> pd.DataFrame:
+    """
+    构造多阶段数据集：
+      选择满足 start_batch <= k 的最后一个阶段数据源作为第 k 个 batch 的输入。
+
+    Example:
+      [(1, clean), (50, bad_2), (100, bad_4)]
+    表示：
+      1-49   -> clean
+      50-99  -> bad_2
+      100+   -> bad_4
+    """
+    fn = to_numeric_df if mode == "numeric" else to_text_df
+
+    normalized_phases: List[Tuple[int, Dict[int, Dict]]] = []
+    for start_batch, batches in sorted(phase_batches, key=lambda item: int(item[0])):
+        normalized_phases.append(
+            (int(start_batch), {int(batch["batchIndex"]): batch for batch in batches})
+        )
+
+    parts: List[pd.DataFrame] = []
+    for k in range(1, int(n_total) + 1):
+        current_batches: Optional[Dict[int, Dict]] = None
+        for start_batch, indexed_batches in normalized_phases:
+            if k >= start_batch:
+                current_batches = indexed_batches
+            else:
+                break
+        if current_batches is None:
+            continue
+        batch = current_batches.get(k)
         if batch is None:
             continue
         parts.append(fn([batch]))

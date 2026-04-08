@@ -1,0 +1,208 @@
+{
+  "experiment_id": "demo_text_BasicTruth",
+  "experiment_digest": "2d147bef0b9640e84ea5e8b33d177abb58dafb4bad360f843801c0433269cd9a",
+  "method": "BasicTruth",
+  "row_count": 10,
+  "result_digest": "6c18b8127df03183ba1ba9c9ba60685311deb253f796916c34112ef7a015b956",
+  "rows": [
+    {
+      "website": "agent-1",
+      "fact": "Agilent Technologies, Inc. (A)的新期权合约将于2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "batch_index": 1,
+      "trustworthiness": 0.6901068629135223,
+      "fact_confidence": 0.6901068629135223,
+      "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "source_reliability": 0.6901068629135223,
+      "proof_id": "c885f6e16d35bfcc3b560493fcc7acdf69c1bfe90bffed577c5abd7f3e194a27",
+      "proof_scheme": "schnorr_nizk_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "website": "agent-2",
+      "fact": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "batch_index": 1,
+      "trustworthiness": 0.6912952988584944,
+      "fact_confidence": 0.6912952988584944,
+      "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "source_reliability": 0.6912952988584944,
+      "proof_id": "c885f6e16d35bfcc3b560493fcc7acdf69c1bfe90bffed577c5abd7f3e194a27",
+      "proof_scheme": "schnorr_nizk_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "website": "agent-3",
+      "fact": "从最新披露看，Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，相关看跌与看涨期权对卖方而言可能带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "batch_index": 1,
+      "trustworthiness": 0.6596408595528174,
+      "fact_confidence": 0.6596408595528174,
+      "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "source_reliability": 0.6596408595528174,
+      "proof_id": "c885f6e16d35bfcc3b560493fcc7acdf69c1bfe90bffed577c5abd7f3e194a27",
+      "proof_scheme": "schnorr_nizk_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "website": "agent-4",
+      "fact": "Agilent Technologies, Inc. (Symbol: A) 的新期权合约将于2024年8月开始交易，当前分析数据显示有77%的可能性股票价格会上涨，但125.00美元的行权价可能到期失效。",
+      "object": "第1条新闻简短摘要",
+      "batch_index": 1,
+      "trustworthiness": 0.6051007761169627,
+      "fact_confidence": 0.6051007761169627,
+      "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "source_reliability": 0.6051007761169627,
+      "proof_id": "c885f6e16d35bfcc3b560493fcc7acdf69c1bfe90bffed577c5abd7f3e194a27",
+      "proof_scheme": "schnorr_nizk_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "website": "agent-5",
+      "fact": "Agilent Technologies, Inc. (Symbol: A) 的看涨和看跌期权在2024年8月到期，当前看涨期权的溢价可能因时间价值较高，而看跌期权的行权价为125美元，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "batch_index": 1,
+      "trustworthiness": 0.615325462761034,
+      "fact_confidence": 0.615325462761034,
+      "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "source_reliability": 0.615325462761034,
+      "proof_id": "c885f6e16d35bfcc3b560493fcc7acdf69c1bfe90bffed577c5abd7f3e194a27",
+      "proof_scheme": "schnorr_nizk_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "website": "agent-6",
+      "fact": "从市场信息看，Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，目前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "batch_index": 1,
+      "trustworthiness": 0.6738009349279067,
+      "fact_confidence": 0.6738009349279067,
+      "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "source_reliability": 0.6738009349279067,
+      "proof_id": "c885f6e16d35bfcc3b560493fcc7acdf69c1bfe90bffed577c5abd7f3e194a27",
+      "proof_scheme": "schnorr_nizk_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "website": "agent-7",
+      "fact": "就目前公开内容看，Agilent Technologies, Inc. (A)的新的期权合约将在2024年8月开始挂牌交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，现阶段看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "batch_index": 1,
+      "trustworthiness": 0.653040930526282,
+      "fact_confidence": 0.653040930526282,
+      "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "source_reliability": 0.653040930526282,
+      "proof_id": "c885f6e16d35bfcc3b560493fcc7acdf69c1bfe90bffed577c5abd7f3e194a27",
+      "proof_scheme": "schnorr_nizk_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "website": "agent-8",
+      "fact": "结合已披露资料，Agilent Technologies, Inc. (A)的新期权合约将于2024年8月开始交易，相关看跌与看涨期权对卖方而言可能带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "batch_index": 1,
+      "trustworthiness": 0.6558567807072658,
+      "fact_confidence": 0.6558567807072658,
+      "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "source_reliability": 0.6558567807072658,
+      "proof_id": "c885f6e16d35bfcc3b560493fcc7acdf69c1bfe90bffed577c5abd7f3e194a27",
+      "proof_scheme": "schnorr_nizk_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "website": "agent-9",
+      "fact": "从现有消息看，Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开启交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，最新看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "batch_index": 1,
+      "trustworthiness": 0.6640250875252149,
+      "fact_confidence": 0.6640250875252149,
+      "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "source_reliability": 0.6640250875252149,
+      "proof_id": "c885f6e16d35bfcc3b560493fcc7acdf69c1bfe90bffed577c5abd7f3e194a27",
+      "proof_scheme": "schnorr_nizk_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    },
+    {
+      "website": "agent-10",
+      "fact": "Agilent Technologies, Inc. (A)的新期权合约将于2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来较高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "object": "第1条新闻简短摘要",
+      "batch_index": 1,
+      "trustworthiness": 0.6810382765552746,
+      "fact_confidence": 0.6810382765552746,
+      "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
+      "source_reliability": 0.6810382765552746,
+      "proof_id": "c885f6e16d35bfcc3b560493fcc7acdf69c1bfe90bffed577c5abd7f3e194a27",
+      "proof_scheme": "schnorr_nizk_v1",
+      "proof_verified": null,
+      "proof_verification_mode": "external"
+    }
+  ],
+  "proof_groups": [
+    {
+      "group_id": {
+        "proof_scope": "text:BasicTruth:full_run"
+      },
+      "group_digest": "3189628e7e6549c34c76da3d1ba5db63e3a1e84d891b12c4dc394ef381ecd1f4",
+      "result_digest": "fdd5cda54db0b78d4efc896ba084018949fa785e8ee7de317597c4bb32e4bae8",
+      "row_count": 10,
+      "proof_id": "c885f6e16d35bfcc3b560493fcc7acdf69c1bfe90bffed577c5abd7f3e194a27",
+      "proof_scheme": "schnorr_nizk_v1",
+      "proof_backend": "schnorr",
+      "statement_hash": "12d58da5db14f9823fb4577eed4e93682272b147942ebc7396b504d474523bfd",
+      "statement_digest_sha256": "12d58da5db14f9823fb4577eed4e93682272b147942ebc7396b504d474523bfd",
+      "verification_key_path": null,
+      "artifact_dir": null,
+      "public_json": null,
+      "proof_json": null,
+      "proof_payload": {
+        "proof_id": "c885f6e16d35bfcc3b560493fcc7acdf69c1bfe90bffed577c5abd7f3e194a27",
+        "scheme": "schnorr_nizk_v1",
+        "backend": "schnorr",
+        "group": "modp2048_subgroup",
+        "generated_at": 1775623815,
+        "prover_id": "BasicTruth",
+        "statement": {
+          "extra_public_data": {
+            "domain": "text",
+            "row_count": 10
+          },
+          "group_id": {
+            "proof_scope": "text:BasicTruth:full_run"
+          },
+          "input_digest": "e3bf6a1d2978e5ff5fdc901df623553d82b96c58b2d0556dfcb17053fa40ec3f",
+          "iteration_count": null,
+          "method": "BasicTruth",
+          "row_count": 10,
+          "source_score_digest": "312c0a21007f418b03abe9b85eb3a1c976cf40108df40733e93ebd3be66daede",
+          "truth_digest": "0044a6382fe2538321e2cc7f42996d8a4459874b43b4a9e2a34e8ee261a5806d"
+        },
+        "statement_hash": "12d58da5db14f9823fb4577eed4e93682272b147942ebc7396b504d474523bfd",
+        "public_key": "0xf6ae194bbf828c15e6c260ab3a240976c027c963c875f58cd3e7448a20db282e89005cbc4727d7aa54a62ced71fc93d5e1172432b0758e801ce915c552cac41cf7a3d1dfc09a7272b2bbd80eca1ecc6611a1c821aee6b0066eb4e6e9f14ec3dfbdf8245ed9f3355e6785bc3606201c43e3e76abb7cedabf6d0ca8bf5b1d7ebf50f8fd0f8b9aff0590e546da35513e70813df06e201012bcea45b7c6c3989a719871964a6f1c6c92ba9a6e8864f98ff30a937e10ad24247d01ad09787cc93bd1f95d6aca8c888e16dcc5154c4fc819db4613030068b2744ac604f81eca3e46505e355cc314e530520f7f97d92af319340e94cfdc0c5165e1b1cfb60d148c4b807",
+        "commitment": "0xe2db81b0ff8a40d586617f9062d778bfe75e97f8dc0b7efcb103bce0cbd6de0bc5b9657eae0f25a3e4f66de69213085eb37a674fbff167c09e0bbb42005d09f2a2b839427df33e17f5900dbe01bd3e4b0c48e2a4e6af0f472c5356335b1ee1ddb9ca903dc25dcdfb0596f17a8124747a68502315d28aaf4a1990ffb99ad2145c68766f1c5d0aeb0963a6e0f5d4fe758c62119e0155fb523398cadfecd0dbf8876c5ba161173ee33a13a50b5d0849969286b4c8e9b549de8e0ccc79499fd1d19279aa1b399c052cf4bbb57cf78a856292f672d8422403c1548b71d7e89fd9c5c704d0c964a44f61c094aedb249512fbb13b3a47890b9f26d206f87384f6e8f60d",
+        "challenge": "0x65671e4e83e8944141a3e984dd4311c63d9113097234a4bb5b7a7d0e74057d36",
+        "response": "0x44b6e5988209cb32dcc07145133406308663beed8ff471ac6216d81fbc080c24bdd46f1eb20947e958b4e0b0ee33aaf236b5ae7e6ab84e59012b968a1317c77e30d5fc2961a52e5d65f4962309e6965d8c04ecfe6dfe5976f000e36bdc10907dd7c2264e76808cdf204c0666f12ee7cbe2a49b076cb7a2af011051e4490a17c733fbb23d4ef29aaddb81f3d224df30d918c90fd93a3e74c2b1698b023a1cf5a8b7792efa64bde11022f6ebefec2f38b237f7fc8515b90f065b13b4079861b82f04468fe2a312193c3c169649869178b4bea37fc5580294e880d9f59cf76eb20eb7f495b5d54c76c32ce26c32f1fdd214a47b3e2fdff18906edbfdb12a5952140",
+        "verified": null,
+        "verification_performed_in_python": false,
+        "verification_hint": "verify externally"
+      },
+      "contract_call": null,
+      "contract_submission": {
+        "experimentId": "0x6a7263653501604e12ed8f1ffe7318b9e1957e12ce84c5ad61010725bbcb48a4",
+        "groupId": "0x3189628e7e6549c34c76da3d1ba5db63e3a1e84d891b12c4dc394ef381ecd1f4",
+        "resultDigest": "0xfdd5cda54db0b78d4efc896ba084018949fa785e8ee7de317597c4bb32e4bae8",
+        "proofId": "0xc885f6e16d35bfcc3b560493fcc7acdf69c1bfe90bffed577c5abd7f3e194a27",
+        "statementDigestSha256": "0x12d58da5db14f9823fb4577eed4e93682272b147942ebc7396b504d474523bfd"
+      },
+      "rows": null
+    }
+  ]
+}

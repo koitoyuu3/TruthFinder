@@ -1,10 +1,13 @@
+import json
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
 from scipy.special import erfc
 
+from decentralized_truth_discovery.examples import exp_utils
 from decentralized_truth_discovery.examples.exp_utils import get_numeric_demo_files
 from decentralized_truth_discovery.core import (
     BasicTruthFinder,
@@ -128,11 +131,113 @@ class TestSenteTruthPaperAlignment(unittest.TestCase):
 
 class TestExperimentDatasetRouting(unittest.TestCase):
     def test_numeric_experiments_use_dedicated_numeric_datasets(self):
-        numeric_files = get_numeric_demo_files()
+        numeric_files = get_numeric_demo_files(mode="agent")
 
         self.assertEqual(sorted(numeric_files), list(range(7)))
         self.assertEqual(numeric_files[0].name, "num_demo.json")
         self.assertEqual(numeric_files[6].name, "num_demo_6bad_agent.json")
+
+    def test_numeric_collude_datasets_cover_up_to_six_bad_agents(self):
+        numeric_files = get_numeric_demo_files(mode="collude")
+
+        self.assertEqual(sorted(numeric_files), list(range(7)))
+        self.assertEqual(numeric_files[0].name, "num_demo.json")
+        self.assertEqual(numeric_files[6].name, "num_demo_6bad_collude.json")
+
+    def test_numeric_collude_5bad_uses_two_direction_split(self):
+        clean_path = Path("decentralized_truth_discovery/data_agent-10/num_demo.json")
+        noisy_path = Path("decentralized_truth_discovery/data_agent-10/num_demo_5bad_collude.json")
+
+        clean_batches = json.loads(clean_path.read_text())["job"]["batches"]
+        noisy_batches = json.loads(noisy_path.read_text())["job"]["batches"]
+        clean_btc = float(clean_batches[0]["items"][0]["response"]["BTC"])
+        split_threshold = clean_btc * 1.035
+
+        bad_items = [item for item in noisy_batches[0]["items"] if item["agent"] in {f"agent-{idx}" for idx in range(1, 6)}]
+        mild_side = [item["agent"] for item in bad_items if clean_btc < float(item["response"]["BTC"]) < split_threshold]
+        strong_side = [item["agent"] for item in bad_items if float(item["response"]["BTC"]) > split_threshold]
+
+        self.assertEqual(len(mild_side), 2)
+        self.assertEqual(len(strong_side), 3)
+
+    def test_numeric_collude_6bad_uses_balanced_two_direction_split(self):
+        clean_path = Path("decentralized_truth_discovery/data_agent-10/num_demo.json")
+        noisy_path = Path("decentralized_truth_discovery/data_agent-10/num_demo_6bad_collude.json")
+
+        clean_batches = json.loads(clean_path.read_text())["job"]["batches"]
+        noisy_batches = json.loads(noisy_path.read_text())["job"]["batches"]
+        clean_btc = float(clean_batches[0]["items"][0]["response"]["BTC"])
+        split_threshold = clean_btc * 1.035
+
+        bad_items = [item for item in noisy_batches[0]["items"] if item["agent"] in {f"agent-{idx}" for idx in range(1, 7)}]
+        mild_side = [item["agent"] for item in bad_items if clean_btc < float(item["response"]["BTC"]) < split_threshold]
+        strong_side = [item["agent"] for item in bad_items if float(item["response"]["BTC"]) > split_threshold]
+
+        self.assertEqual(len(mild_side), 3)
+        self.assertEqual(len(strong_side), 3)
+
+
+class TestNumericExperimentAdapters(unittest.TestCase):
+    def test_sente_numeric_runner_keeps_fact_dtype_numeric(self):
+        df = pd.DataFrame(
+            [
+                ["h1", "btc", 100.0, 1],
+                ["h2", "btc", 100.4, 1],
+                ["m1", "btc", 145.0, 1],
+            ],
+            columns=["website", "object", "fact", "batch_index"],
+        )[["website", "fact", "object", "batch_index"]]
+        seen_dtypes = []
+
+        class SpyNumericSente(exp_utils._NumericSenteTruthFinder):
+            def process_batch(self, dataframe: pd.DataFrame, epoch=None) -> pd.DataFrame:
+                seen_dtypes.append(str(dataframe["fact"].dtype))
+                return super().process_batch(dataframe, epoch=epoch)
+
+        with patch(
+            "decentralized_truth_discovery.examples.exp_utils._NumericSenteTruthFinder",
+            SpyNumericSente,
+        ):
+            preds = exp_utils._run_sente_num(df)
+
+        self.assertEqual(seen_dtypes, ["float64"])
+        self.assertIn((1, "btc"), preds)
+        self.assertLess(abs(preds[(1, "btc")] - 100.0), abs(preds[(1, "btc")] - 145.0))
+
+    def test_basic_numeric_runner_keeps_fact_dtype_numeric(self):
+        df = pd.DataFrame(
+            [
+                ["h1", "btc", 100.0, 1],
+                ["h2", "btc", 100.3, 1],
+                ["m1", "btc", 150.0, 1],
+            ],
+            columns=["website", "object", "fact", "batch_index"],
+        )[["website", "fact", "object", "batch_index"]]
+        seen_dtypes = []
+
+        class SpyNumericBasic(exp_utils._NumericBasicTruthFinder):
+            def process_batch(
+                self,
+                dataframe: pd.DataFrame,
+                implication_texts=None,
+                initial_trustworthiness: float = 0.9,
+            ) -> pd.DataFrame:
+                seen_dtypes.append(str(dataframe["fact"].dtype))
+                return super().process_batch(
+                    dataframe,
+                    implication_texts=implication_texts,
+                    initial_trustworthiness=initial_trustworthiness,
+                )
+
+        with patch(
+            "decentralized_truth_discovery.examples.exp_utils._NumericBasicTruthFinder",
+            SpyNumericBasic,
+        ):
+            preds = exp_utils._run_basic_num(df)
+
+        self.assertEqual(seen_dtypes, ["float64"])
+        self.assertIn((1, "btc"), preds)
+        self.assertLess(abs(preds[(1, "btc")] - 100.0), abs(preds[(1, "btc")] - 150.0))
 
 
 class TestBasicTruthFinderOnlineHistory(unittest.TestCase):
@@ -165,6 +270,7 @@ class TestBasicTruthFinderOnlineHistory(unittest.TestCase):
         fresh = BasicTruthFinder(implication=lambda _f1, _f2: 0.0, enable_zk_proof=False)
         out_fresh = fresh.process_batch(batch_2, implication_texts=["M2", "H2"])
 
+        self.assertEqual(finder.last_iteration_count, 1)
         self.assertEqual(str(out_fresh["global_truth"].iloc[0]), "M2")
         self.assertEqual(str(out_persistent["global_truth"].iloc[0]), "H2")
 
@@ -187,55 +293,51 @@ class TestBasicTruthFinderOnlineHistory(unittest.TestCase):
         self.assertEqual(finder.get_source_reliability(), {})
 
 
-class TestSenFeedPaperAlignment(unittest.TestCase):
-    def test_iterative_mode_ignores_history_truth_virtual_source(self):
-        finder = SenFeedTruthDiscovery(mode='iterative', enable_zk_proof=False)
-        finder.source_weights = {'s1': 1.0, 's2': 1.0}
-        finder.previous_truth = {'o1': 1000.0}
+class TestSenFeedOnlineHistory(unittest.TestCase):
+    def test_train_carries_history_across_timestamps(self):
+        finder = SenFeedTruthDiscovery(history_truth_weight=0.0, enable_zk_proof=False)
         df = pd.DataFrame([
-            ['s1', 'o1', 10.0, 0],
-            ['s2', 'o1', 12.0, 0],
-        ], columns=['website', 'object', 'fact', 'timestamp'])
-
-        truth_map = finder._run_iterative_truth_discovery(df)
-
-        self.assertAlmostEqual(truth_map['o1'], 11.0, places=6)
-
-    def test_composite_uses_epsilon_without_source_count_scaling(self):
-        class StubComposite(SenFeedTruthDiscovery):
-            def _run_iterative_truth_discovery(self, df_t, include_history_truth=False):
-                for source in df_t['website'].unique():
-                    self.source_weights[str(source)] = 1.0
-                self.last_iteration_count = 2
-                return {str(df_t['object'].iloc[0]): 10.0}
-
-            def _run_incremental_map_update(self, df_t):
-                for source in df_t['website'].unique():
-                    self.source_weights[str(source)] = 1.03
-                self.last_iteration_count = 1
-                return (
-                    {str(df_t['object'].iloc[0]): 11.0},
-                    {str(source): 0.0 for source in df_t['website'].unique()},
-                    {str(source): 1 for source in df_t['website'].unique()},
-                )
-
-        finder = StubComposite(mode='composite', evolution_threshold=0.05, enable_zk_proof=False)
-        df = pd.DataFrame([
-            ['s1', 'o1', 10.0, 0],
-            ['s2', 'o1', 10.0, 0],
-            ['s1', 'o1', 11.0, 1],
-            ['s2', 'o1', 11.0, 1],
+            ['h1', 'o1', 10.0, 0],
+            ['h2', 'o1', 10.0, 0],
+            ['m1', 'o1', 100.0, 0],
+            ['h1', 'o1', 10.0, 1],
+            ['m1', 'o1', 100.0, 1],
         ], columns=['website', 'object', 'fact', 'timestamp'])
 
         result = finder.train(df)
         second_timestamp = result[result['timestamp'] == 1]
 
-        self.assertTrue((second_timestamp['td_mode'] == 'incremental').all())
-        self.assertTrue(np.allclose(second_timestamp['weight_evolution'].to_numpy(), 0.03))
+        fresh = SenFeedTruthDiscovery(history_truth_weight=0.0, enable_zk_proof=False)
+        fresh_result = fresh.train(df[df['timestamp'] == 1].copy())
+
+        self.assertGreaterEqual(finder.last_iteration_count, 1)
+        self.assertGreater(finder.source_weights['h1'], finder.source_weights['m1'])
+        self.assertLess(float(second_timestamp['global_truth'].iloc[0]), 35.0)
+        self.assertLess(
+            float(second_timestamp['global_truth'].iloc[0]),
+            float(fresh_result['global_truth'].iloc[0]),
+        )
+        self.assertNotIn('td_mode', result.columns)
+        self.assertNotIn('weight_evolution', result.columns)
+
+    def test_composite_td_runs_iterative_initialization_and_downweights_outlier(self):
+        finder = SenFeedTruthDiscovery(history_truth_weight=0.0, enable_zk_proof=False)
+        df = pd.DataFrame([
+            ['h1', 'o1', 10.0, 0],
+            ['h2', 'o1', 10.0, 0],
+            ['m1', 'o1', 100.0, 0],
+        ], columns=['website', 'object', 'fact', 'timestamp'])
+
+        result = finder.train(df)
+
+        self.assertEqual(finder.last_td_mode, 'iterative')
+        self.assertGreater(finder.last_iteration_count, 1)
+        self.assertGreater(finder.source_weights['h1'], finder.source_weights['m1'])
+        self.assertGreater(finder.source_weights['h2'], finder.source_weights['m1'])
+        self.assertLess(float(result['global_truth'].iloc[0]), 20.0)
 
     def test_incremental_map_accumulates_observation_count_across_steps(self):
         finder = SenFeedTruthDiscovery(
-            mode='incremental',
             history_truth_weight=0.0,
             enable_zk_proof=False,
         )
@@ -262,24 +364,6 @@ class TestSenFeedPaperAlignment(unittest.TestCase):
         finder.reset_history()
 
         self.assertEqual(finder.cumulative_obs_count, {})
-
-    def test_composite_fallback_rolls_back_incremental_observation_count(self):
-        finder = SenFeedTruthDiscovery(
-            mode='composite',
-            evolution_threshold=0.05,
-            history_truth_weight=0.0,
-            enable_zk_proof=False,
-        )
-        df = pd.DataFrame([
-            ['s1', 'o1', 10.0, 0],
-            ['s1', 'o1', 10.0, 1],
-        ], columns=['website', 'object', 'fact', 'timestamp'])
-
-        result = finder.train(df)
-        second_timestamp = result[result['timestamp'] == 1]
-
-        self.assertTrue((second_timestamp['td_mode'] == 'iterative').all())
-        self.assertEqual(finder.cumulative_obs_count['s1'], 0)
 
 
 class TestSemanticTruthFinder(unittest.TestCase):
@@ -443,23 +527,20 @@ class TestEnhancedTruthFinderDecentTruthFixes(unittest.TestCase):
         self.assertAlmostEqual(metrics['k'], expected_k, places=9)
         self.assertAlmostEqual(metrics['r'], expected_r, places=9)
 
-    def test_numeric_global_truth_uses_coordinate_descent(self):
-        finder = EnhancedTruthFinder(enable_zk_proof=False, global_td_max_iter=50, global_td_tol=1e-9)
+    def test_numeric_global_truth_uses_history_weighted_average(self):
+        finder = EnhancedTruthFinder(enable_zk_proof=False)
+        finder.source_reliability_history = {
+            'honest': {'r': 0.9, 'e': 0.0, 'k': 1.0},
+            'outlier': {'r': 0.1, 'e': 0.0, 'k': 1.0},
+        }
         df = pd.DataFrame([
-            ['a', 10.0, 'o1'],
-            ['a', 20.0, 'o2'],
-            ['b', 10.1, 'o1'],
-            ['b', 19.9, 'o2'],
-            ['c', 9.9, 'o1'],
-            ['c', 20.2, 'o2'],
-            ['d', 100.0, 'o1'],
-            ['d', 200.0, 'o2'],
+            ['honest', 10.0, 'o1'],
+            ['outlier', 100.0, 'o1'],
         ], columns=['website', 'fact', 'object'])
 
         truth = finder._run_global_td(df)
 
-        self.assertAlmostEqual(float(truth['o1']), 10.0, delta=1.0)
-        self.assertAlmostEqual(float(truth['o2']), 20.0, delta=1.0)
+        self.assertAlmostEqual(float(truth['o1']), 19.0, places=6)
 
 
 if __name__ == '__main__':

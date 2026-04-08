@@ -7,7 +7,7 @@ SenteTruth TruthFinder
 1. 使用SBERT进行语义编码
 2. 计算节点数据之间的语义相似度
 3. 结合节点可信度和语义相似度进行真相聚合
-4. 迭代更新节点可信度
+    4. 逐 batch 单次更新节点可信度
 
 核心公式：
 - 公式2：φ(v_i) = (1/n) * Σ(j=1, j≠i to n) cosine_similarity(v_i, v_j)  # 语义相似度
@@ -51,12 +51,10 @@ class SenteTruthFinder:
     3. 计算每个节点的可信度分数 φ(v_i)
     4. 选择 C_i · φ(v_i) 最大的节点数据作为真值
     5. 根据与真值的相似度更新节点可信度
-    6. 迭代直到收敛
+    6. 进入下一个 batch，不在当前 batch 内重复求稳态
     """
 
     def __init__(self,
-                 convergence_threshold: float = 1e-6,
-                 max_iterations: int = 200,
                  initial_credibility: float = 0.5,
                  sbert_model: Optional[str] = None,
                  use_sbert: bool = True,
@@ -68,9 +66,6 @@ class SenteTruthFinder:
         初始化SenteTruthFinder
         
         Args:
-            convergence_threshold: 收敛阈值
-                                 - 当节点可信度的变化小于这个值时，算法认为已经收敛
-            max_iterations: 最大迭代次数
             initial_credibility: 初始节点可信度 (0-1之间)
                                - 所有节点开始时都有这个可信度
             sbert_model: SBERT模型名称（可选）
@@ -85,8 +80,6 @@ class SenteTruthFinder:
             enable_zk_proof: 是否为结果附加零知识证明
             zk_proof_secret: 证明私钥种子（可选）
         """
-        self.convergence_threshold = convergence_threshold
-        self.max_iterations = max_iterations
         self.initial_credibility = initial_credibility
         self.use_sbert = use_sbert and HAS_SBERT
         self.strict_sbert = strict_sbert
@@ -447,89 +440,6 @@ class SenteTruthFinder:
 
         dataframe = self.iteration(dataframe)
         self.last_iteration_count = 1
-
-        if self.enable_zk_proof:
-            source_scores = {website: float(score) for website, score in self.node_credibility.items()}
-            dataframe = attach_grouped_proofs(
-                dataframe,
-                method_name="SenteTruthFinder",
-                source_scores=source_scores,
-                group_columns=("object",),
-                truth_column="global_truth",
-                iteration_count=self.last_iteration_count,
-                proof_engine=self.zk_proof_engine,
-                extra_public_data={"use_sbert": bool(self.use_sbert)},
-            )
-
-        return dataframe
-
-    def train(self,
-              dataframe: pd.DataFrame,
-              max_iterations: Optional[int] = None,
-              threshold: Optional[float] = None) -> pd.DataFrame:
-        """
-        训练模型（批量处理）
-        
-        反复迭代直到收敛或达到最大迭代次数
-        
-        Args:
-            dataframe: 输入DataFrame，必须包含website, fact, object列
-            max_iterations: 最大迭代次数（可选）
-            threshold: 收敛阈值（可选）
-            
-        Returns:
-            更新后的DataFrame，包含source_reliability和global_truth列
-        """
-        max_iter = max_iterations if max_iterations is not None else self.max_iterations
-        conv_threshold = threshold if threshold is not None else self.convergence_threshold
-        
-        # 创建副本
-        dataframe = dataframe.copy()
-        
-        # 确保fact列是字符串
-        dataframe['fact'] = dataframe['fact'].astype(str)
-        
-        # 初始化
-        self._initialize_credibility(dataframe)
-        
-        # 迭代
-        converged_at = None
-        prev_truth_map: Dict[str, str] = {}
-        for i in range(max_iter):
-            print(f'Iteration {i + 1}/{max_iter}')
-            
-            # 保存上一轮的可信度
-            prev_credibility = self.node_credibility.copy()
-            
-            # 执行一次迭代
-            dataframe = self.iteration(dataframe)
-
-            current_truth_map = (
-                dataframe[["object", "global_truth"]]
-                .drop_duplicates(subset=["object"])
-                .set_index("object")["global_truth"]
-                .astype(str)
-                .to_dict()
-            )
-            
-            # 检查收敛
-            max_change = 0.0
-            all_websites = set(list(prev_credibility.keys()) + list(self.node_credibility.keys()))
-            
-            for website in all_websites:
-                prev_val = prev_credibility.get(website, 0)
-                curr_val = self.node_credibility.get(website, 0)
-                change = abs(curr_val - prev_val)
-                max_change = max(max_change, change)
-            
-            if max_change < conv_threshold or (prev_truth_map and current_truth_map == prev_truth_map):
-                print(f'Convergence reached at iteration {i + 1}/{max_iter}')
-                converged_at = i + 1
-                break
-
-            prev_truth_map = current_truth_map
-
-        self.last_iteration_count = converged_at if converged_at is not None else max_iter
 
         if self.enable_zk_proof:
             source_scores = {website: float(score) for website, score in self.node_credibility.items()}

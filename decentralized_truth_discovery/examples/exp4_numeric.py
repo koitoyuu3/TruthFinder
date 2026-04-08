@@ -13,8 +13,9 @@
   preds = 方法在 num_demo_1bad_agent.json（agent subset, 1 恶意）上的输出
   gt    = num_demo.json 中的真实值（价格与 agent subset 无关）
   数值场景 → RMSE(preds_last10%, gt_last10%), MAE(...)
+           可选 relative metric：先按 |gt| 归一化误差，再聚合 RMSE/MAE
 
-运行: python3 exp4_numeric.py
+运行: python3 exp4_numeric.py [--metric-scale raw|relative]
 """
 import argparse
 from pathlib import Path
@@ -45,6 +46,7 @@ def save_results(
     agent_range: List[int],
     num_results: Dict[str, Dict[str, List[float]]],
     out_dir: Path,
+    metric_scale: str,
 ) -> None:
     rows = []
     for i, agent_count in enumerate(agent_range):
@@ -54,6 +56,7 @@ def save_results(
                 "method": method,
                 "rmse": num_results[method]["rmse"][i] if i < len(num_results[method]["rmse"]) else float("nan"),
                 "mae": num_results[method]["mae"][i] if i < len(num_results[method]["mae"]) else float("nan"),
+                "metric_scale": metric_scale,
             })
     path = out_dir / "results.csv"
     pd.DataFrame(rows).to_csv(path, index=False, encoding="utf-8-sig")
@@ -73,7 +76,14 @@ def main() -> None:
         default=BAD_COUNT,
         help="固定恶意节点数量。",
     )
+    parser.add_argument(
+        "--metric-scale",
+        choices=["raw", "relative"],
+        default="relative",
+        help="raw: 原始绝对误差; relative: 按每个币种的 |ground truth| 归一化后再算 RMSE/MAE（默认）",
+    )
     args = parser.parse_args()
+    normalize_metric = args.metric_scale == "relative"
 
     num_files = get_numeric_demo_files()
     if args.bad_count not in num_files:
@@ -82,13 +92,13 @@ def main() -> None:
             f"bad_count={args.bad_count} is unavailable for numeric files. "
             f"Available bad_count values: {available}"
         )
-    out_dir = BASE_OUT_DIR / f"bad_{args.bad_count}"
+    out_dir = BASE_OUT_DIR / f"bad_{args.bad_count}" / f"metric_{args.metric_scale}"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     print("\n" + "=" * 60)
     print(TITLE)
     print("=" * 60)
-    print(f"dataset = numeric:num_demo_*bad_agent.json, bad_count = {args.bad_count}")
+    print(f"dataset = numeric:num_demo_*bad_agent.json, bad_count = {args.bad_count}, metric_scale = {args.metric_scale}")
 
     clean_num_batches = load_batches(num_files[0])
     mal_num_batches = load_batches(num_files[args.bad_count])
@@ -105,13 +115,25 @@ def main() -> None:
         print(f"\n  n_agents={n_agents}  恶意比例≈{ratio:.1f}%  subset={subset}")
 
         noisy_num_df = to_numeric_df(mal_num_batches, agent_subset=subset)
-        res_num = eval_numeric(noisy_num_df, gt_num)
+        res_num = eval_numeric(noisy_num_df, gt_num, normalize=normalize_metric)
         for method in NUM_METHODS:
             num_results[method]["rmse"].append(res_num[method]["rmse"])
             num_results[method]["mae"].append(res_num[method]["mae"])
 
-    plot_numeric(agent_range, num_results, X_LABEL, TITLE, out_dir)
-    save_results(agent_range, num_results, out_dir)
+    plot_numeric(
+        agent_range,
+        num_results,
+        X_LABEL,
+        TITLE,
+        out_dir,
+        metric_scope_label=(
+            "last 10% batches, relative error normalized by |ground truth|"
+            if normalize_metric else
+            "last 10% batches"
+        ),
+        metric_name_prefix="Normalized " if normalize_metric else "",
+    )
+    save_results(agent_range, num_results, out_dir, metric_scale=args.metric_scale)
 
     print(f"\n[E4-Numeric] 完成，结果保存至 {out_dir}")
 

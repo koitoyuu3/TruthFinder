@@ -13,9 +13,10 @@
   preds = 方法在 demo_1bad_agent.json（agent subset, 1 恶意）上的输出
   gt    = demo.json 中的真实值（价格与 agent subset 无关）
   数值场景 → RMSE(preds_last10%, gt_last10%), MAE(...)
-  混合场景 → SemanticDist(X_clean, Y_noisy)
+           可选 relative metric：先按 |gt| 归一化误差，再聚合 RMSE/MAE
+  混合场景 → DataAccuracy(X_clean, Y_noisy)
 
-运行: python3 exp4_agent_count.py
+运行: python3 exp4_agent_count.py [--metric-scale raw|relative]
 """
 import argparse
 from pathlib import Path
@@ -53,7 +54,14 @@ def main() -> None:
         default=BAD_COUNT,
         help="固定恶意节点数量。",
     )
+    parser.add_argument(
+        "--metric-scale",
+        choices=["raw", "relative"],
+        default="relative",
+        help="raw: 原始绝对误差; relative: 按每个币种的 |ground truth| 归一化后再算 RMSE/MAE（默认）",
+    )
     args = parser.parse_args()
+    normalize_metric = args.metric_scale == "relative"
 
     num_files = get_numeric_demo_files()
     text_files = get_text_demo_files()
@@ -69,13 +77,16 @@ def main() -> None:
             f"bad_count={args.bad_count} is unavailable for text files. "
             f"Available bad_count values: {available}"
         )
-    out_dir = BASE_OUT_DIR / "demo_agent_text_collude" / f"bad_{args.bad_count}"
+    out_dir = BASE_OUT_DIR / "demo_agent_text_collude" / f"bad_{args.bad_count}" / f"metric_{args.metric_scale}"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     print("\n" + "=" * 60)
     print(TITLE)
     print("=" * 60)
-    print(f"datasets = numeric:num_demo_*bad_agent.json, text:demo_*bad_collude.json, bad_count = {args.bad_count}")
+    print(
+        "datasets = numeric:num_demo_*bad_agent.json, "
+        f"text:demo_*bad_collude.json, bad_count = {args.bad_count}, metric_scale = {args.metric_scale}"
+    )
 
     clean_num_batches = load_batches(num_files[0])
     mal_num_batches   = load_batches(num_files[args.bad_count])
@@ -100,7 +111,7 @@ def main() -> None:
         noisy_txt_df = to_text_df(mal_txt_batches,      agent_subset=subset)
 
         # ── 数值场景 ──────────────────────────────────────────────
-        res_num = eval_numeric(noisy_num_df, gt_num)
+        res_num = eval_numeric(noisy_num_df, gt_num, normalize=normalize_metric)
         for m in NUM_METHODS:
             num_results[m]["rmse"].append(res_num[m]["rmse"])
             num_results[m]["mae"].append(res_num[m]["mae"])
@@ -114,9 +125,21 @@ def main() -> None:
             for m in TEXT_METHODS:
                 txt_results[m]["data_accuracy"].append(float("nan"))
 
-    plot_numeric(agent_range, num_results, X_LABEL, TITLE, out_dir)
+    plot_numeric(
+        agent_range,
+        num_results,
+        X_LABEL,
+        TITLE,
+        out_dir,
+        metric_scope_label=(
+            "last 10% batches, relative error normalized by |ground truth|"
+            if normalize_metric else
+            "last 10% batches"
+        ),
+        metric_name_prefix="Normalized " if normalize_metric else "",
+    )
     plot_text(agent_range, txt_results, X_LABEL, TITLE, out_dir)
-    save_csv("agent_count", agent_range, num_results, txt_results, out_dir)
+    save_csv("agent_count", agent_range, num_results, txt_results, out_dir, metric_scale=args.metric_scale)
 
     print(f"\n[E4] 完成，结果保存至 {out_dir}")
 

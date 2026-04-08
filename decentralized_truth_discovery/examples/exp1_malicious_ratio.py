@@ -1,10 +1,10 @@
 """
 实验1: 改变恶意节点比例
 ================================================
-自变量: 恶意节点数 k ∈ {0,1,2,3,4,5,6} → 比例 {0,10,20,30,40,50,60}%
+自变量: 恶意节点数 k ∈ {0,1,2,3,4} → 比例 {0,10,20,30,40}%
 数据文件:
-  数值   → num_demo.json / num_demo_1~6bad_agent.json
-  文本   → demo.json / demo_1~6bad_collude.json
+  数值   → num_demo.json / num_demo_1~4bad_agent.json
+  文本   → demo.json / demo_1~4bad_collude.json
 固定: 使用全部 batch，全部 10 个 agent
 
 评估框架（对齐论文 Section VI）:

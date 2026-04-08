@@ -12,7 +12,7 @@ Core formulas (continuous/numeric data only, per Section III-A of the paper):
   Eq.(5):  κ_s   = erfc(β|ε_s − ε̂_s|)(1−α) + κ̂_s·α  (consistency measure)
   Eq.(6):  r_s   = κ_s / ε_s                            (reliability update)
   Eq.(8):  w_n   = 1 / d(x̃_n, x̂)                     (node weight by distance)
-  Eq.(9):  x̂_i  = Σ w_n · x̃_n / Σ w_n               (global truth, iterated)
+  Eq.(9):  x̂_i  = Σ w_n · x̃_n / Σ w_n               (global truth)
 
 Data structure: DataFrame with columns
   - website : source identifier
@@ -40,10 +40,6 @@ class EnhancedTruthFinder:
     def __init__(self,
                  alpha: float = 0.9,
                  beta: float = 100.0,
-                 convergence_threshold: float = 1e-6,
-                 max_iterations: int = 200,
-                 global_td_max_iter: int = 20,
-                 global_td_tol: float = 1e-6,
                  initial_reliability: float = 0.5,
                  enable_zk_proof: bool = True,
                  zk_proof_secret: Optional[str] = None):
@@ -51,20 +47,12 @@ class EnhancedTruthFinder:
         Args:
             alpha:                 smoothing factor α ∈ (0,1) for κ update (Eq.5)
             beta:                  scale factor β for erfc consistency measure (Eq.5)
-            convergence_threshold: outer loop stops when max reliability change < threshold
-            max_iterations:        max outer iterations for train()
-            global_td_max_iter:    max inner iterations for global TD (Eqs.8-9)
-            global_td_tol:         convergence tolerance for global TD inner loop
             initial_reliability:   r₀ assigned to each source on first encounter
             enable_zk_proof:       whether to attach ZK proofs to output
             zk_proof_secret:       seed for ZKProofEngine (optional)
         """
         self.alpha = alpha
         self.beta = beta
-        self.convergence_threshold = convergence_threshold
-        self.max_iterations = max_iterations
-        self.global_td_max_iter = max(1, int(global_td_max_iter))
-        self.global_td_tol = max(0.0, float(global_td_tol))
         self.initial_reliability = initial_reliability
         self.enable_zk_proof = enable_zk_proof
         self.zk_proof_engine = ZKProofEngine(
@@ -93,7 +81,7 @@ class EnhancedTruthFinder:
                 }
 
     # ------------------------------------------------------------------
-    # Global TD — Eqs.(3)(8)(9)
+    # Online truth estimate
     # ------------------------------------------------------------------
 
     def _build_local_estimates(self, dataframe: pd.DataFrame) -> Dict[str, Dict[str, float]]:
@@ -110,7 +98,7 @@ class EnhancedTruthFinder:
     ) -> Dict[str, float]:
         """
         Eq.(3): x̃_i = Σ r_s · x_{s,i} / Σ r_s
-        Reliability-weighted average as starting point for iterative global TD.
+        Reliability-weighted average as the one-shot online truth estimate.
         """
         epsilon = 1e-10
         weighted: Dict[str, List[Tuple[float, float]]] = {}
@@ -133,55 +121,14 @@ class EnhancedTruthFinder:
 
     def _run_global_td(self, dataframe: pd.DataFrame) -> Dict[str, float]:
         """
-        Eqs.(8)(9): iterative coordinate descent for global truth estimate.
-          w_n   = 1 / d(x̃_n, x̂)          (Eq.8 — d is L1 distance)
-          x̂_i  = Σ w_n x̃_n / Σ w_n       (Eq.9)
-        Iterates until convergence or global_td_max_iter.
+        Online one-shot truth estimate for the current batch.
+        This intentionally avoids any within-batch fixed-point loop and only
+        uses source reliability carried from previous batches.
         """
-        epsilon = 1e-10
         local_estimates = self._build_local_estimates(dataframe)
         if not local_estimates:
             return {}
-
-        x_hat = self._initialize_global_truth(local_estimates)
-        object_ids = sorted({oid for ovs in local_estimates.values() for oid in ovs})
-
-        for _ in range(self.global_td_max_iter):
-            # Eq.(8): node weight = 1 / total L1 distance to current global truth
-            node_weights: Dict[str, float] = {}
-            for website, object_values in local_estimates.items():
-                dist = sum(
-                    abs(float(object_values[oid]) - float(x_hat[oid]))
-                    for oid in object_values
-                    if oid in x_hat
-                )
-                node_weights[website] = 1.0 / (dist + epsilon)
-
-            # Eq.(9): update global truth by weighted average of local estimates
-            x_hat_new: Dict[str, float] = {}
-            max_change = 0.0
-            for oid in object_ids:
-                weighted_sum = total_w = 0.0
-                for website, object_values in local_estimates.items():
-                    if oid not in object_values:
-                        continue
-                    w = node_weights.get(website, 0.0)
-                    weighted_sum += w * float(object_values[oid])
-                    total_w += w
-                x_hat_new[oid] = (
-                    weighted_sum / total_w if total_w > 0
-                    else float(x_hat.get(oid, 0.0))
-                )
-                max_change = max(
-                    max_change,
-                    abs(x_hat_new[oid] - float(x_hat.get(oid, x_hat_new[oid])))
-                )
-
-            x_hat = x_hat_new
-            if max_change < self.global_td_tol:
-                break
-
-        return x_hat
+        return self._initialize_global_truth(local_estimates)
 
     # ------------------------------------------------------------------
     # Reliability update — Eqs.(4)(5)(6)
@@ -248,71 +195,14 @@ class EnhancedTruthFinder:
         dataframe['global_truth'] = dataframe['object'].map(global_truth)
 
     # ------------------------------------------------------------------
-    # Iteration / training loop
+    # Online batch update
     # ------------------------------------------------------------------
 
     def iteration(self, dataframe: pd.DataFrame) -> pd.DataFrame:
-        """One CBI-TD iteration: global TD → reliability update → write output columns."""
+        """One online update: estimate truth once, then update reliability and outputs."""
         global_truth = self._run_global_td(dataframe)
         self._update_source_reliability(dataframe, global_truth)
         self._update_dataframe(dataframe, global_truth)
-        return dataframe
-
-    def train(
-        self,
-        dataframe: pd.DataFrame,
-        max_iterations: Optional[int] = None,
-        threshold: Optional[float] = None,
-    ) -> pd.DataFrame:
-        """
-        Batch training: iterate until source reliabilities converge.
-
-        Args:
-            dataframe:      must contain columns website, fact (numeric), object
-            max_iterations: overrides self.max_iterations if provided
-            threshold:      overrides self.convergence_threshold if provided
-        Returns:
-            DataFrame with added columns: source_reliability, error_metric,
-            consistency_metric, global_truth [, proof, proof_id, proof_verified]
-        """
-        max_iter = max_iterations if max_iterations is not None else self.max_iterations
-        conv_thr = threshold if threshold is not None else self.convergence_threshold
-
-        dataframe = dataframe.copy()
-        dataframe['fact'] = pd.to_numeric(dataframe['fact'], errors='raise')
-        self.last_iteration_count = 0
-
-        self._initialize_source_reliability(dataframe)
-
-        for i in range(max_iter):
-            prev_r = {w: v['r'] for w, v in self.source_reliability_history.items()}
-            dataframe = self.iteration(dataframe)
-            curr_r = {w: v['r'] for w, v in self.source_reliability_history.items()}
-
-            all_w = set(prev_r) | set(curr_r)
-            max_change = (
-                max(abs(curr_r.get(w, 0.0) - prev_r.get(w, 0.0)) for w in all_w)
-                if all_w else 0.0
-            )
-            if max_change < conv_thr:
-                self.last_iteration_count = i + 1
-                break
-
-        if self.last_iteration_count == 0:
-            self.last_iteration_count = max_iter
-
-        if self.enable_zk_proof:
-            source_scores = {w: float(v['r']) for w, v in self.source_reliability_history.items()}
-            dataframe = attach_grouped_proofs(
-                dataframe,
-                method_name="EnhancedTruthFinder",
-                source_scores=source_scores,
-                group_columns=("object",),
-                truth_column="global_truth",
-                iteration_count=self.last_iteration_count,
-                proof_engine=self.zk_proof_engine,
-            )
-
         return dataframe
 
     def process_batch(
@@ -335,8 +225,15 @@ class EnhancedTruthFinder:
 
         self._initialize_source_reliability(dataframe)
         dataframe = self.iteration(dataframe)
+        self.last_iteration_count = 1
 
-        global_truth = self._run_global_td(dataframe)
+        global_truth = (
+            dataframe[["object", "global_truth"]]
+            .drop_duplicates(subset=["object"])
+            .set_index("object")["global_truth"]
+            .astype(float)
+            .to_dict()
+        )
         if epoch is not None:
             self.global_truth_history[epoch] = global_truth
 
@@ -344,11 +241,11 @@ class EnhancedTruthFinder:
             source_scores = {w: float(v['r']) for w, v in self.source_reliability_history.items()}
             dataframe = attach_grouped_proofs(
                 dataframe,
-                method_name="EnhancedTruthFinder[batch]",
+                method_name="EnhancedTruthFinder",
                 source_scores=source_scores,
                 group_columns=("object",),
                 truth_column="global_truth",
-                iteration_count=epoch,
+                iteration_count=self.last_iteration_count,
                 proof_engine=self.zk_proof_engine,
             )
 

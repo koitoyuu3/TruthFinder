@@ -53,7 +53,7 @@ class BasicTruthFinder:
        b. 调整fact_confidence（考虑事实之间的关联）
        c. 应用sigmoid函数
     3. 更新trustworthiness（基于fact_confidence的平均值）
-    4. 迭代直到收敛
+    4. 单次在线更新后进入下一个batch，不在batch内迭代到收敛
     """
 
     def __init__(self, 
@@ -239,22 +239,6 @@ class BasicTruthFinder:
         df = self.update_website_trustworthiness(df)
         return df
 
-    def stop_condition(self, t1: pd.Series, t2: pd.Series, threshold: float) -> bool:
-        """
-        检查是否满足停止条件
-        
-        当trustworthiness的变化小于阈值时，认为已收敛。
-        
-        Args:
-            t1: 上一轮的trustworthiness
-            t2: 当前轮的trustworthiness
-            threshold: 收敛阈值
-            
-        Returns:
-            True表示已收敛，False表示未收敛
-        """
-        return norm(t2 - t1) < threshold
-
     def _estimate_global_truth_text(self, dataframe: pd.DataFrame) -> Dict[str, str]:
         """
         基于fact_confidence提取每个object的代表性真值文本。
@@ -286,93 +270,16 @@ class BasicTruthFinder:
             )
         return values.clip(lower=0.001, upper=0.999)
 
-    def train(self, 
-              dataframe: pd.DataFrame,
-              max_iterations: int = 200,
-              threshold: float = 1e-6,
-              initial_trustworthiness: Union[float, Dict[str, float]] = 0.9,
-              default_trustworthiness: float = 0.9) -> pd.DataFrame:
-        """
-        训练模型（批量处理）
-        
-        反复迭代直到收敛或达到最大迭代次数。
-        
-        Args:
-            dataframe: 输入DataFrame，必须包含website, fact, object列
-            max_iterations: 最大迭代次数
-            threshold: 收敛阈值
-            initial_trustworthiness: 初始数据源可靠性
-            
-        Returns:
-            更新后的DataFrame，包含trustworthiness和fact_confidence列
-        """
-        # 创建副本
-        dataframe = dataframe.copy()
-        dataframe["website"] = dataframe["website"].astype(str)
-        dataframe["fact"] = dataframe["fact"].astype(str)
-        dataframe["object"] = dataframe["object"].astype(str)
-        
-        # 初始化trustworthiness和fact_confidence
-        dataframe["trustworthiness"] = self._initialize_trustworthiness(
-            dataframe,
-            initial_trustworthiness,
-            default_trustworthiness,
-        )
-        dataframe["fact_confidence"] = np.zeros(len(dataframe.index))
-
-        # 迭代
-        converged_at = None
-        for i in range(max_iterations):
-            # 保存上一轮的trustworthiness
-            t1 = dataframe.drop_duplicates("website")["trustworthiness"]
-
-            # 执行一次迭代
-            dataframe = self.iteration(dataframe)
-
-            # 获取当前轮的trustworthiness
-            t2 = dataframe.drop_duplicates("website")["trustworthiness"]
-
-            # 检查收敛
-            if self.stop_condition(t1, t2, threshold):
-                converged_at = i + 1
-                break
-
-        self.last_iteration_count = converged_at if converged_at is not None else max_iterations
-
-        if self.enable_zk_proof:
-            truth_map = self._estimate_global_truth_text(dataframe)
-            dataframe["global_truth"] = dataframe["object"].map(truth_map)
-            source_scores = (
-                dataframe[["website", "trustworthiness"]]
-                .drop_duplicates(subset=["website"])
-                .set_index("website")["trustworthiness"]
-                .astype(float)
-                .to_dict()
-            )
-            dataframe = attach_grouped_proofs(
-                dataframe,
-                method_name="BasicTruthFinder",
-                source_scores=source_scores,
-                group_columns=("object",),
-                truth_column="global_truth",
-                iteration_count=self.last_iteration_count,
-                proof_engine=self.zk_proof_engine,
-            )
-
-        return dataframe
-
     def process_batch(
         self,
         dataframe: pd.DataFrame,
         implication_texts: Optional[List[str]] = None,
-        max_iterations: int = 200,
-        threshold: float = 1e-6,
-        initial_trustworthiness: float = 0.9,
+        initial_trustworthiness: float = 0.5,
     ) -> pd.DataFrame:
         """
         在线处理单个 batch：
         - 跨 batch 保留 website -> trustworthiness
-        - 当前 batch 内按 BasicTruth 原始迭代规则收敛
+        - 当前 batch 仅执行一次 BasicTruth 更新
         - implication 仅基于当前可见文本（当前 batch 或当前 prefix）拟合
         """
         if dataframe is None or dataframe.empty:
@@ -394,19 +301,18 @@ class BasicTruthFinder:
             self.implication = create_implication_function_from_texts(visible_texts)
 
         init = self.website_trustworthiness if self.website_trustworthiness else initial_trustworthiness
-        out = self.train(
+        dataframe["trustworthiness"] = self._initialize_trustworthiness(
             dataframe,
-            max_iterations=max_iterations,
-            threshold=threshold,
-            initial_trustworthiness=init,
-            default_trustworthiness=initial_trustworthiness,
+            init,
+            initial_trustworthiness,
         )
+        dataframe["fact_confidence"] = np.zeros(len(dataframe.index))
+
+        out = self.iteration(dataframe)
+        self.last_iteration_count = 1
 
         truth_map = self._estimate_global_truth_text(out)
         out["global_truth"] = out["object"].map(truth_map)
-        out["source_reliability"] = out["website"].map(
-            lambda website: float(out.loc[out["website"] == website, "trustworthiness"].iloc[-1])
-        )
 
         latest_scores = (
             out[["website", "trustworthiness"]]
@@ -416,6 +322,20 @@ class BasicTruthFinder:
             .to_dict()
         )
         self.website_trustworthiness.update(latest_scores)
+        out["source_reliability"] = out["website"].map(
+            lambda website: float(self.website_trustworthiness[str(website)])
+        )
+
+        if self.enable_zk_proof:
+            out = attach_grouped_proofs(
+                out,
+                method_name="BasicTruthFinder",
+                source_scores=latest_scores,
+                group_columns=("object",),
+                truth_column="global_truth",
+                iteration_count=self.last_iteration_count,
+                proof_engine=self.zk_proof_engine,
+            )
         return out
 
     def get_source_reliability(self, website: Optional[str] = None) -> Dict:

@@ -1,125 +1,192 @@
 """
-实验3-数值: 随着恶意节点注入时间变化
+实验3-数值: 分阶段恶意源激活
 ================================================
-自变量: 注入起始 batch t ∈ {1, 2, ..., N}
 场景设定:
-  batch_index < t  → 使用干净数据（num_demo.json）
-  batch_index >= t → 使用恶意数据（num_demo_4bad_agent.json，40% 恶意节点）
+  batch 1-49   → 使用干净数据（0 bad）
+  batch 50-99  → 使用 2 bad 数据（20% 恶意源）
+  batch 100-150 → 使用 4 bad 数据（40% 恶意源）
 
-评估框架（对齐论文 Section VI）:
-  preds = 方法在注入合成数据集上的输出
+评估框架（对齐 DecentTruth / SenFEED 的 temporal attack setting）:
+  preds = 方法在分阶段攻击数据集上的输出
   gt    = num_demo.json（全程干净）中的真实值
-  数值场景 → RMSE(preds_all, gt_all), MAE(...)
+  指标  = per-batch Relative RMSE(preds_b, gt_b)
+
+默认攻击模式: collude
 
 运行: python exp3_numeric.py
 """
 import argparse
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict
 
 import pandas as pd
 
 from exp_utils import (
+    N_AGENTS,
     NUM_METHODS,
     build_gt_numeric,
-    build_injection_df,
-    eval_numeric,
+    build_phase_switched_df,
+    eval_numeric_per_batch,
     get_numeric_demo_files,
     load_batches,
-    plot_numeric,
+    plot_temporal_metric,
 )
 
 BASE_OUT_DIR = Path(__file__).parent / "outputs" / "exp3_numeric"
 
-BAD_COUNT = 4
-TITLE = "E3-Numeric: 恶意节点注入时间"
-X_LABEL = "恶意注入起始 Batch"
+PHASE1_START = 50
+PHASE2_START = 100
+PHASE1_BAD_COUNT = 2
+PHASE2_BAD_COUNT = 4
+TITLE = "E3-Numeric: Progressive Byzantine Source Mutiny"
 
 
 def save_results(
-    injection_points: List[int],
-    num_results: Dict[str, Dict[str, List[float]]],
+    per_batch_results: Dict[str, Dict[int, float]],
     out_dir: Path,
+    attack_profile: str,
+    phase1_start: int,
+    phase2_start: int,
+    phase1_bad_count: int,
+    phase2_bad_count: int,
 ) -> None:
     rows = []
-    for i, injection_start in enumerate(injection_points):
-        for method in NUM_METHODS:
+    for method in NUM_METHODS:
+        series = per_batch_results.get(method, {})
+        for batch_idx, relative_rmse in sorted(series.items()):
             rows.append({
-                "injection_start_batch": injection_start,
+                "batch_idx": batch_idx,
                 "method": method,
-                "rmse": num_results[method]["rmse"][i] if i < len(num_results[method]["rmse"]) else float("nan"),
-                "mae": num_results[method]["mae"][i] if i < len(num_results[method]["mae"]) else float("nan"),
+                "relative_rmse": relative_rmse,
+                "attack_profile": attack_profile,
+                "phase1_start_batch": phase1_start,
+                "phase2_start_batch": phase2_start,
+                "phase1_bad_count": phase1_bad_count,
+                "phase2_bad_count": phase2_bad_count,
             })
     path = out_dir / "results.csv"
     pd.DataFrame(rows).to_csv(path, index=False, encoding="utf-8-sig")
     print(f"  → 已保存 {path}")
 
 
+def _validate_phase_schedule(phase1_start: int, phase2_start: int, n_batches: int) -> None:
+    if phase1_start < 1:
+        raise ValueError(f"phase1_start must be >= 1, got {phase1_start}")
+    if phase2_start <= phase1_start:
+        raise ValueError(
+            f"phase2_start must be > phase1_start, got phase1_start={phase1_start}, phase2_start={phase2_start}"
+        )
+    if phase2_start > n_batches:
+        raise ValueError(
+            f"phase2_start={phase2_start} exceeds available batches ({n_batches})"
+        )
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="实验3-数值: 随着恶意节点注入时间变化")
+    parser = argparse.ArgumentParser(description="实验3-数值: 分阶段恶意源激活")
     parser.add_argument(
         "--attack-profile",
-        default="agent",
-        help="已弃用，仅为兼容旧命令保留。实验固定使用：数值=num_demo_*bad_agent.json。",
+        default="collude",
+        choices=["agent", "collude"],
+        help="恶意数据模式。collude=更有辨识度的同向串谋（默认）；agent=动态偏离。",
     )
     parser.add_argument(
-        "--bad-count",
+        "--phase1-start",
         type=int,
-        default=BAD_COUNT,
-        help="注入后使用的恶意节点数量。",
+        default=PHASE1_START,
+        help="第一阶段恶意源激活 batch。",
+    )
+    parser.add_argument(
+        "--phase2-start",
+        type=int,
+        default=PHASE2_START,
+        help="第二阶段恶意源激活 batch。",
+    )
+    parser.add_argument(
+        "--phase1-bad-count",
+        type=int,
+        default=PHASE1_BAD_COUNT,
+        help="第一阶段恶意源数量。",
+    )
+    parser.add_argument(
+        "--phase2-bad-count",
+        type=int,
+        default=PHASE2_BAD_COUNT,
+        help="第二阶段恶意源数量。",
     )
     args = parser.parse_args()
 
-    num_files = get_numeric_demo_files()
-    if args.bad_count not in num_files:
-        available = ", ".join(str(k) for k in sorted(num_files))
-        raise ValueError(
-            f"bad_count={args.bad_count} is unavailable for numeric files. "
-            f"Available bad_count values: {available}"
-        )
-    out_dir = BASE_OUT_DIR / f"bad_{args.bad_count}"
+    num_files = get_numeric_demo_files(mode=args.attack_profile)
+    for bad_count in [0, args.phase1_bad_count, args.phase2_bad_count]:
+        if bad_count not in num_files:
+            available = ", ".join(str(k) for k in sorted(num_files))
+            raise ValueError(
+                f"bad_count={bad_count} is unavailable for numeric files under attack_profile={args.attack_profile}. "
+                f"Available bad_count values: {available}"
+            )
+
+    out_dir = (
+        BASE_OUT_DIR
+        / args.attack_profile
+        / f"{args.phase1_bad_count}bad_at_{args.phase1_start}__{args.phase2_bad_count}bad_at_{args.phase2_start}"
+    )
     out_dir.mkdir(parents=True, exist_ok=True)
 
     print("\n" + "=" * 60)
     print(TITLE)
     print("=" * 60)
-    print(f"dataset = numeric:num_demo_*bad_agent.json, bad_count = {args.bad_count}")
+    print(
+        "dataset = "
+        f"numeric:num_demo_*bad_{args.attack_profile}.json, "
+        f"schedule = 0 bad -> {args.phase1_bad_count} bad -> {args.phase2_bad_count} bad"
+    )
 
     clean_num_batches = load_batches(num_files[0])
-    mal_num_batches = load_batches(num_files[args.bad_count])
+    phase1_num_batches = load_batches(num_files[args.phase1_bad_count])
+    phase2_num_batches = load_batches(num_files[args.phase2_bad_count])
 
-    n_batches = min(len(clean_num_batches), len(mal_num_batches))
-    injection_points = list(range(1, n_batches + 1))
+    n_batches = min(len(clean_num_batches), len(phase1_num_batches), len(phase2_num_batches))
+    _validate_phase_schedule(args.phase1_start, args.phase2_start, n_batches)
 
     gt_num = build_gt_numeric(clean_num_batches)
-    num_results = {method: {"rmse": [], "mae": []} for method in NUM_METHODS}
-
-    for injection_start in injection_points:
-        print(
-            f"\n  注入起始 batch = {injection_start}  "
-            f"（前 {injection_start - 1} 个干净，后 {n_batches - injection_start + 1} 个恶意）"
-        )
-        noisy_num_df = build_injection_df(
-            clean_num_batches,
-            mal_num_batches,
-            inj_start=injection_start,
-            n_total=n_batches,
-            mode="numeric",
-        )
-        res_num = eval_numeric(noisy_num_df, gt_num, last_pct=1.0)
-        for method in NUM_METHODS:
-            num_results[method]["rmse"].append(res_num[method]["rmse"])
-            num_results[method]["mae"].append(res_num[method]["mae"])
-
-    plot_numeric(
-        injection_points,
-        num_results,
-        X_LABEL,
-        TITLE,
-        out_dir,
-        metric_scope_label="all batches",
+    phased_num_df = build_phase_switched_df(
+        [
+            (1, clean_num_batches),
+            (args.phase1_start, phase1_num_batches),
+            (args.phase2_start, phase2_num_batches),
+        ],
+        n_total=n_batches,
+        mode="numeric",
     )
-    save_results(injection_points, num_results, out_dir)
+    per_batch_results = eval_numeric_per_batch(phased_num_df, gt_num, normalize=True)
+
+    event_lines = [
+        (
+            args.phase1_start,
+            f"{args.phase1_bad_count} bad ({args.phase1_bad_count / N_AGENTS:.0%})",
+        ),
+        (
+            args.phase2_start,
+            f"{args.phase2_bad_count} bad ({args.phase2_bad_count / N_AGENTS:.0%})",
+        ),
+    ]
+    plot_temporal_metric(
+        per_batch_results,
+        NUM_METHODS,
+        ylabel="Relative RMSE",
+        title=TITLE,
+        out_path=out_dir / "numeric.png",
+        event_lines=event_lines,
+    )
+    save_results(
+        per_batch_results,
+        out_dir,
+        attack_profile=args.attack_profile,
+        phase1_start=args.phase1_start,
+        phase2_start=args.phase2_start,
+        phase1_bad_count=args.phase1_bad_count,
+        phase2_bad_count=args.phase2_bad_count,
+    )
 
     print(f"\n[E3-Numeric] 完成，结果保存至 {out_dir}")
 

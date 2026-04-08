@@ -111,6 +111,7 @@ class ExperimentProofGroup:
     artifact_dir: Optional[str]
     public_json: Any
     proof_json: Any
+    proof_payload: Any
     contract_call: Optional[Dict[str, Any]]
     contract_submission: Dict[str, Any]
     rows: Optional[List[Dict[str, Any]]] = None
@@ -216,6 +217,7 @@ def build_experiment_proof_bundle(
                 artifact_dir=proof_payload.get("artifact_dir"),
                 public_json=proof_payload.get("public_json"),
                 proof_json=proof_payload.get("proof_json"),
+                proof_payload=dict(proof_payload),
                 contract_call=contract_call,
                 contract_submission=contract_submission,
                 rows=group_rows_payload if include_group_rows else None,

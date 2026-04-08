@@ -1,93 +1,90 @@
 """
-SenFEED Composite Truth Discovery (CompositeTD)
+SenFEED CompositeTD truth discovery
 
-严格按论文「SenFEED: Dynamic Decentralized Oracle Services for Accurate and Real-Time Sensor Data」
-中的真值发现部分（CompositeTD）复现核心公式：
+贴近论文「SenFEED: Dynamic Decentralized Oracle Services for Accurate and Real-Time Sensor Data」
+中的 CompositeTD:
 
-- Eq. (2): 对象真值的加权聚合
-- Eq. (3): 迭代式来源权重更新（单调递减函数 f）
-- Eq. (6): 增量式 MAP 权重更新
-- Eq. (7): 使用历史真值平滑的加权聚合
+- Eq. (2)/(7): 当前 source weight + 历史 truth 的加权聚合
+- Eq. (6): 跨 timestamp 的增量 MAP 更新
+- Shock detection: 监测 source weight evolution
+- Shock fallback: 当权重突变时，在当前 batch 内按 Eq. (2)/(3) 交替迭代到收敛
 
 说明：
 1. 该实现仅覆盖“真值发现”部分，不覆盖 DPS-BFT 共识协议。
 2. 输入数据默认是数值型传感器数据（论文真值发现实验的主要设定）。
+3. 与论文保持一致：默认在首个 timestamp 进行 iterative 初始化；后续通常走
+   incremental MAP，但在权重突变时会回退到 batch 内迭代收敛。
 """
 
 from __future__ import annotations
 
-from typing import Dict, Literal, Optional, Tuple
+import math
+from typing import Dict, Optional, Tuple
 
-import numpy as np
 import pandas as pd
-from numpy.linalg import norm
 
 from .zk_proof import ZKProofEngine, attach_grouped_proofs
 
 
-ModeType = Literal["composite", "iterative", "incremental"]
-
-
 class SenFeedTruthDiscovery:
     """
-    SenFEED 论文真值发现算法（CompositeTD）复现实现。
+    SenFEED 论文的在线真值发现实现。
 
     Args:
-        mode:
-            - "composite": CompositeTD（默认，按论文组合策略）
-            - "iterative": 仅迭代式（每个时间戳都执行 Eq.2 + Eq.3 至收敛）
-            - "incremental": 仅增量式（每个时间戳执行 Eq.6 的 MAP 更新）
         gamma: 论文中的误差尺度系数 γ（用于 Eq.6 分母）
         map_shape_a: MAP 的 Gamma 先验 shape 参数 a（Eq.6）
         map_scale_beta: MAP 的 Gamma 先验 scale 参数 β（Eq.6）
         history_truth_weight: 论文 Eq.7 中历史真值虚拟源权重 w
-        evolution_threshold: CompositeTD 的权重波动阈值 ε
-        convergence_threshold: 迭代收敛阈值
-        max_iterations: 迭代最大轮数
         initial_weight: 来源初始权重
         weight_floor: 权重下限，避免数值不稳定
     """
 
     def __init__(
         self,
-        mode: ModeType = "composite",
         gamma: float = 1.0,
         map_shape_a: float = 2.0,
         map_scale_beta: float = 1.0,
         history_truth_weight: float = 1.0,
-        evolution_threshold: float = 0.05,
-        convergence_threshold: float = 1e-6,
-        max_iterations: int = 200,
         initial_weight: float = 1.0,
         weight_floor: float = 1e-12,
+        composite_mode: bool = True,
+        distance_mode: str = "relative",
+        weight_evolution_epsilon: float = 1.0,
+        iterative_max_iters: int = 50,
+        iterative_convergence_tol: float = 1e-6,
+        use_history_in_iterative: bool = True,
         enable_zk_proof: bool = True,
         zk_proof_secret: Optional[str] = None,
     ):
-        assert mode in {"composite", "iterative", "incremental"}, "invalid mode"
         assert gamma > 0, "gamma must be > 0"
         assert map_shape_a > 1.0, "map_shape_a should be > 1 to keep numerator positive"
         assert map_scale_beta > 0, "map_scale_beta must be > 0"
         assert history_truth_weight >= 0, "history_truth_weight must be >= 0"
-        assert evolution_threshold >= 0, "evolution_threshold must be >= 0"
-        assert convergence_threshold > 0, "convergence_threshold must be > 0"
-        assert max_iterations > 0, "max_iterations must be > 0"
         assert initial_weight > 0, "initial_weight must be > 0"
         assert weight_floor > 0, "weight_floor must be > 0"
+        assert distance_mode in {"relative", "absolute"}, "distance_mode must be 'relative' or 'absolute'"
+        assert weight_evolution_epsilon > 0, "weight_evolution_epsilon must be > 0"
+        assert iterative_max_iters >= 1, "iterative_max_iters must be >= 1"
+        assert iterative_convergence_tol > 0, "iterative_convergence_tol must be > 0"
 
-        self.mode = mode
         self.gamma = gamma
         self.map_shape_a = map_shape_a
         self.map_scale_beta = map_scale_beta
         self.history_truth_weight = history_truth_weight
-        self.evolution_threshold = evolution_threshold
-        self.convergence_threshold = convergence_threshold
-        self.max_iterations = max_iterations
         self.initial_weight = initial_weight
         self.weight_floor = weight_floor
+        self.composite_mode = composite_mode
+        self.distance_mode = distance_mode
+        self.weight_evolution_epsilon = weight_evolution_epsilon
+        self.iterative_max_iters = iterative_max_iters
+        self.iterative_convergence_tol = iterative_convergence_tol
+        self.use_history_in_iterative = use_history_in_iterative
         self.enable_zk_proof = enable_zk_proof
 
         # 来源权重 w_{t,s}
         self.source_weights: Dict[str, float] = {}
+        # 上一时刻的来源权重（用于 weight evolution）
+        self.previous_source_weights: Dict[str, float] = {}
         # 历史真值 v_{t-1,o}（用于 Eq.7）
         self.previous_truth: Dict[str, float] = {}
         # 增量 MAP 所需累计误差项 Σ(Δv)^2（用于 Eq.6 分母）
@@ -96,6 +93,8 @@ class SenFeedTruthDiscovery:
         self.cumulative_obs_count: Dict[str, int] = {}
         # 记录最近一次迭代使用的轮数
         self.last_iteration_count: int = 0
+        self.last_weight_evolution: Dict[str, float] = {}
+        self.last_td_mode: str = "incremental"
         self.zk_proof_engine = ZKProofEngine(
             prover_id="SenFeedTruthDiscovery",
             secret_seed=zk_proof_secret,
@@ -104,10 +103,13 @@ class SenFeedTruthDiscovery:
     def reset_history(self):
         """重置内部状态。"""
         self.source_weights = {}
+        self.previous_source_weights = {}
         self.previous_truth = {}
         self.cumulative_squared_error = {}
         self.cumulative_obs_count = {}
         self.last_iteration_count = 0
+        self.last_weight_evolution = {}
+        self.last_td_mode = "incremental"
 
     def get_source_reliability(self, website: Optional[str] = None) -> Dict:
         """获取来源权重。"""
@@ -117,7 +119,7 @@ class SenFeedTruthDiscovery:
 
     def train(self, dataframe: pd.DataFrame) -> pd.DataFrame:
         """
-        训练/推理入口，按时间戳顺序处理数据。
+        按时间戳顺序执行论文式 CompositeTD。
 
         输入列要求：
         - website: 来源
@@ -131,69 +133,20 @@ class SenFeedTruthDiscovery:
         result_chunks = []
         unique_timestamps = sorted(df["timestamp"].unique())
 
-        for i, timestamp in enumerate(unique_timestamps):
+        for timestamp in unique_timestamps:
             current_df = df[df["timestamp"] == timestamp].copy()
-            old_weights = self.source_weights.copy()
-
-            if self.mode == "iterative":
-                truth_map = self._run_iterative_truth_discovery(current_df)
-                self._accumulate_squared_error(current_df, truth_map)
-                td_mode = "iterative"
-                weight_evolution = self._compute_weight_evolution(old_weights, self.source_weights)
-            elif self.mode == "incremental":
-                truth_map, _, _ = self._run_incremental_map_update(current_df)
-                td_mode = "incremental"
-                weight_evolution = self._compute_weight_evolution(old_weights, self.source_weights)
-            else:
-                # CompositeTD 策略：
-                # 1) t=1 时先用迭代式得到稳定初值
-                # 2) 后续先尝试增量式（Eq.6），若权重波动过大则回退到迭代式
-                if i == 0:
-                    truth_map = self._run_iterative_truth_discovery(current_df)
-                    self._accumulate_squared_error(current_df, truth_map)
-                    td_mode = "iterative"
-                    weight_evolution = self._compute_weight_evolution(old_weights, self.source_weights)
-                else:
-                    truth_inc, sq_error_this_step, obs_count_this_step = self._run_incremental_map_update(current_df)
-                    weight_evolution = self._compute_weight_evolution(old_weights, self.source_weights)
-
-                    # 根据论文中的权重波动思想触发“增量->迭代”切换：
-                    # 当来源权重演化量超过阈值 ε 时，回退到 Eq.2 + Eq.3 的迭代式求解。
-                    need_iterative = any(
-                        delta > self.evolution_threshold
-                        for delta in weight_evolution.values()
-                    )
-
-                    if need_iterative:
-                        # 回滚增量步骤（因为该时刻改用迭代法）
-                        self.source_weights = old_weights.copy()
-                        for s, e2 in sq_error_this_step.items():
-                            self.cumulative_squared_error[s] = max(
-                                0.0, self.cumulative_squared_error.get(s, 0.0) - e2
-                            )
-                        for s, cnt in obs_count_this_step.items():
-                            self.cumulative_obs_count[s] = max(
-                                0, self.cumulative_obs_count.get(s, 0) - cnt
-                            )
-
-                        truth_map = self._run_iterative_truth_discovery(current_df)
-                        self._accumulate_squared_error(current_df, truth_map)
-                        td_mode = "iterative"
-                        weight_evolution = self._compute_weight_evolution(old_weights, self.source_weights)
-                    else:
-                        truth_map = truth_inc
-                        td_mode = "incremental"
+            truth_map, _, _, final_weights = self._run_composite_timestamp(current_df)
 
             # 更新历史真值（供 Eq.7 使用）
             self.previous_truth = truth_map.copy()
+            self.previous_source_weights = {
+                str(source): float(weight)
+                for source, weight in final_weights.items()
+            }
 
             current_df["global_truth"] = current_df["object"].map(truth_map)
             current_df["source_weight"] = current_df["website"].map(
                 lambda s: self.source_weights.get(s, self.initial_weight)
-            )
-            current_df["td_mode"] = td_mode
-            current_df["weight_evolution"] = current_df["website"].map(
-                lambda s: weight_evolution.get(s, 0.0)
             )
             result_chunks.append(current_df)
 
@@ -202,13 +155,12 @@ class SenFeedTruthDiscovery:
         if self.enable_zk_proof:
             result_df = attach_grouped_proofs(
                 result_df,
-                method_name=f"SenFeedTruthDiscovery[{self.mode}]",
+                method_name="SenFeedTruthDiscovery",
                 source_scores=self.source_weights,
                 group_columns=("timestamp", "object"),
                 truth_column="global_truth",
                 iteration_count=self.last_iteration_count,
                 proof_engine=self.zk_proof_engine,
-                extra_public_data={"mode": self.mode},
             )
 
         return result_df
@@ -239,13 +191,27 @@ class SenFeedTruthDiscovery:
         for source in df["website"].unique():
             if source not in self.source_weights:
                 self.source_weights[source] = self.initial_weight
+            if source not in self.previous_source_weights:
+                self.previous_source_weights[source] = self.initial_weight
             if source not in self.cumulative_squared_error:
                 self.cumulative_squared_error[source] = 0.0
             if source not in self.cumulative_obs_count:
                 self.cumulative_obs_count[source] = 0
 
+    def _distance(self, value: float, truth: float) -> float:
+        residual = float(value) - float(truth)
+        if self.distance_mode == "absolute":
+            return residual * residual
+
+        scale = max(abs(float(truth)), 1e-8)
+        normalized = residual / scale
+        return normalized * normalized
+
     def _compute_weighted_truth(
-        self, object_df: pd.DataFrame, include_history_truth: bool
+        self,
+        object_df: pd.DataFrame,
+        include_history_truth: bool,
+        weight_map: Optional[Dict[str, float]] = None,
     ) -> float:
         """
         Eq. (2) 与 Eq. (7)：
@@ -264,7 +230,8 @@ class SenFeedTruthDiscovery:
         for _, row in object_df.iterrows():
             source = str(row["website"])
             value = float(row["fact"])
-            w_ts = max(self.weight_floor, self.source_weights.get(source, self.initial_weight))
+            source_weights = self.source_weights if weight_map is None else weight_map
+            w_ts = max(self.weight_floor, source_weights.get(source, self.initial_weight))
 
             numerator += w_ts * value
             denominator += w_ts
@@ -277,11 +244,20 @@ class SenFeedTruthDiscovery:
             return float(object_df["fact"].mean())
         return float(numerator / denominator)
 
-    def _estimate_truth_map(self, df_t: pd.DataFrame, include_history_truth: bool) -> Dict[str, float]:
+    def _estimate_truth_map(
+        self,
+        df_t: pd.DataFrame,
+        include_history_truth: bool,
+        weight_map: Optional[Dict[str, float]] = None,
+    ) -> Dict[str, float]:
         truth_map: Dict[str, float] = {}
         for object_id in df_t["object"].unique():
             obj_df = df_t[df_t["object"] == object_id]
-            truth_map[str(object_id)] = self._compute_weighted_truth(obj_df, include_history_truth)
+            truth_map[str(object_id)] = self._compute_weighted_truth(
+                obj_df,
+                include_history_truth,
+                weight_map=weight_map,
+            )
         return truth_map
 
     def _collect_error_statistics(
@@ -296,126 +272,192 @@ class SenFeedTruthDiscovery:
             object_id = str(row["object"])
             value = float(row["fact"])
             truth = float(truth_map[object_id])
-            diff = value - truth
+            dist = self._distance(value, truth)
 
-            abs_error_sum[source] = abs_error_sum.get(source, 0.0) + abs(diff)
-            squared_error_sum[source] = squared_error_sum.get(source, 0.0) + diff * diff
+            abs_error_sum[source] = abs_error_sum.get(source, 0.0) + math.sqrt(dist)
+            squared_error_sum[source] = squared_error_sum.get(source, 0.0) + dist
             observation_count[source] = observation_count.get(source, 0) + 1
 
         return abs_error_sum, squared_error_sum, observation_count
 
+    def _compute_batch_weight_update(
+        self,
+        squared_err: Dict[str, float],
+        obs_count: Dict[str, int],
+    ) -> Dict[str, float]:
+        updated: Dict[str, float] = {}
+        for source, count in obs_count.items():
+            numerator = (2.0 * self.map_shape_a - 2.0) + float(count)
+            denominator = (2.0 * self.map_scale_beta) + self.gamma * float(squared_err.get(source, 0.0))
+            if denominator <= self.weight_floor:
+                updated[source] = self.weight_floor
+            else:
+                updated[source] = max(self.weight_floor, float(numerator / denominator))
+        return updated
+
+    def _compute_incremental_candidate(
+        self,
+        df_t: pd.DataFrame,
+        include_history_truth: bool,
+    ) -> Tuple[Dict[str, float], Dict[str, float], Dict[str, float], Dict[str, int]]:
+        truth_map = self._estimate_truth_map(df_t, include_history_truth=include_history_truth)
+        _, squared_err, obs_count = self._collect_error_statistics(df_t, truth_map)
+
+        candidate_weights: Dict[str, float] = {}
+        for source in [str(s) for s in df_t["website"].unique()]:
+            cumulative_squared_error = (
+                self.cumulative_squared_error.get(source, 0.0) + squared_err.get(source, 0.0)
+            )
+            cumulative_obs_count = self.cumulative_obs_count.get(source, 0) + obs_count.get(source, 0)
+
+            numerator = (2.0 * self.map_shape_a - 2.0) + float(cumulative_obs_count)
+            denominator = (2.0 * self.map_scale_beta) + self.gamma * cumulative_squared_error
+            if denominator <= self.weight_floor:
+                candidate_weights[source] = self.weight_floor
+            else:
+                candidate_weights[source] = max(self.weight_floor, float(numerator / denominator))
+
+        return truth_map, candidate_weights, squared_err, obs_count
+
+    def _commit_statistics(
+        self,
+        squared_err: Dict[str, float],
+        obs_count: Dict[str, int],
+    ) -> None:
+        for source, count in obs_count.items():
+            self.cumulative_squared_error[source] = (
+                self.cumulative_squared_error.get(source, 0.0) + squared_err.get(source, 0.0)
+            )
+            self.cumulative_obs_count[source] = self.cumulative_obs_count.get(source, 0) + int(count)
+
+    def _compute_weight_evolution(
+        self,
+        df_t: pd.DataFrame,
+        candidate_weights: Dict[str, float],
+    ) -> Dict[str, float]:
+        evolution: Dict[str, float] = {}
+        for source in [str(s) for s in df_t["website"].unique()]:
+            previous = float(self.previous_source_weights.get(source, self.initial_weight))
+            current = float(candidate_weights.get(source, previous))
+            evolution[source] = abs(current - previous)
+        return evolution
+
+    def _weight_evolution_threshold(self, n_sources: int) -> float:
+        return float(self.weight_evolution_epsilon) / max(int(n_sources), 1)
+
+    def _should_run_iterative(
+        self,
+        df_t: pd.DataFrame,
+        weight_evolution: Dict[str, float],
+    ) -> bool:
+        if not self.composite_mode:
+            return False
+        if not self.previous_truth:
+            return True
+
+        threshold = self._weight_evolution_threshold(df_t["website"].nunique())
+        return any(delta > threshold for delta in weight_evolution.values())
+
     def _run_iterative_truth_discovery(
         self,
         df_t: pd.DataFrame,
-        include_history_truth: bool = False,
-    ) -> Dict[str, float]:
-        """
-        迭代式真值发现（Eq.2 + Eq.3）。
+        include_history_truth: bool,
+    ) -> Tuple[Dict[str, float], Dict[str, float], Dict[str, int], Dict[str, float], int]:
+        active_sources = [str(source) for source in df_t["website"].unique()]
+        working_weights: Dict[str, float] = {
+            source: max(self.weight_floor, float(self.source_weights.get(source, self.initial_weight)))
+            for source in active_sources
+        }
 
-        Eq. (3) 仅要求 f(·) 为单调递减函数：
-            w_{t,s} = f( Σ_o d(v_{t,s,o}, v_hat_{t,o}) )
-        这里采用经典可解释实例：
-            f(x) = 1 / (x + eps)
-        """
-        sources = [str(s) for s in df_t["website"].unique()]
-        prev = np.array([self.source_weights[s] for s in sources], dtype=float)
         truth_map: Dict[str, float] = {}
+        squared_err: Dict[str, float] = {}
+        obs_count: Dict[str, int] = {}
+        iteration_count = 0
 
-        for iteration in range(self.max_iterations):
+        for iteration in range(1, self.iterative_max_iters + 1):
             truth_map = self._estimate_truth_map(
                 df_t,
                 include_history_truth=include_history_truth,
+                weight_map=working_weights,
             )
-            abs_err, _, _ = self._collect_error_statistics(df_t, truth_map)
+            _, squared_err, obs_count = self._collect_error_statistics(df_t, truth_map)
+            updated_weights = self._compute_batch_weight_update(squared_err, obs_count)
 
-            new_weights: Dict[str, float] = {}
-            for s in sources:
-                err = abs_err.get(s, 0.0)
-                new_weights[s] = 1.0 / (err + self.weight_floor)
-
-            # 归一化到均值为 1，避免尺度漂移影响收敛判定。
-            mean_w = float(np.mean(list(new_weights.values()))) if new_weights else 1.0
-            if mean_w > self.weight_floor:
-                for s in new_weights:
-                    new_weights[s] /= mean_w
-
-            current = np.array([new_weights[s] for s in sources], dtype=float)
-            delta = norm(current - prev)
-
-            for s in sources:
-                self.source_weights[s] = max(self.weight_floor, float(new_weights[s]))
-
-            self.last_iteration_count = iteration + 1
-            if delta < self.convergence_threshold:
+            max_delta = max(
+                abs(updated_weights.get(source, working_weights[source]) - working_weights[source])
+                for source in active_sources
+            )
+            working_weights = {
+                source: max(self.weight_floor, float(updated_weights.get(source, working_weights[source])))
+                for source in active_sources
+            }
+            iteration_count = iteration
+            if max_delta <= self.iterative_convergence_tol:
                 break
-            prev = current
 
-        return truth_map
+        return truth_map, squared_err, obs_count, working_weights, iteration_count
 
     def _run_incremental_map_update(
         self, df_t: pd.DataFrame
     ) -> Tuple[Dict[str, float], Dict[str, float], Dict[str, int]]:
         """
-        增量 MAP 更新（Eq.6），并使用 Eq.7 计算当前真值。
+        单步在线更新：先按当前历史状态估计真值，再做 Eq.6 的 MAP 权重更新。
 
         Eq. (6):
             w_{t,s} = (2a - 2 + Σ_{τ<=t}Σ_o I_{τ,s,o}) / (2β + γ*Σ_{τ<=t}Σ_o (Δv_{τ,s,o})^2)
         """
-        truth_map = self._estimate_truth_map(df_t, include_history_truth=True)
-        _, squared_err, obs_count = self._collect_error_statistics(df_t, truth_map)
-
-        for source in [str(s) for s in df_t["website"].unique()]:
-            self.cumulative_squared_error[source] = (
-                self.cumulative_squared_error.get(source, 0.0) + squared_err.get(source, 0.0)
-            )
-            self.cumulative_obs_count[source] = (
-                self.cumulative_obs_count.get(source, 0) + obs_count.get(source, 0)
-            )
-
-            numerator = (2.0 * self.map_shape_a - 2.0) + float(self.cumulative_obs_count[source])
-            denominator = (2.0 * self.map_scale_beta) + self.gamma * self.cumulative_squared_error[source]
-
-            if denominator <= self.weight_floor:
-                new_weight = self.weight_floor
-            else:
-                new_weight = numerator / denominator
-
-            self.source_weights[source] = max(self.weight_floor, float(new_weight))
-
+        truth_map, candidate_weights, squared_err, obs_count = self._compute_incremental_candidate(
+            df_t,
+            include_history_truth=True,
+        )
+        self._commit_statistics(squared_err, obs_count)
+        for source, weight in candidate_weights.items():
+            self.source_weights[source] = max(self.weight_floor, float(weight))
         self.last_iteration_count = 1
         return truth_map, squared_err, obs_count
 
-    def _accumulate_squared_error(self, df_t: pd.DataFrame, truth_map: Dict[str, float]):
-        """把当前时间戳误差累计到 Eq.6 的历史项。"""
-        _, squared_err, _ = self._collect_error_statistics(df_t, truth_map)
-        for source, e2 in squared_err.items():
-            self.cumulative_squared_error[source] = self.cumulative_squared_error.get(source, 0.0) + e2
+    def _run_composite_timestamp(
+        self,
+        df_t: pd.DataFrame,
+    ) -> Tuple[Dict[str, float], Dict[str, float], Dict[str, int], Dict[str, float]]:
+        if not self.composite_mode:
+            truth_map, squared_err, obs_count = self._run_incremental_map_update(df_t)
+            final_weights = {
+                str(source): float(self.source_weights.get(str(source), self.initial_weight))
+                for source in df_t["website"].unique()
+            }
+            self.last_weight_evolution = {
+                source: abs(final_weights[source] - self.previous_source_weights.get(source, self.initial_weight))
+                for source in final_weights
+            }
+            self.last_td_mode = "incremental"
+            return truth_map, squared_err, obs_count, final_weights
 
-    @staticmethod
-    def _compute_weight_evolution(old_w: Dict[str, float], new_w: Dict[str, float]) -> Dict[str, float]:
-        evolution: Dict[str, float] = {}
-        all_sources = set(old_w.keys()) | set(new_w.keys())
-        for source in all_sources:
-            evolution[source] = abs(float(new_w.get(source, 0.0)) - float(old_w.get(source, 0.0)))
-        return evolution
+        truth_map, candidate_weights, squared_err, obs_count = self._compute_incremental_candidate(
+            df_t,
+            include_history_truth=bool(self.previous_truth),
+        )
+        weight_evolution = self._compute_weight_evolution(df_t, candidate_weights)
+        self.last_weight_evolution = weight_evolution
 
+        if self._should_run_iterative(df_t, weight_evolution):
+            truth_map, squared_err, obs_count, final_weights, iteration_count = self._run_iterative_truth_discovery(
+                df_t,
+                include_history_truth=bool(self.previous_truth) and self.use_history_in_iterative,
+            )
+            for source, weight in final_weights.items():
+                self.source_weights[source] = max(self.weight_floor, float(weight))
+            self.last_iteration_count = iteration_count
+            self.last_td_mode = "iterative"
+        else:
+            for source, weight in candidate_weights.items():
+                self.source_weights[source] = max(self.weight_floor, float(weight))
+            final_weights = {
+                str(source): float(candidate_weights.get(str(source), self.initial_weight))
+                for source in df_t["website"].unique()
+            }
+            self.last_iteration_count = 1
+            self.last_td_mode = "incremental"
 
-class SenFeedCompositeTD(SenFeedTruthDiscovery):
-    """CompositeTD 模式快捷类。"""
-
-    def __init__(self, **kwargs):
-        super().__init__(mode="composite", **kwargs)
-
-
-class SenFeedIterativeTD(SenFeedTruthDiscovery):
-    """迭代模式快捷类（每轮都执行 Eq.2 + Eq.3）。"""
-
-    def __init__(self, **kwargs):
-        super().__init__(mode="iterative", **kwargs)
-
-
-class SenFeedIncrementalTD(SenFeedTruthDiscovery):
-    """增量模式快捷类（每轮都执行 Eq.6 + Eq.7）。"""
-
-    def __init__(self, **kwargs):
-        super().__init__(mode="incremental", **kwargs)
+        self._commit_statistics(squared_err, obs_count)
+        return truth_map, squared_err, obs_count, final_weights
