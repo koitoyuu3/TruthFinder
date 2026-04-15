@@ -1,3 +1,4 @@
+import importlib.util
 import json
 import unittest
 from pathlib import Path
@@ -19,6 +20,24 @@ from decentralized_truth_discovery.core import (
 from decentralized_truth_discovery.core.hybrid_text_alignment import (
     DEFAULT_NUMERIC_MATCH_TOL,
     DEFAULT_SEMANTIC_NUMERIC_ALPHA,
+)
+
+
+def _load_script_module(module_name: str, path: Path):
+    spec = importlib.util.spec_from_file_location(module_name, path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
+TEXT_REGEN_MODULE = _load_script_module(
+    "truthfinder_text_regen_10",
+    Path("decentralized_truth_discovery/data_agent-10/regen_bad_text.py"),
+)
+TEXT_REGEN_50_MODULE = _load_script_module(
+    "truthfinder_text_regen_50",
+    Path("decentralized_truth_discovery/data_agent-50_news-300/regen_bad_text.py"),
 )
 
 
@@ -175,6 +194,49 @@ class TestExperimentDatasetRouting(unittest.TestCase):
 
         self.assertEqual(len(mild_side), 3)
         self.assertEqual(len(strong_side), 3)
+
+    def test_text_collude_default_group_sizes_are_explicit(self):
+        self.assertEqual(TEXT_REGEN_MODULE.default_collude_group_sizes(5), [2, 2, 1])
+        self.assertEqual(TEXT_REGEN_MODULE.default_collude_group_sizes(6), [2, 2, 2])
+
+    def test_text_collude_direction_names_do_not_collapse_by_parity(self):
+        directions = TEXT_REGEN_MODULE.collude_direction_names(5)
+
+        self.assertEqual(len(directions), 5)
+        self.assertEqual(len(set(directions)), 5)
+
+    def test_50_agent_text_collude_preserves_one_direction_per_group(self):
+        group_sizes = TEXT_REGEN_50_MODULE.BAD_GROUP_SPECS[35]
+        directions = TEXT_REGEN_MODULE.collude_direction_names(len(group_sizes))
+
+        self.assertEqual(group_sizes, [12, 12, 11])
+        self.assertEqual(len(set(directions)), len(group_sizes))
+
+    def test_text_collude_direction_templates_change_semantic_tail(self):
+        clean_text = (
+            "Agilent Technologies, Inc. (A) 的新期权合约（8月2024到期）开始交易，"
+            "其中看跌期权敲定价格为125.00，看涨期权敲定价格为150.00，"
+            "未披露明确财务数字，时间戳缺失。"
+        )
+
+        guidance_cut = TEXT_REGEN_MODULE.corrupt_text_collude(
+            canonical_text=clean_text,
+            style_reference=clean_text,
+            object_seed=0,
+            variant_id=0,
+            direction_name="guidance_cut",
+        )
+        margin_pressure = TEXT_REGEN_MODULE.corrupt_text_collude(
+            canonical_text=clean_text,
+            style_reference=clean_text,
+            object_seed=0,
+            variant_id=0,
+            direction_name="margin_pressure",
+        )
+
+        self.assertNotEqual(guidance_cut, margin_pressure)
+        self.assertIn("全年指引", guidance_cut)
+        self.assertIn("利润率", margin_pressure)
 
 
 class TestNumericExperimentAdapters(unittest.TestCase):

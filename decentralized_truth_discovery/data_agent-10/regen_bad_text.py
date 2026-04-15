@@ -4,8 +4,9 @@ regen_bad_text.py
 
 Support two malicious-text generation modes:
 1. noise   : force large semantic deviation (legacy easy benchmark)
-2. collude : keep high surface/semantic similarity while coordinating on
-             the same false facts across malicious agents
+2. collude : assign malicious agents to explicit attack directions with
+             fixed group sizes so each colluding group maps to one and only
+             one semantic direction
 """
 
 import argparse
@@ -149,6 +150,84 @@ COLLUDE_BULLISH_FALSE_CLAUSE_FAMILIES = [
 ]
 
 
+DEFAULT_COLLUDE_GROUP_SPECS = {
+    1: [1],
+    2: [1, 1],
+    3: [1, 1, 1],
+    4: [2, 1, 1],
+    5: [2, 2, 1],
+    6: [2, 2, 2],
+}
+
+
+COLLUDE_DIRECTION_LIBRARY = [
+    {
+        "name": "guidance_cut",
+        "bias": "bearish",
+        "factor_even": 0.78,
+        "factor_odd": 0.88,
+        "clauses": COLLUDE_FALSE_CLAUSE_FAMILIES[0],
+        "surface_profile_ids": [0, 5],
+    },
+    {
+        "name": "guidance_raise",
+        "bias": "bullish",
+        "factor_even": 1.18,
+        "factor_odd": 1.28,
+        "clauses": COLLUDE_BULLISH_FALSE_CLAUSE_FAMILIES[0],
+        "surface_profile_ids": [5, 0],
+    },
+    {
+        "name": "demand_slump",
+        "bias": "bearish",
+        "factor_even": 0.74,
+        "factor_odd": 0.84,
+        "clauses": COLLUDE_FALSE_CLAUSE_FAMILIES[1],
+        "surface_profile_ids": [1, 4],
+    },
+    {
+        "name": "demand_rebound",
+        "bias": "bullish",
+        "factor_even": 1.12,
+        "factor_odd": 1.22,
+        "clauses": COLLUDE_BULLISH_FALSE_CLAUSE_FAMILIES[1],
+        "surface_profile_ids": [4, 1],
+    },
+    {
+        "name": "margin_pressure",
+        "bias": "bearish",
+        "factor_even": 0.69,
+        "factor_odd": 0.79,
+        "clauses": COLLUDE_FALSE_CLAUSE_FAMILIES[2],
+        "surface_profile_ids": [2, 3],
+    },
+    {
+        "name": "margin_expansion",
+        "bias": "bullish",
+        "factor_even": 1.09,
+        "factor_odd": 1.17,
+        "clauses": COLLUDE_BULLISH_FALSE_CLAUSE_FAMILIES[2],
+        "surface_profile_ids": [3, 2],
+    },
+    {
+        "name": "cautious_outlook",
+        "bias": "bearish",
+        "factor_even": 0.72,
+        "factor_odd": 0.82,
+        "clauses": COLLUDE_FALSE_CLAUSE_FAMILIES[3],
+        "surface_profile_ids": [0, 1],
+    },
+    {
+        "name": "constructive_outlook",
+        "bias": "bullish",
+        "factor_even": 1.14,
+        "factor_odd": 1.24,
+        "clauses": COLLUDE_BULLISH_FALSE_CLAUSE_FAMILIES[3],
+        "surface_profile_ids": [1, 0],
+    },
+]
+
+
 SURFACE_PROFILES = [
     [("将于", "将在"), ("当前", "目前"), ("预计", "预期")],
     [("当前", "现阶段"), ("第四季度", "第四财季"), ("预计", "预计")],
@@ -157,9 +236,6 @@ SURFACE_PROFILES = [
     [("当前", "现时"), ("预计", "预期"), ("可能", "可能"), ("将于", "将于")],
     [("当前", "目前"), ("预计", "展望"), ("第四季度", "第四财季")],
 ]
-
-
-COLLUDE_PROFILE_IDS = [0, 5]
 
 HONEST_AGENT_PREFIXES = [
     "",
@@ -470,28 +546,51 @@ def _mutate_percentage_collude_bullish(m: re.Match) -> str:
     return f"{int(new_val)}%"
 
 
-def _collude_variant_count(num_bad_agents: int) -> int:
-    if num_bad_agents <= 2:
-        return 1
-    return min(2, num_bad_agents)
+def default_collude_group_sizes(num_bad_agents: int) -> list[int]:
+    if num_bad_agents <= 0:
+        return []
+    if num_bad_agents in DEFAULT_COLLUDE_GROUP_SPECS:
+        return list(DEFAULT_COLLUDE_GROUP_SPECS[num_bad_agents])
+
+    group_count = min(3, num_bad_agents)
+    base, remainder = divmod(num_bad_agents, group_count)
+    return [base + (1 if idx < remainder else 0) for idx in range(group_count)]
 
 
-def _collude_attack_direction(
-    num_bad_agents: int,
-    variant_id: int,
-) -> str:
-    if num_bad_agents >= 5 and variant_id % 2 == 1:
-        return "bullish"
-    return "bearish"
+def collude_direction_names(direction_count: int) -> list[str]:
+    if direction_count < 0:
+        raise ValueError("direction_count must be non-negative")
+    if direction_count > len(COLLUDE_DIRECTION_LIBRARY):
+        raise ValueError(
+            f"Requested {direction_count} directions, but only "
+            f"{len(COLLUDE_DIRECTION_LIBRARY)} unique direction templates are defined."
+        )
+    return [COLLUDE_DIRECTION_LIBRARY[idx]["name"] for idx in range(direction_count)]
+
+
+def _collude_direction_spec(direction_name: str) -> dict:
+    for spec in COLLUDE_DIRECTION_LIBRARY:
+        if spec["name"] == direction_name:
+            return spec
+    raise ValueError(f"Unknown collude direction: {direction_name}")
+
+
+def _validate_collude_group_sizes(group_sizes: list[int], bad_agents: list[str]) -> list[int]:
+    cleaned = [int(size) for size in group_sizes if int(size) > 0]
+    if sum(cleaned) != len(bad_agents):
+        raise ValueError(
+            f"group_sizes {cleaned} do not sum to bad agent count {len(bad_agents)}"
+        )
+    return cleaned
 
 
 def _collude_variant_id(
     agent_name: str,
     bad_agents: list[str],
     object_seed: int,
-    variant_count: int,
+    group_sizes: list[int],
 ) -> int:
-    if variant_count <= 1 or not bad_agents:
+    if not group_sizes or not bad_agents:
         return 0
     try:
         agent_index = bad_agents.index(agent_name)
@@ -499,7 +598,12 @@ def _collude_variant_id(
         agent_index = 0
 
     rotated_index = (agent_index + object_seed) % len(bad_agents)
-    return (rotated_index * variant_count) // len(bad_agents)
+    boundary = 0
+    for variant_id, size in enumerate(group_sizes):
+        boundary += size
+        if rotated_index < boundary:
+            return variant_id
+    return len(group_sizes) - 1
 
 
 def corrupt_text_collude(
@@ -507,33 +611,45 @@ def corrupt_text_collude(
     style_reference: str,
     object_seed: int,
     variant_id: int,
-    attack_direction: str,
+    attack_direction: str = "bearish",
+    direction_name: str = None,
 ) -> str:
     """
     Generate a coordinated false text:
     - shared wrong slots come from object_seed
-    - surface form varies only across a few shared collusion templates
-    - avoid large topic drift that makes SBERT separation trivial
+    - each colluding group is assigned to a unique semantic direction
+    - surface form stays close enough to the clean text to remain plausible
     """
+    if direction_name is None:
+        direction_name = "guidance_raise" if attack_direction == "bullish" else "guidance_cut"
+
+    direction_spec = _collude_direction_spec(direction_name)
+    direction_bias = direction_spec["bias"]
     result = canonical_text
     mutation_count = 0
 
-    if attack_direction == "bullish":
-        num_factor = 1.18 if object_seed % 2 == 0 else 1.28
+    if direction_bias == "bullish":
+        num_factor = (
+            direction_spec["factor_even"]
+            if object_seed % 2 == 0
+            else direction_spec["factor_odd"]
+        )
         result, n = _apply_all_bullish_direction_boosts(result)
         mutation_count += n
         result, n = _apply_all_bullish_rating_boosts(result)
         mutation_count += n
         pct_replacer = _mutate_percentage_collude_bullish
-        clause_families = COLLUDE_BULLISH_FALSE_CLAUSE_FAMILIES
     else:
-        num_factor = 0.88 if object_seed % 2 == 0 else 0.78
+        num_factor = (
+            direction_spec["factor_even"]
+            if object_seed % 2 == 0
+            else direction_spec["factor_odd"]
+        )
         result, n = _apply_all_direction_flips(result)
         mutation_count += n
         result, n = _apply_all_rating_flips(result)
         mutation_count += n
         pct_replacer = _mutate_percentage_collude
-        clause_families = COLLUDE_FALSE_CLAUSE_FAMILIES
 
     new_result, n_subs = re.subn(r"(\d+\.?\d*)%", pct_replacer, result)
     if n_subs > 0:
@@ -558,14 +674,14 @@ def corrupt_text_collude(
         result = new_result
         mutation_count += 1
 
-    family = clause_families[object_seed % len(clause_families)]
-    clause = family[variant_id % len(family)]
+    clause = direction_spec["clauses"][object_seed % len(direction_spec["clauses"])]
     result = _append_clause(result, clause)
 
+    surface_profile_ids = direction_spec["surface_profile_ids"]
     result = _apply_surface_profile(
         result,
         target_reference=style_reference,
-        profile_id=COLLUDE_PROFILE_IDS[variant_id % len(COLLUDE_PROFILE_IDS)],
+        profile_id=surface_profile_ids[object_seed % len(surface_profile_ids)],
     )
     return _normalize_option_pair_terms(result)
 
@@ -717,13 +833,25 @@ def regenerate_collude_file(
     canonical_clean_map: dict,
     clean_agent_map: dict,
     bad_agents: list[str],
+    group_sizes: list[int] = None,
+    direction_names: list[str] = None,
 ):
     """
     Build a collusive malicious dataset from clean demo data.
-    All bad agents share the same false facts per (batch, object), with only
-    a small number of shared malicious templates to prevent BasicTruth from
-    winning via exact-match advantages on the honest side.
+    Each malicious group has a fixed size and maps to exactly one attack
+    direction so theoretical analyses over m1, m2, ... can be reproduced.
     """
+    if group_sizes is None:
+        group_sizes = default_collude_group_sizes(len(bad_agents))
+    group_sizes = _validate_collude_group_sizes(group_sizes, bad_agents)
+    if direction_names is None:
+        direction_names = collude_direction_names(len(group_sizes))
+    if len(direction_names) != len(group_sizes):
+        raise ValueError(
+            f"direction_names length {len(direction_names)} does not match "
+            f"group_sizes length {len(group_sizes)}"
+        )
+
     data = copy.deepcopy(demo_data)
     samples = []
 
@@ -738,10 +866,9 @@ def regenerate_collude_file(
         for obj, items in object_groups.items():
             canonical_text = canonical_clean_map.get((bi, obj), items[0]["response"])
             object_seed = _stable_object_seed(bi, obj)
-            variant_count = _collude_variant_count(len(items))
 
             exemplar_style_refs = {}
-            for variant_id in range(variant_count):
+            for variant_id in range(len(group_sizes)):
                 exemplar = next(
                     (
                         item for item in items
@@ -749,7 +876,7 @@ def regenerate_collude_file(
                             item["agent"],
                             bad_agents,
                             object_seed,
-                            variant_count,
+                            group_sizes,
                         ) == variant_id
                     ),
                     items[0],
@@ -765,9 +892,8 @@ def regenerate_collude_file(
                     agent,
                     bad_agents,
                     object_seed,
-                    variant_count,
+                    group_sizes,
                 )
-                attack_direction = _collude_attack_direction(len(items), variant_id)
                 style_reference = exemplar_style_refs[variant_id]
 
                 before = item["response"]
@@ -776,7 +902,7 @@ def regenerate_collude_file(
                     style_reference=style_reference,
                     object_seed=object_seed,
                     variant_id=variant_id,
-                    attack_direction=attack_direction,
+                    direction_name=direction_names[variant_id],
                 )
                 item["response"] = after
 
@@ -896,11 +1022,16 @@ def main():
     if args.mode in {"collude", "both"}:
         for bad_count in _parse_bad_counts(args.bad_counts):
             bad_agents = [f"agent-{idx}" for idx in range(1, bad_count + 1)]
+            group_sizes = default_collude_group_sizes(len(bad_agents))
+            direction_names = collude_direction_names(len(group_sizes))
             filename = f"demo_{bad_count}bad_collude.json"
             path = os.path.join(DATA_DIR, filename)
 
             print(f"{'='*70}")
-            print(f"Processing {filename}  (collude, bad agents: {bad_agents})")
+            print(
+                f"Processing {filename}  (collude, bad agents: {bad_agents}, "
+                f"group_sizes={group_sizes}, directions={direction_names})"
+            )
             print(f"{'='*70}")
 
             data, samples = regenerate_collude_file(
@@ -909,6 +1040,8 @@ def main():
                 canonical_clean_map=canonical_clean_map,
                 clean_agent_map=clean_agent_map,
                 bad_agents=bad_agents,
+                group_sizes=group_sizes,
+                direction_names=direction_names,
             )
             summary = summarize_collude_quality(data, clean_agent_map, bad_agents)
 
