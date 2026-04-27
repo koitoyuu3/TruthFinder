@@ -1,0 +1,4 @@
+method,agent_count,run_count,success_count,success_rate,mean_wall_time_sec,std_wall_time_sec,mean_elapsed_with_comm_sec,mean_network_sec,mean_total_peak_rss_mb,mean_total_peak_delta_rss_mb,mean_coord_peak_rss_mb,mean_coord_peak_delta_rss_mb,mean_fleet_peak_rss_mb_sum,mean_fleet_peak_delta_rss_mb_sum,mean_fleet_peak_delta_rss_mb_max
+BasicTruth,50,1,1,1.0,8.782113509252667,,4.396535059437156,0.0385833792388439,1808.37890625,658.0703125,856.5234375,658.0703125,951.85546875,0.0,0.0
+SemanticTruth,50,1,1,1.0,7.667513931170106,,3.0371119510382414,1.7404690627008677,46792.4140625,2597.75390625,1108.32421875,909.5,45684.08984375,1688.25390625,43.25390625
+SenteTruth,50,1,1,1.0,7.916596855968237,,2.873019026592374,1.89593412168324,46779.828125,2587.28125,1089.16015625,890.7265625,45690.66796875,1696.5546875,42.78125

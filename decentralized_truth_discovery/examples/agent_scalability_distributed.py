@@ -639,6 +639,12 @@ def _run_benchmark(args: argparse.Namespace) -> int:
                     text_filtered_df = _batches_to_text_df(
                         text_workload_batches, agent_subset=selected_agents
                     )
+                    if args.text_mode and text_filtered_df.empty:
+                        raise ValueError(
+                            "Text mode did not extract any string news-summary records "
+                            f"from {text_input_path} for workload={workload.workload_index}, "
+                            f"agent_count={agent_count}."
+                        )
                 if args.text_mode and text_filtered_df is not None and not text_filtered_df.empty:
                     websites = (
                         text_filtered_df["website"]
@@ -677,12 +683,25 @@ def _run_benchmark(args: argparse.Namespace) -> int:
                     row["total_subsets_for_agent_count"] = len(subsets)
                     row["selection_strategy"] = args.selection_strategy
                     row["subset_seed"] = args.subset_seed
-                    row["input_item_count"] = int(filtered_df.shape[0])
-                    row["input_object_count"] = (
+                    row["paired_numeric_input_item_count"] = int(filtered_df.shape[0])
+                    row["paired_numeric_input_object_count"] = (
                         int(filtered_df["object"].nunique()) if not filtered_df.empty else 0
                     )
+                    if args.text_mode and text_filtered_df is not None:
+                        row["input_item_count"] = int(text_filtered_df.shape[0])
+                        row["input_object_count"] = (
+                            int(text_filtered_df["object"].nunique())
+                            if not text_filtered_df.empty
+                            else 0
+                        )
+                    else:
+                        row["input_item_count"] = int(filtered_df.shape[0])
+                        row["input_object_count"] = (
+                            int(filtered_df["object"].nunique()) if not filtered_df.empty else 0
+                        )
                     row["experiment_id"] = experiment_id
                     row["input_json"] = input_json_path
+                    row["input_text_json"] = text_input_path if args.text_mode else ""
                     row["mode"] = args.mode
                     row["transport"] = "zmq-tcp" if args.mode == "dist-tcp" else "inproc"
                     row["serialization"] = args.serialization if args.mode != "inproc" else ""

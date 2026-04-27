@@ -20,20 +20,27 @@ Exp5b 的目标是评估五类 truth discovery 方法在 50 个 agent 场景下�
 - 文本运行方式：强制 CPU SBERT，运行时设置 `CUDA_VISIBLE_DEVICES=""`，避免 GPU 显存占用和 OOM 干扰。
 - 通信方式：ZeroMQ TCP，`msgpack` 序列化。
 
-本地拉回的结果目录：
+本地拉回的数值结果目录：
 
 ```text
 decentralized_truth_discovery/examples/outputs/remote_10_3_242_100_exp5b_50agent_time_memory/
 ```
 
+本地拉回的新闻摘要文本结果目录：
+
+```text
+decentralized_truth_discovery/examples/outputs/remote_10_3_242_100_exp5b_50agent_news_summary_text/
+```
+
 主要结果文件：
 
 ```text
-exp5b_numeric_dist_50agent_time_memory/summary_time_memory.csv
-exp5b_numeric_dist_50agent_time_memory/raw_runs.csv
-exp5b_text_dist_50agent_time_memory/summary_time_memory.csv
-exp5b_text_dist_50agent_time_memory/raw_runs.csv
-logs/exp5b_50agent_time_memory.log
+remote_10_3_242_100_exp5b_50agent_time_memory/exp5b_numeric_dist_50agent_time_memory/summary_time_memory.csv
+remote_10_3_242_100_exp5b_50agent_time_memory/exp5b_numeric_dist_50agent_time_memory/raw_runs.csv
+remote_10_3_242_100_exp5b_50agent_news_summary_text/summary_time_memory.csv
+remote_10_3_242_100_exp5b_50agent_news_summary_text/raw_runs.csv
+remote_10_3_242_100_exp5b_50agent_time_memory/logs/exp5b_50agent_time_memory.log
+remote_10_3_242_100_exp5b_50agent_news_summary_text/logs/exp5b_50agent_news_summary_text_time_memory.log
 ```
 
 ## 3. 分布式实验设计
@@ -122,13 +129,25 @@ num_workloads = 1
 batch_group_size = 5
 subset_samples = 1
 use_sbert = true
+input_text_json = /home/gao/data/data_agent-50_news-300/demo.json
 ```
+
+文本输入明确使用新闻摘要记录：`demo.json` 中 `response` 为字符串的条目，例如 object 为 `第1条新闻简短摘要` 的新闻摘要。价格记录是 `response` 为 dict 的条目，文本 loader 会过滤掉这些 dict 记录。
 
 文本实验总运行记录数为：
 
 ```text
 3 methods * 1 workload * 1 subset = 3 runs
 ```
+
+每条文本 run 的输入规模为：
+
+```text
+input_item_count = 250
+input_object_count = 5
+```
+
+其中 `paired_numeric_input_item_count=750` 只表示同一批 batch 中配套存在的价格记录数量，不是文本方法的实际输入。
 
 所有 3 条记录均成功。
 
@@ -231,9 +250,9 @@ elapsed_sec = method_compute_sec + network_sec
 
 | 方法 | runs | success | wall time(s) | elapsed+comm(s) | network(s) | total peak RSS(MB) | total peak delta(MB) | fleet peak RSS sum(MB) |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| `BasicTruth` | 1 | 1 | 8.8085 | 4.3751 | 0.0295 | 1807.9 | 658.1 | 951.1 |
-| `SemanticTruth` | 1 | 1 | 7.4944 | 3.0483 | 1.7768 | 46766.5 | 2569.7 | 45665.2 |
-| `SenteTruth` | 1 | 1 | 6.8595 | 2.4535 | 1.6375 | 46711.4 | 2487.5 | 45631.8 |
+| `BasicTruth` | 1 | 1 | 8.7821 | 4.3965 | 0.0386 | 1808.4 | 658.1 | 951.9 |
+| `SemanticTruth` | 1 | 1 | 7.6675 | 3.0371 | 1.7405 | 46792.4 | 2597.8 | 45684.1 |
+| `SenteTruth` | 1 | 1 | 7.9166 | 2.8730 | 1.8959 | 46779.8 | 2587.3 | 45690.7 |
 
 ### 8.1 文本结果解析
 
@@ -245,9 +264,9 @@ elapsed_sec = method_compute_sec + network_sec
 
 - worker fleet peak RSS 约 `951MB`，接近数值场景 worker 基线。
 - total peak RSS 约 `1.8GB`，显著低于 SemanticTruth/SenteTruth。
-- network time 只有 `0.0295s`，因为 worker 不执行 SBERT 编码，通信负担较低。
+- network time 只有 `0.0386s`，因为 worker 不执行 SBERT 编码，通信负担较低。
 
-但 `BasicTruth` 的 `elapsed+comm` 最高，为 `4.3751s`。原因是：
+但 `BasicTruth` 的 `elapsed+comm` 最高，为 `4.3965s`。原因是：
 
 - BasicTruth 要按 batch prefix 构建 TF-IDF implication。
 - TruthFinder 的 trust-confidence 更新逻辑比简单向量投票更重。
@@ -259,20 +278,20 @@ elapsed_sec = method_compute_sec + network_sec
 
 `SemanticTruth` 使用 SBERT，并且文本模式下 50 个 worker 会预加载 SBERT，以反映真实分布式部署中模型复制带来的内存 footprint。因此：
 
-- fleet peak RSS sum 达到约 `45665MB`。
-- total peak RSS 达到约 `46766MB`。
-- network time 为 `1.7768s`，明显高于 BasicTruth，因为 worker 端还要执行文本编码相关操作，并通过通信协议完成 gather/broadcast。
+- fleet peak RSS sum 达到约 `45684MB`。
+- total peak RSS 达到约 `46792MB`。
+- network time 为 `1.7405s`，明显高于 BasicTruth，因为 worker 端还要执行文本编码相关操作，并通过通信协议完成 gather/broadcast。
 
-时间上，`SemanticTruth` 的 `elapsed+comm` 为 `3.0483s`，低于 BasicTruth，高于 SenteTruth。原因是它不仅做语义 embedding，还包含双通道/软投票、source reliability、semantic affinity 等逻辑。
+时间上，`SemanticTruth` 的 `elapsed+comm` 为 `3.0371s`，低于 BasicTruth，高于 SenteTruth。原因是它不仅做语义 embedding，还包含双通道/软投票、source reliability、semantic affinity 等逻辑。
 
 #### SenteTruth
 
 `SenteTruth` 同样使用 SBERT，因此内存量级与 SemanticTruth 接近：
 
-- fleet peak RSS sum 约 `45632MB`
-- total peak RSS 约 `46711MB`
+- fleet peak RSS sum 约 `45691MB`
+- total peak RSS 约 `46780MB`
 
-但它的 `elapsed+comm` 最低，为 `2.4535s`。原因是 SenteTruth 的文本聚合逻辑更直接：
+但它的 `elapsed+comm` 最低，为 `2.8730s`。原因是 SenteTruth 的文本聚合逻辑更直接：
 
 - SBERT 编码文本。
 - 计算 cosine similarity。
@@ -328,6 +347,9 @@ BasicTruth 文本路径不预加载 SBERT，所以它的 worker fleet peak RSS �
    - 所有记录 `selected_agent_count=50`。
    - 所有记录 `fleet_proc_count=50`。
    - `use_sbert=True`。
+   - 所有记录 `input_text_json=/home/gao/data/data_agent-50_news-300/demo.json`。
+   - 所有记录 `input_item_count=250`，表示实际输入为 250 条新闻摘要文本。
+   - 所有记录 `input_object_count=5`，表示 5 条新闻摘要对象。
 
 3. 分布式核验：
    - 所有记录 `mode=dist-tcp`。

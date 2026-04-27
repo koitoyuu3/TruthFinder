@@ -1,0 +1,93 @@
+Data numeric: /home/gao/data/data_agent-50_news-300/num_demo.json
+Data text   : /home/gao/data/data_agent-50_news-300/demo.json
+Output root : /home/gao/TruthFinder_exp5b/outputs
+SBERT model : sentence-transformers/all-MiniLM-L6-v2
+Python      : /home/gao/anaconda3/bin/python
+Run domain  : text
+============================================================================================================
+Distributed agent scalability benchmark — mode=dist-tcp
+============================================================================================================
+Input JSON      : /home/gao/data/data_agent-50_news-300/num_demo.json
+Experiment ID   : exp5b_text_dist_50agent_BasicTruth
+Output dir      : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_BasicTruth
+Workloads       : 1 | batch_group_size=5
+Agent counts    : [50]
+Methods         : ['BasicTruth']
+Coord endpoint  : tcp://127.0.0.1:5588
+Serialization   : msgpack
+netem delay (ms): 0.0
+Text mode       : True (use_sbert=True)
+Input text JSON : /home/gao/data/data_agent-50_news-300/demo.json
+Composite weights: time=0.45 memory=0.35 quality=0.20
+[dist-tcp|workload 1] agents=50 subset=1/1 method=BasicTruth status=OK time=4.396535s wall=8.782114s memΔ=658.070312MB net=0.038583s bytes=149356 p95=6.201047ms rpc=350 fleetMem=0.000000MB
+
+Time/memory summary:
+    method  agent_count  success_count  run_count  mean_wall_time_sec  mean_elapsed_with_comm_sec  mean_network_sec  mean_total_peak_delta_rss_mb  mean_coord_peak_delta_rss_mb  mean_fleet_peak_delta_rss_mb_sum
+BasicTruth           50              1          1              8.7821                      4.3965            0.0386                      658.0703                      658.0703                               0.0
+
+Hybrid check: Hybrid ranking constraint disabled.
+raw runs              : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_BasicTruth/raw_runs.csv
+scored runs           : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_BasicTruth/scored_runs.csv
+method-agent summary  : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_BasicTruth/summary_by_method_agent_count.csv
+overall summary       : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_BasicTruth/summary_overall.csv
+time/memory summary   : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_BasicTruth/summary_time_memory.csv
+benchmark summary     : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_BasicTruth/benchmark_summary.json
+============================================================================================================
+Distributed agent scalability benchmark — mode=dist-tcp
+============================================================================================================
+Input JSON      : /home/gao/data/data_agent-50_news-300/num_demo.json
+Experiment ID   : exp5b_text_dist_50agent_SemanticTruth
+Output dir      : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_SemanticTruth
+Workloads       : 1 | batch_group_size=5
+Agent counts    : [50]
+Methods         : ['SemanticTruth']
+Coord endpoint  : tcp://127.0.0.1:5588
+Serialization   : msgpack
+netem delay (ms): 0.0
+Text mode       : True (use_sbert=True)
+Input text JSON : /home/gao/data/data_agent-50_news-300/demo.json
+Composite weights: time=0.45 memory=0.35 quality=0.20
+[dist-tcp|workload 1] agents=50 subset=1/1 method=SemanticTruth status=OK time=3.037112s wall=7.667514s memΔ=909.500000MB net=1.740469s bytes=120141 p95=1636.151623ms rpc=100 fleetMem=1688.253906MB
+
+Time/memory summary:
+       method  agent_count  success_count  run_count  mean_wall_time_sec  mean_elapsed_with_comm_sec  mean_network_sec  mean_total_peak_delta_rss_mb  mean_coord_peak_delta_rss_mb  mean_fleet_peak_delta_rss_mb_sum
+SemanticTruth           50              1          1              7.6675                      3.0371            1.7405                     2597.7539                         909.5                         1688.2539
+
+Hybrid check: Hybrid ranking constraint disabled.
+raw runs              : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_SemanticTruth/raw_runs.csv
+scored runs           : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_SemanticTruth/scored_runs.csv
+method-agent summary  : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_SemanticTruth/summary_by_method_agent_count.csv
+overall summary       : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_SemanticTruth/summary_overall.csv
+time/memory summary   : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_SemanticTruth/summary_time_memory.csv
+benchmark summary     : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_SemanticTruth/benchmark_summary.json
+============================================================================================================
+Distributed agent scalability benchmark — mode=dist-tcp
+============================================================================================================
+Input JSON      : /home/gao/data/data_agent-50_news-300/num_demo.json
+Experiment ID   : exp5b_text_dist_50agent_SenteTruth
+Output dir      : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_SenteTruth
+Workloads       : 1 | batch_group_size=5
+Agent counts    : [50]
+Methods         : ['SenteTruth']
+Coord endpoint  : tcp://127.0.0.1:5588
+Serialization   : msgpack
+netem delay (ms): 0.0
+Text mode       : True (use_sbert=True)
+Input text JSON : /home/gao/data/data_agent-50_news-300/demo.json
+Composite weights: time=0.45 memory=0.35 quality=0.20
+[dist-tcp|workload 1] agents=50 subset=1/1 method=SenteTruth status=OK time=2.873019s wall=7.916597s memΔ=890.726562MB net=1.895934s bytes=119841 p95=1805.680333ms rpc=100 fleetMem=1696.554688MB
+
+Time/memory summary:
+    method  agent_count  success_count  run_count  mean_wall_time_sec  mean_elapsed_with_comm_sec  mean_network_sec  mean_total_peak_delta_rss_mb  mean_coord_peak_delta_rss_mb  mean_fleet_peak_delta_rss_mb_sum
+SenteTruth           50              1          1              7.9166                       2.873            1.8959                     2587.2812                      890.7266                         1696.5547
+
+Hybrid check: Hybrid ranking constraint disabled.
+raw runs              : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_SenteTruth/raw_runs.csv
+scored runs           : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_SenteTruth/scored_runs.csv
+method-agent summary  : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_SenteTruth/summary_by_method_agent_count.csv
+overall summary       : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_SenteTruth/summary_overall.csv
+time/memory summary   : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_SenteTruth/summary_time_memory.csv
+benchmark summary     : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_SenteTruth/benchmark_summary.json
+Done.
+Numeric output: /home/gao/TruthFinder_exp5b/outputs/exp5b_numeric_dist_50agent_time_memory
+Text output   : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent_time_memory

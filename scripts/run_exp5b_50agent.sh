@@ -26,6 +26,7 @@ Environment overrides:
   NUMERIC_PORT              default: 5560
   TEXT_PORT                 default: 5588
   PYTHON_BIN                default: python3
+  RUN_DOMAIN                default: both (both|numeric|text)
   TRUTHFINDER_SBERT_MODEL    default: sentence-transformers/all-MiniLM-L6-v2
 EOF
 }
@@ -64,6 +65,7 @@ WORKER_SPAWN_STAGGER="${WORKER_SPAWN_STAGGER:-0.5}"
 NUMERIC_PORT="${NUMERIC_PORT:-5560}"
 TEXT_PORT="${TEXT_PORT:-5588}"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
+RUN_DOMAIN="${RUN_DOMAIN:-both}"
 export TRUTHFINDER_SBERT_MODEL="${TRUTHFINDER_SBERT_MODEL:-sentence-transformers/all-MiniLM-L6-v2}"
 export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}"
 export TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE:-1}"
@@ -75,6 +77,7 @@ echo "Data text   : ${TEXT_JSON}"
 echo "Output root : ${OUTPUT_ROOT}"
 echo "SBERT model : ${TRUTHFINDER_SBERT_MODEL}"
 echo "Python      : ${PYTHON_BIN}"
+echo "Run domain  : ${RUN_DOMAIN}"
 
 run_numeric_method() {
   local method="$1"
@@ -162,15 +165,28 @@ TEXT_METHODS=(BasicTruth SemanticTruth SenteTruth)
 NUMERIC_FINAL_DIR="${OUTPUT_ROOT}/exp5b_numeric_dist_50agent_time_memory"
 TEXT_FINAL_DIR="${OUTPUT_ROOT}/exp5b_text_dist_50agent_time_memory"
 
-for method in "${NUMERIC_METHODS[@]}"; do
-  run_numeric_method "${method}"
-done
-merge_domain_outputs numeric "${NUMERIC_FINAL_DIR}" "${NUMERIC_METHODS[@]}"
+case "${RUN_DOMAIN}" in
+  both|numeric)
+    for method in "${NUMERIC_METHODS[@]}"; do
+      run_numeric_method "${method}"
+    done
+    merge_domain_outputs numeric "${NUMERIC_FINAL_DIR}" "${NUMERIC_METHODS[@]}"
+    ;;
+esac
 
-for method in "${TEXT_METHODS[@]}"; do
-  run_text_method "${method}"
-done
-merge_domain_outputs text "${TEXT_FINAL_DIR}" "${TEXT_METHODS[@]}"
+case "${RUN_DOMAIN}" in
+  both|text)
+    for method in "${TEXT_METHODS[@]}"; do
+      run_text_method "${method}"
+    done
+    merge_domain_outputs text "${TEXT_FINAL_DIR}" "${TEXT_METHODS[@]}"
+    ;;
+esac
+
+if [[ "${RUN_DOMAIN}" != "both" && "${RUN_DOMAIN}" != "numeric" && "${RUN_DOMAIN}" != "text" ]]; then
+  echo "Invalid RUN_DOMAIN=${RUN_DOMAIN}; expected both, numeric, or text." >&2
+  exit 2
+fi
 
 echo "Done."
 echo "Numeric output: ${NUMERIC_FINAL_DIR}"
