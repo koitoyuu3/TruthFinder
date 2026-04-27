@@ -108,7 +108,11 @@ class SenteTruthFinder:
         
         # 句子编码器
         if self.use_sbert:
-            model_name = sbert_model or 'paraphrase-multilingual-MiniLM-L12-v2'
+            model_name = (
+                sbert_model
+                or os.environ.get("TRUTHFINDER_SBERT_MODEL")
+                or 'paraphrase-multilingual-MiniLM-L12-v2'
+            )
             try:
                 model_source = model_name
                 if self.local_files_only and not os.path.isdir(model_name):

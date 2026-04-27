@@ -1,0 +1,46 @@
+============================================================================================================
+Distributed agent scalability benchmark — mode=dist-tcp
+============================================================================================================
+Input JSON      : /home/gao/data/data_agent-50_news-300/num_demo.json
+Experiment ID   : exp5b_text_dist_50agent
+Output dir      : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent
+Workloads       : 1 | batch_group_size=5
+Agent counts    : [2, 4, 8, 16, 32, 50]
+Methods         : ['BasicTruth', 'SemanticTruth', 'SenteTruth']
+Coord endpoint  : tcp://127.0.0.1:5588
+Serialization   : msgpack
+netem delay (ms): 0.0
+Text mode       : True (use_sbert=True)
+Input text JSON : /home/gao/data/data_agent-50_news-300/demo.json
+Composite weights: time=0.45 memory=0.35 quality=0.20
+[dist-tcp|workload 1] agents=2 subset=1/1 method=BasicTruth status=OK time=0.089981s wall=4.387209s memΔ=655.140625MB net=0.004896s bytes=4185 p95=0.901924ms rpc=14 fleetMem=0.000000MB
+[dist-tcp|workload 1] agents=2 subset=1/1 method=SemanticTruth status=OK time=0.358956s wall=0.360692s memΔ=87.523438MB net=0.056778s bytes=3026 p95=51.349884ms rpc=4 fleetMem=58.500000MB
+[dist-tcp|workload 1] agents=2 subset=1/1 method=SenteTruth status=OK time=0.391489s wall=0.392961s memΔ=0.375000MB net=0.132414s bytes=3014 p95=55.926066ms rpc=4 fleetMem=11.074219MB
+[dist-tcp|workload 1] agents=4 subset=1/1 method=BasicTruth status=OK time=0.150625s wall=0.151839s memΔ=0.000000MB net=0.005667s bytes=8544 p95=0.772968ms rpc=28 fleetMem=0.000000MB
+[dist-tcp|workload 1] agents=4 subset=1/1 method=SemanticTruth status=OK time=0.467109s wall=0.468745s memΔ=72.601562MB net=0.150665s bytes=6226 p95=120.598225ms rpc=8 fleetMem=111.433594MB
+[dist-tcp|workload 1] agents=4 subset=1/1 method=SenteTruth status=OK time=0.596991s wall=0.598960s memΔ=61.054688MB net=0.322754s bytes=6202 p95=159.464352ms rpc=8 fleetMem=25.050781MB
+[dist-tcp|workload 1] agents=8 subset=1/1 method=BasicTruth status=OK time=0.339540s wall=0.340784s memΔ=0.003906MB net=0.009592s bytes=17783 p95=1.119198ms rpc=56 fleetMem=0.000000MB
+[dist-tcp|workload 1] agents=8 subset=1/1 method=SemanticTruth status=OK time=0.673391s wall=0.675053s memΔ=0.062500MB net=0.281810s bytes=13102 p95=279.270057ms rpc=16 fleetMem=260.054688MB
+[dist-tcp|workload 1] agents=8 subset=1/1 method=SenteTruth status=OK time=0.687972s wall=0.691044s memΔ=24.832031MB net=0.348557s bytes=13054 p95=320.706852ms rpc=16 fleetMem=45.062500MB
+[dist-tcp|workload 1] agents=16 subset=1/1 method=BasicTruth status=OK time=0.902810s wall=0.904056s memΔ=0.464844MB net=0.015145s bytes=38349 p95=1.822948ms rpc=112 fleetMem=0.000000MB
+[dist-tcp|workload 1] agents=16 subset=1/1 method=SemanticTruth status=OK time=1.080997s wall=1.082851s memΔ=99.277344MB net=0.544527s bytes=28987 p95=496.561326ms rpc=32 fleetMem=502.761719MB
+[dist-tcp|workload 1] agents=16 subset=1/1 method=SenteTruth status=OK time=0.990595s wall=0.992351s memΔ=0.000000MB net=0.541698s bytes=28891 p95=519.675214ms rpc=32 fleetMem=90.523438MB
+[dist-tcp|workload 1] agents=32 subset=1/1 method=BasicTruth status=OK time=2.499430s wall=2.502651s memΔ=0.000000MB net=0.031504s bytes=85075 p95=4.415359ms rpc=224 fleetMem=0.000000MB
+[dist-tcp|workload 1] agents=32 subset=1/1 method=SemanticTruth status=OK time=1.904753s wall=1.906551s memΔ=158.785156MB net=1.102924s bytes=66381 p95=1022.320852ms rpc=64 fleetMem=1074.476562MB
+[dist-tcp|workload 1] agents=32 subset=1/1 method=SenteTruth status=OK time=1.617274s wall=1.619118s memΔ=4.914062MB net=1.002646s bytes=66189 p95=923.821114ms rpc=64 fleetMem=191.738281MB
+[dist-tcp|workload 1] agents=50 subset=1/1 method=BasicTruth status=OK time=4.382231s wall=4.385499s memΔ=0.136719MB net=0.031243s bytes=149356 p95=6.485451ms rpc=350 fleetMem=0.000000MB
+[dist-tcp|workload 1] agents=50 subset=1/1 method=SemanticTruth status=OK time=2.941531s wall=2.942956s memΔ=49.953125MB net=1.584339s bytes=120141 p95=1459.521364ms rpc=100 fleetMem=1600.789062MB
+[dist-tcp|workload 1] agents=50 subset=1/1 method=SenteTruth status=OK time=2.349243s wall=2.351008s memΔ=3.855469MB net=1.515204s bytes=119841 p95=1452.929588ms rpc=100 fleetMem=282.195312MB
+
+Overall summary:
+       method  overall_mean_composite_rank  overall_mean_composite_score  overall_mean_elapsed_sec  overall_mean_peak_delta_rss_mb  overall_mean_source_score_pct  runtime_scaling_exponent  memory_scaling_exponent
+   BasicTruth                       1.5000                       75.2504                    1.3941                        109.2910                        87.6317                    1.2496                  -2.3271
+   SenteTruth                       2.1667                       42.4502                    1.1056                         15.8385                        50.0000                    0.5308                   0.1447
+SemanticTruth                       2.3333                       40.7676                    1.2378                         78.0339                        85.1712                    0.6561                   0.2940
+
+Hybrid check: Hybrid average composite rank=2.333, required <= 3.
+raw runs              : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent/raw_runs.csv
+scored runs           : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent/scored_runs.csv
+method-agent summary  : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent/summary_by_method_agent_count.csv
+overall summary       : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent/summary_overall.csv
+benchmark summary     : /home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent/benchmark_summary.json

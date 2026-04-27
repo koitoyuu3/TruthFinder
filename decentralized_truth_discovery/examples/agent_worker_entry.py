@@ -105,7 +105,12 @@ def _handle(message: Dict[str, Any], state: Dict[str, Any]) -> Dict[str, Any]:
     if msg_type == "process_text_batch":
         start = time.perf_counter()
         items = message.get("items") or []
-        encoded_count, embed_dim = _encode_text_slice(state, items)
+        # BasicTruth's text path is TF-IDF based; only semantic methods should
+        # pay the per-worker SBERT encoding cost in the distributed benchmark.
+        if message.get("method") == "BasicTruth":
+            encoded_count, embed_dim = 0, 0
+        else:
+            encoded_count, embed_dim = _encode_text_slice(state, items)
         local_compute_sec = time.perf_counter() - start
         state["last_item_count"] = len(items)
         return {

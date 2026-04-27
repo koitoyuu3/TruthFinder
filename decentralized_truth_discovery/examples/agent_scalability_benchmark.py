@@ -710,7 +710,7 @@ def _run_numeric_method_by_name(method_name: str, numeric_df: pd.DataFrame) -> t
     raise ValueError(f"Unsupported method: {method_name}")
 
 
-TEXT_CAPABLE_METHODS = ("SemanticTruth", "SenteTruth")
+TEXT_CAPABLE_METHODS = ("BasicTruth", "SemanticTruth", "SenteTruth")
 
 
 def _run_text_method_by_name(
@@ -719,18 +719,50 @@ def _run_text_method_by_name(
     *,
     use_sbert: bool = True,
 ) -> tuple[Dict[str, float], float]:
-    """Text-mode aggregation for the two text-capable methods.
+    """Text-mode aggregation for the text-capable methods.
 
     SemanticTruth runs the dual-channel pipeline with an empty numeric channel
-    (text-only workload), and SenteTruth ingests the text fact directly.
+    (text-only workload), SenteTruth ingests the text fact directly, and
+    BasicTruth uses TF-IDF implication over the current prefix of text facts.
     `use_sbert=True` exercises the real sentence-transformer model so that
     per-process RSS reflects the model's footprint.
     """
-    from decentralized_truth_discovery.core import SemanticTruthFinder
+    from decentralized_truth_discovery.core import BasicTruthFinder, SemanticTruthFinder
     from decentralized_truth_discovery.core.sente_truth_finder import SenteTruthFinder
 
     if text_df is None or text_df.empty:
         return {}, 0.0
+
+    if method_name == "BasicTruth":
+        start = time.perf_counter()
+        model = _run_silently(
+            lambda: BasicTruthFinder(
+                implication=lambda _f1, _f2: 0.0,
+                enable_zk_proof=False,
+            )
+        )
+        for batch_index in sorted(text_df["batch_index"].unique()):
+            group_df = text_df[text_df["batch_index"] == batch_index][
+                ["website", "fact", "object", "batch_index"]
+            ].copy()
+            prefix_texts = (
+                text_df[text_df["batch_index"] <= batch_index]["fact"]
+                .astype(str)
+                .tolist()
+            )
+            _run_silently(
+                lambda grp=group_df, texts=prefix_texts: model.process_batch(
+                    grp,
+                    implication_texts=texts,
+                )
+            )
+        elapsed = time.perf_counter() - start
+        source_scores = {
+            str(website): float(score)
+            for website, score in model.website_trustworthiness.items()
+            if pd.notna(score)
+        }
+        return source_scores, elapsed
 
     if method_name == "SemanticTruth":
         start = time.perf_counter()

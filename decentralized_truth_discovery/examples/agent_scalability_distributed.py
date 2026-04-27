@@ -432,6 +432,114 @@ def _build_unique_endpoint(base: str) -> str:
     return base + (f"-{uuid.uuid4().hex[:8]}" if base.startswith("ipc://") else "")
 
 
+def _summarize_time_memory(raw_results_df: pd.DataFrame) -> pd.DataFrame:
+    """Summarize exp5b with only the scalability metrics: time and memory.
+
+    Time is the full per-method protocol wall time after the worker pool is
+    ready, so request/reply and reliability-broadcast communication are
+    included. Memory reports both coordinator RSS and the 50-worker fleet RSS;
+    for distributed runs the total footprint is coordinator + fleet.
+    """
+    df = raw_results_df.copy()
+    numeric_columns = [
+        "agent_count",
+        "success",
+        "elapsed_sec",
+        "wall_elapsed_sec",
+        "network_sec",
+        "peak_rss_mb",
+        "peak_delta_rss_mb",
+        "fleet_peak_rss_mb_sum",
+        "fleet_peak_delta_rss_mb_sum",
+        "fleet_peak_delta_rss_mb_max",
+    ]
+    for column in numeric_columns:
+        if column in df.columns and column != "success":
+            df[column] = pd.to_numeric(df[column], errors="coerce")
+
+    success_mask = df["success"].fillna(False).astype(bool)
+    fleet_peak = (
+        df["fleet_peak_rss_mb_sum"]
+        if "fleet_peak_rss_mb_sum" in df.columns
+        else pd.Series(np.nan, index=df.index)
+    )
+    fleet_delta = (
+        df["fleet_peak_delta_rss_mb_sum"]
+        if "fleet_peak_delta_rss_mb_sum" in df.columns
+        else pd.Series(np.nan, index=df.index)
+    )
+    coord_peak = (
+        df["peak_rss_mb"]
+        if "peak_rss_mb" in df.columns
+        else pd.Series(np.nan, index=df.index)
+    )
+    coord_delta = (
+        df["peak_delta_rss_mb"]
+        if "peak_delta_rss_mb" in df.columns
+        else pd.Series(np.nan, index=df.index)
+    )
+    df["total_peak_rss_mb"] = coord_peak + fleet_peak.fillna(0.0)
+    df.loc[coord_peak.isna(), "total_peak_rss_mb"] = np.nan
+    df["total_peak_delta_rss_mb"] = coord_delta + fleet_delta.fillna(0.0)
+    df.loc[coord_delta.isna(), "total_peak_delta_rss_mb"] = np.nan
+
+    metric_columns = [
+        "elapsed_sec",
+        "wall_elapsed_sec",
+        "network_sec",
+        "peak_rss_mb",
+        "peak_delta_rss_mb",
+        "fleet_peak_rss_mb_sum",
+        "fleet_peak_delta_rss_mb_sum",
+        "fleet_peak_delta_rss_mb_max",
+        "total_peak_rss_mb",
+        "total_peak_delta_rss_mb",
+    ]
+    for column in metric_columns:
+        if column in df.columns:
+            df.loc[~success_mask, column] = np.nan
+
+    summary_df = (
+        df.groupby(["method", "agent_count"], sort=False)
+        .agg(
+            run_count=("method", "size"),
+            success_count=("success", lambda series: int(pd.Series(series).fillna(False).sum())),
+            mean_wall_time_sec=("wall_elapsed_sec", "mean"),
+            std_wall_time_sec=("wall_elapsed_sec", "std"),
+            mean_elapsed_with_comm_sec=("elapsed_sec", "mean"),
+            mean_network_sec=("network_sec", "mean"),
+            mean_coord_peak_rss_mb=("peak_rss_mb", "mean"),
+            mean_coord_peak_delta_rss_mb=("peak_delta_rss_mb", "mean"),
+            mean_fleet_peak_rss_mb_sum=("fleet_peak_rss_mb_sum", "mean"),
+            mean_fleet_peak_delta_rss_mb_sum=("fleet_peak_delta_rss_mb_sum", "mean"),
+            mean_fleet_peak_delta_rss_mb_max=("fleet_peak_delta_rss_mb_max", "mean"),
+            mean_total_peak_rss_mb=("total_peak_rss_mb", "mean"),
+            mean_total_peak_delta_rss_mb=("total_peak_delta_rss_mb", "mean"),
+        )
+        .reset_index()
+    )
+    summary_df["success_rate"] = summary_df["success_count"] / summary_df["run_count"]
+    ordered_columns = [
+        "method",
+        "agent_count",
+        "run_count",
+        "success_count",
+        "success_rate",
+        "mean_wall_time_sec",
+        "std_wall_time_sec",
+        "mean_elapsed_with_comm_sec",
+        "mean_network_sec",
+        "mean_total_peak_rss_mb",
+        "mean_total_peak_delta_rss_mb",
+        "mean_coord_peak_rss_mb",
+        "mean_coord_peak_delta_rss_mb",
+        "mean_fleet_peak_rss_mb_sum",
+        "mean_fleet_peak_delta_rss_mb_sum",
+        "mean_fleet_peak_delta_rss_mb_max",
+    ]
+    return summary_df[ordered_columns]
+
+
 def _run_benchmark(args: argparse.Namespace) -> int:
     input_json_path = os.path.abspath(args.input_json)
     all_batches = _load_batches(input_json_path)
@@ -597,6 +705,7 @@ def _run_benchmark(args: argparse.Namespace) -> int:
     )
     method_agent_summary_df = _summarize_by_method_agent(scored_results_df)
     overall_summary_df = _summarize_overall(scored_results_df, method_agent_summary_df)
+    time_memory_summary_df = _summarize_time_memory(raw_results_df)
     effective_top_k = args.hybrid_top_k if HYBRID_METHOD_NAME in methods else 0
     hybrid_check = _evaluate_hybrid_requirement(
         overall_summary_df,
@@ -608,12 +717,14 @@ def _run_benchmark(args: argparse.Namespace) -> int:
     scored_results_path = os.path.join(output_dir, "scored_runs.csv")
     method_agent_summary_path = os.path.join(output_dir, "summary_by_method_agent_count.csv")
     overall_summary_path = os.path.join(output_dir, "summary_overall.csv")
+    time_memory_summary_path = os.path.join(output_dir, "summary_time_memory.csv")
     benchmark_summary_path = os.path.join(output_dir, "benchmark_summary.json")
 
     raw_results_df.to_csv(raw_results_path, index=False)
     scored_results_df.to_csv(scored_results_path, index=False)
     method_agent_summary_df.to_csv(method_agent_summary_path, index=False)
     overall_summary_df.to_csv(overall_summary_path, index=False)
+    time_memory_summary_df.to_csv(time_memory_summary_path, index=False)
     _write_json(
         benchmark_summary_path,
         {
@@ -646,27 +757,31 @@ def _run_benchmark(args: argparse.Namespace) -> int:
                 "scored_runs_csv": scored_results_path,
                 "summary_by_method_agent_count_csv": method_agent_summary_path,
                 "summary_overall_csv": overall_summary_path,
+                "summary_time_memory_csv": time_memory_summary_path,
             },
         },
     )
 
-    print("\nOverall summary:")
+    print("\nTime/memory summary:")
     summary_columns = [
         "method",
-        "overall_mean_composite_rank",
-        "overall_mean_composite_score",
-        "overall_mean_elapsed_sec",
-        "overall_mean_peak_delta_rss_mb",
-        "overall_mean_source_score_pct",
-        "runtime_scaling_exponent",
-        "memory_scaling_exponent",
+        "agent_count",
+        "success_count",
+        "run_count",
+        "mean_wall_time_sec",
+        "mean_elapsed_with_comm_sec",
+        "mean_network_sec",
+        "mean_total_peak_delta_rss_mb",
+        "mean_coord_peak_delta_rss_mb",
+        "mean_fleet_peak_delta_rss_mb_sum",
     ]
-    print(overall_summary_df[summary_columns].round(4).to_string(index=False))
+    print(time_memory_summary_df[summary_columns].round(4).to_string(index=False))
     print(f"\nHybrid check: {hybrid_check['message']}")
     print(f"raw runs              : {raw_results_path}")
     print(f"scored runs           : {scored_results_path}")
     print(f"method-agent summary  : {method_agent_summary_path}")
     print(f"overall summary       : {overall_summary_path}")
+    print(f"time/memory summary   : {time_memory_summary_path}")
     print(f"benchmark summary     : {benchmark_summary_path}")
 
     return 0 if hybrid_check.get("passed", False) else 2
@@ -712,53 +827,75 @@ def _execute_subset(
     if args.mode != "dist-tcp":
         raise ValueError(f"Unknown mode: {args.mode}")
 
-    # Distributed: spawn a fresh worker pool per subset to keep agent-set
-    # membership clean (workers' DEALER identities are tied to agent ids).
+    # Distributed: spawn fresh worker pools per subset/method group to keep
+    # agent-set membership clean (workers' DEALER identities are tied to agent
+    # ids) and to avoid charging BasicTruth's TF-IDF text path for SBERT preload
+    # memory used only by SemanticTruth/SenteTruth.
     coord_addr = args.coord_addr
-    pool = WorkerPool(
-        agent_ids=selected_agents,
-        coord_addr=coord_addr,
-        serialization=args.serialization,
-        python_executable=sys.executable,
-        preload_sbert=bool(args.text_mode and args.use_sbert),
-        spawn_stagger_sec=args.worker_spawn_stagger_sec,
-    )
-    with _coord_session(
-        agent_ids=selected_agents,
-        coord_addr=coord_addr,
-        serialization=args.serialization,
-    ) as coord:
-        pool.start()
-        try:
-            _drain_hellos(coord, selected_agents, timeout_sec=args.worker_startup_timeout_sec)
-            sampler_seed = MultiProcessSampler(interval_sec=args.memory_sample_interval)
-            for method_name in methods:
-                row = _run_distributed(
-                    method_name=method_name,
-                    numeric_df=filtered_df.copy(),
-                    text_df=text_payload.copy() if text_payload is not None else None,
-                    websites=websites,
-                    selected_agents=selected_agents,
-                    coord=coord,
-                    pool=pool,
-                    proc_sampler=sampler_seed,
-                    memory_sample_interval=args.memory_sample_interval,
-                    use_sbert=bool(args.use_sbert),
-                )
-                _print_progress(
-                    mode=args.mode,
-                    workload_index=workload.workload_index,
-                    agent_count=agent_count,
-                    subset_index=subset_offset,
-                    total_subsets=total_subsets,
-                    method_name=method_name,
-                    result_row=row,
-                )
-                rows.append(row)
-        finally:
-            errors = pool.shutdown(coord)
-            for err in errors:
-                print(f"[shutdown warning] {err}", file=sys.stderr)
+
+    def _needs_worker_sbert(method_name: str) -> bool:
+        return bool(
+            args.text_mode
+            and args.use_sbert
+            and method_name in {"SemanticTruth", "SenteTruth"}
+        )
+
+    method_groups: List[Tuple[bool, List[str]]] = []
+    for method_name in methods:
+        preload_sbert = _needs_worker_sbert(method_name)
+        if method_groups and method_groups[-1][0] == preload_sbert:
+            method_groups[-1][1].append(method_name)
+        else:
+            method_groups.append((preload_sbert, [method_name]))
+
+    for preload_sbert, grouped_methods in method_groups:
+        pool = WorkerPool(
+            agent_ids=selected_agents,
+            coord_addr=coord_addr,
+            serialization=args.serialization,
+            python_executable=sys.executable,
+            preload_sbert=preload_sbert,
+            spawn_stagger_sec=args.worker_spawn_stagger_sec,
+        )
+        with _coord_session(
+            agent_ids=selected_agents,
+            coord_addr=coord_addr,
+            serialization=args.serialization,
+        ) as coord:
+            pool.start()
+            try:
+                _drain_hellos(coord, selected_agents, timeout_sec=args.worker_startup_timeout_sec)
+                sampler_seed = MultiProcessSampler(interval_sec=args.memory_sample_interval)
+                for method_name in grouped_methods:
+                    row = _run_distributed(
+                        method_name=method_name,
+                        numeric_df=filtered_df.copy(),
+                        text_df=text_payload.copy() if text_payload is not None else None,
+                        websites=websites,
+                        selected_agents=selected_agents,
+                        coord=coord,
+                        pool=pool,
+                        proc_sampler=sampler_seed,
+                        memory_sample_interval=args.memory_sample_interval,
+                        use_sbert=bool(args.use_sbert),
+                    )
+                    _print_progress(
+                        mode=args.mode,
+                        workload_index=workload.workload_index,
+                        agent_count=agent_count,
+                        subset_index=subset_offset,
+                        total_subsets=total_subsets,
+                        method_name=method_name,
+                        result_row=row,
+                    )
+                    rows.append(row)
+            finally:
+                errors = pool.shutdown(coord)
+                for err in errors:
+                    print(f"[shutdown warning] {err}", file=sys.stderr)
+        # Give ZeroMQ a brief moment to release the TCP bind before the next
+        # method group reuses the same coordinator endpoint.
+        time.sleep(0.05)
     return rows
 
 
@@ -815,7 +952,7 @@ def parse_args() -> argparse.Namespace:
         "--text-mode",
         action="store_true",
         help=(
-            "Run text-mode workloads (SemanticTruth/SenteTruth with SBERT) "
+            "Run text-mode workloads (BasicTruth/SemanticTruth/SenteTruth) "
             "instead of the numeric pipeline. Requires --input-text-json."
         ),
     )

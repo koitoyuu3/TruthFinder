@@ -1,0 +1,61 @@
+{
+  "experiment_id": "exp5b_text_dist_50agent",
+  "mode": "dist-tcp",
+  "config": {
+    "input_json": "/home/gao/data/data_agent-50_news-300/num_demo.json",
+    "start_batch": 1,
+    "batch_group_size": 5,
+    "num_workloads": 1,
+    "agent_counts": [
+      2,
+      4,
+      8,
+      16,
+      32,
+      50
+    ],
+    "subset_samples": 1,
+    "subset_seed": 20260407,
+    "selection_strategy": "random",
+    "methods": [
+      "BasicTruth",
+      "SemanticTruth",
+      "SenteTruth"
+    ],
+    "weights": {
+      "time": 0.45,
+      "memory": 0.35,
+      "quality": 0.2
+    },
+    "hybrid_top_k": 3,
+    "transport": "zmq-tcp",
+    "serialization": "msgpack",
+    "coord_addr": "tcp://127.0.0.1:5588",
+    "netem_delay_ms": 0.0,
+    "text_mode": true,
+    "input_text_json": "/home/gao/data/data_agent-50_news-300/demo.json",
+    "use_sbert": true
+  },
+  "workloads": [
+    {
+      "workload_index": 1,
+      "batch_start": 1,
+      "batch_end": 5,
+      "batch_group_size": 5
+    }
+  ],
+  "hybrid_check": {
+    "enabled": true,
+    "passed": true,
+    "hybrid_method_name": "SemanticTruth",
+    "hybrid_average_composite_rank": 2.3333333333333335,
+    "required_top_k": 3,
+    "message": "Hybrid average composite rank=2.333, required <= 3."
+  },
+  "artifacts": {
+    "raw_runs_csv": "/home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent/raw_runs.csv",
+    "scored_runs_csv": "/home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent/scored_runs.csv",
+    "summary_by_method_agent_count_csv": "/home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent/summary_by_method_agent_count.csv",
+    "summary_overall_csv": "/home/gao/TruthFinder_exp5b/outputs/exp5b_text_dist_50agent/summary_overall.csv"
+  }
+}

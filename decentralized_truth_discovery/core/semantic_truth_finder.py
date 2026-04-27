@@ -77,7 +77,7 @@ class SemanticTruthFinder:
         self.consistency_sem_weight = self.semantic_numeric_alpha
         self.consistency_num_weight = 1.0 - self.semantic_numeric_alpha
         self.use_sbert = bool(use_sbert) and HAS_SBERT
-        self.sbert_model = sbert_model
+        self.sbert_model = os.environ.get("TRUTHFINDER_SBERT_MODEL") or sbert_model
         if local_files_only is None:
             local_files_only = (
                 os.environ.get("HF_HUB_OFFLINE", "0") == "1"
