@@ -10,9 +10,9 @@ skinparam backgroundColor white
 skinparam shadowing false
 skinparam sequenceMessageAlign center
 skinparam responseMessageBelowArrow true
-skinparam ParticipantPadding 30
-skinparam BoxPadding 12
-skinparam ArrowThickness 1
+skinparam ParticipantPadding 15
+skinparam BoxPadding 6
+skinparam ArrowThickness 2
 skinparam RoundCorner 6
 skinparam SequenceBoxBackgroundColor white
 skinparam SequenceBoxBorderColor #555555
@@ -22,87 +22,73 @@ skinparam ParticipantBackgroundColor white
 skinparam ParticipantBorderColor #555555
 skinparam NoteBackgroundColor white
 skinparam NoteBorderColor #555555
-skinparam SequenceMessageAlignment center
-skinparam MaxMessageSize 200
+skinparam MaxMessageSize 400
 
-box "On-chain Domain"
-participant "User Contract" as UC
-participant "Oracle Contract" as OC
+skinparam DefaultFontSize 28
+skinparam SequenceGroupFontSize 28
+skinparam SequenceTitleFontSize 32
+skinparam ParticipantFontSize 26
+skinparam NoteFontSize 26
+skinparam SequenceMessageFontSize 26
+skinparam SequenceBoxFontSize 26
+skinparam SequenceDividerFontSize 26
+
+box "On-chain"
+participant "UserContract" as UC
+participant "OracleContract" as OC
 end box
 
-box "Off-chain Domain"
-participant "Oracle Network" as Network
-participant "Oracle Node\n(Autonomous Agent)" as Agent
-participant "Truth Discovery" as TD
-participant "ZKP Prover" as Prover
+box "Off-chain"
+participant "OracleNetwork" as Net
+participant "OracleNode" as Ag
+participant "TruthDiscovery" as TD
+participant "ZKProver" as ZK
 end box
 
-group Query submission and event emission
-UC -> OC : submit oracle query
+== Query Phase ==
+
+UC -> OC : submit query
 activate OC
-OC -> OC : record query metadata and emit event
-OC --> Network : notify query event
-end
+OC -> OC : record & emit event
+OC --> Net : query event
+activate Net
 
-activate Network
+== Evidence Collection  //[same flow on nodes 1...n]// ==
 
-group Parallel agent evidence collection (for each oracle node n)
-par
-note over Network, Agent #FFFFFF: **Agent 1**
-Network -> Agent : dispatch query
-activate Agent
-Agent -> Agent : RetrieveEvidence
-Agent -> Agent : AgentExtractClaims
-Agent --> Network : return claim report
-deactivate Agent
-else
-note over Network, Agent #FFFFFF: **Agent 2**
-Network -> Agent : dispatch query
-activate Agent
-Agent -> Agent : RetrieveEvidence
-Agent -> Agent : AgentExtractClaims
-Agent --> Network : return claim report
-deactivate Agent
-else
-note over Network, Agent #FFFFFF: **Agent n**
-Network -> Agent : dispatch query
-activate Agent
-Agent -> Agent : RetrieveEvidence
-Agent -> Agent : AgentExtractClaims
-Agent --> Network : return claim report
-deactivate Agent
-end
-end
+Net -> Ag : dispatch query
+activate Ag
+Ag -> Ag : RetrieveEvidence
+Ag -> Ag : ExtractClaims
+Ag --> Net : claim report
+deactivate Ag
 
-group Robust truth discovery aggregation
-Network -> TD : submit heterogeneous claim reports
+== Truth Discovery ==
+
+Net -> TD : claim reports
 activate TD
-TD -> TD : build TF-IDF vocabulary over textual claims
-TD -> TD : TruthDiscoveryAggregate
-TD --> Network : output aggregated result and node reliabilities
+TD -> TD : Aggregate
+TD --> Net : result + reliabilities
 deactivate TD
-end
 
-group Zero-knowledge proof generation
-Network -> Prover : GenerateProof
-activate Prover
-Prover -> Prover : encode truth discovery pipeline as Circom circuit
-Prover -> Prover : construct witness from per-node reports\nand intermediate states
-Prover --> Network : return proof
-deactivate Prover
-end
+== ZK Proof ==
 
-group On-chain submission and verification
-Network -> OC : reporter submits aggregated result and proof
+Net -> ZK : GenerateProof
+activate ZK
+ZK -> ZK : encode as Circom circuit
+ZK -> ZK : construct witness
+ZK --> Net : proof
+deactivate ZK
+
+== On-chain Verification ==
+
+Net -> OC : result + proof
 OC -> OC : VerifyProof
-alt verification succeeds
-OC -> OC : store finalized claim-level results
-OC --> UC : finalized semantic output available
-else verification fails
-OC --> Network : reject submission
+alt success
+OC -> OC : store results
+OC --> UC : output available
+else failure
+OC --> Net : reject
 end
 deactivate OC
-end
-
-deactivate Network
+deactivate Net
 @enduml

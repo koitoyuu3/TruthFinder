@@ -174,8 +174,8 @@ class Groth16TruthAggregationEngine:
     """
     SNARK 电路级证明引擎（circom1 + snarkjs）。
 
-    证明语义：
-    - 对每个分组证明 `claimed_weighted_sum == Σ(value_i * weight_i)`
+    证明语义（与 SemanticTruth 算法对齐）：
+    - 对每个分组证明 `claimed_truth` 是 (values, weights) 的加权中位数
     - 同时证明 `claimed_total_weight == Σ(weight_i)`
     - 并把 `statement_hash` 作为公开输出携带
     """
@@ -205,11 +205,76 @@ class Groth16TruthAggregationEngine:
     def _circuit_text(self, n_sources: int) -> str:
         n = int(n_sources)
         return f"""
+// ---- Inline helpers (self-contained, no circomlib dependency) ----
+
+template Num2Bits(n) {{
+    signal input in;
+    signal output out[n];
+    var lc = 0;
+    for (var i = 0; i < n; i++) {{
+        out[i] <-- (in >> i) & 1;
+        out[i] * (out[i] - 1) === 0;
+        lc += out[i] * (1 << i);
+    }}
+    lc === in;
+}}
+
+template IsZero() {{
+    signal input in;
+    signal output out;
+    signal inv;
+    inv <-- in != 0 ? 1/in : 0;
+    out <== -in * inv + 1;
+    in * out === 0;
+}}
+
+template IsEqual() {{
+    signal input in[2];
+    signal output out;
+    component isz = IsZero();
+    isz.in <== in[0] - in[1];
+    out <== isz.out;
+}}
+
+template LessThan(n) {{
+    signal input in[2];
+    signal output out;
+    component n2b = Num2Bits(n + 1);
+    n2b.in <== in[0] + (1 << n) - in[1];
+    out <== 1 - n2b.out[n];
+}}
+
+template LessEqThan(n) {{
+    signal input in[2];
+    signal output out;
+    component lt = LessThan(n);
+    lt.in[0] <== in[0];
+    lt.in[1] <== in[1] + 1;
+    out <== lt.out;
+}}
+
+template GreaterThan(n) {{
+    signal input in[2];
+    signal output out;
+    component lt = LessThan(n);
+    lt.in[0] <== in[1];
+    lt.in[1] <== in[0];
+    out <== lt.out;
+}}
+
+template GreaterEqThan(n) {{
+    signal input in[2];
+    signal output out;
+    component lt = LessThan(n);
+    lt.in[0] <== in[0];
+    lt.in[1] <== in[1];
+    out <== 1 - lt.out;
+}}
+
 template Sum(n) {{
     signal input in[n];
     signal output out;
     signal partial[n+1];
-
     partial[0] <== 0;
     for (var i = 0; i < n; i++) {{
         partial[i+1] <== partial[i] + in[i];
@@ -217,41 +282,98 @@ template Sum(n) {{
     out <== partial[n];
 }}
 
-template TruthAggregationProof(n) {{
+// ---- SemanticTruth Weighted Median Proof ----
+//
+// 证明 claimed_truth 是 (values, weights) 的加权中位数：
+//   (a) claimed_truth 在 values 中出现
+//   (b) weight(v_i ≤ claimed_truth) × 2 ≥ total_weight
+//   (c) weight(v_i < claimed_truth) × 2 < total_weight
+
+template SemanticTruthProof(n) {{
     signal input values[n];
     signal input weights[n];
-    signal input claimed_weighted_sum;
+    signal input claimed_truth;
     signal input claimed_total_weight;
     signal input statement_hash;
 
     signal output public_statement_hash;
-    signal output public_weighted_sum;
+    signal output public_truth;
     signal output public_total_weight;
     signal output is_valid;
 
-    signal products[n];
+    // (a) claimed_truth must exist in values
+    component eq[n];
+    signal match_flag[n];
     for (var i = 0; i < n; i++) {{
-        products[i] <== values[i] * weights[i];
+        eq[i] = IsEqual();
+        eq[i].in[0] <== values[i];
+        eq[i].in[1] <== claimed_truth;
+        match_flag[i] <== eq[i].out;
+    }}
+    component sum_match = Sum(n);
+    for (var i = 0; i < n; i++) {{
+        sum_match.in[i] <== match_flag[i];
+    }}
+    component has_match = GreaterThan(32);
+    has_match.in[0] <== sum_match.out;
+    has_match.in[1] <== 0;
+    has_match.out === 1;
+
+    // (b) weight_leq = Σ w_i where v_i ≤ claimed_truth
+    component leq[n];
+    signal w_leq[n];
+    for (var i = 0; i < n; i++) {{
+        leq[i] = LessEqThan(64);
+        leq[i].in[0] <== values[i];
+        leq[i].in[1] <== claimed_truth;
+        w_leq[i] <== leq[i].out * weights[i];
+    }}
+    component sum_leq = Sum(n);
+    for (var i = 0; i < n; i++) {{
+        sum_leq.in[i] <== w_leq[i];
     }}
 
-    component sum_products = Sum(n);
-    component sum_weights = Sum(n);
-    for (var j = 0; j < n; j++) {{
-        sum_products.in[j] <== products[j];
-        sum_weights.in[j] <== weights[j];
+    // (c) weight_lt = Σ w_i where v_i < claimed_truth
+    component lt_cmp[n];
+    signal w_lt[n];
+    for (var i = 0; i < n; i++) {{
+        lt_cmp[i] = LessThan(64);
+        lt_cmp[i].in[0] <== values[i];
+        lt_cmp[i].in[1] <== claimed_truth;
+        w_lt[i] <== lt_cmp[i].out * weights[i];
+    }}
+    component sum_lt = Sum(n);
+    for (var i = 0; i < n; i++) {{
+        sum_lt.in[i] <== w_lt[i];
     }}
 
-    claimed_weighted_sum === sum_products.out;
-    claimed_total_weight === sum_weights.out;
+    // total weight
+    component sum_w = Sum(n);
+    for (var i = 0; i < n; i++) {{
+        sum_w.in[i] <== weights[i];
+    }}
+    claimed_total_weight === sum_w.out;
 
-    // 绑定哈希（线性承诺）：把私有输入与公开 statement_hash 绑定
+    // median condition: 2 × weight_leq ≥ total_weight
+    component median_geq = GreaterEqThan(64);
+    median_geq.in[0] <== 2 * sum_leq.out;
+    median_geq.in[1] <== claimed_total_weight;
+    median_geq.out === 1;
+
+    // minimality: 2 × weight_lt < total_weight
+    component median_lt = LessThan(64);
+    median_lt.in[0] <== 2 * sum_lt.out;
+    median_lt.in[1] <== claimed_total_weight;
+    median_lt.out === 1;
+
+    // binding hash
     signal hash_terms[{2*n + 2}];
     component sum_hash = Sum({2*n + 2});
     for (var k = 0; k < n; k++) {{
         hash_terms[2*k] <== values[k] * (k + 1);
         hash_terms[2*k + 1] <== weights[k] * (k + 1001);
     }}
-    hash_terms[{2*n}] <== claimed_weighted_sum;
+    hash_terms[{2*n}] <== claimed_truth;
     hash_terms[{2*n + 1}] <== claimed_total_weight;
     for (var t = 0; t < {2*n + 2}; t++) {{
         sum_hash.in[t] <== hash_terms[t];
@@ -259,12 +381,12 @@ template TruthAggregationProof(n) {{
     statement_hash === sum_hash.out;
 
     public_statement_hash <== statement_hash;
-    public_weighted_sum <== claimed_weighted_sum;
+    public_truth <== claimed_truth;
     public_total_weight <== claimed_total_weight;
     is_valid <== 1;
 }}
 
-component main = TruthAggregationProof({n});
+component main = SemanticTruthProof({n});
 """.strip()
 
     def ensure_setup(self, n_sources: int):
@@ -319,14 +441,23 @@ component main = TruthAggregationProof({n});
         zkey_path = os.path.join(artifact_dir, "truth_aggregation_final.zkey")
         vkey_path = os.path.join(artifact_dir, "verification_key.json")
 
-        weighted_sum = int(sum(int(v) * int(w) for v, w in zip(values, weights)))
+        # Compute weighted median (matches SemanticTruth._weighted_median)
         total_weight = int(sum(int(w) for w in weights))
-        statement_hash_int = self._binding_hash_int(values, weights, weighted_sum, total_weight)
+        pairs = sorted(zip(values, weights), key=lambda x: int(x[0]))
+        cumul = 0
+        claimed_truth = int(pairs[0][0])
+        for v, w in pairs:
+            cumul += int(w)
+            if 2 * cumul >= total_weight:
+                claimed_truth = int(v)
+                break
+
+        statement_hash_int = self._binding_hash_int(values, weights, claimed_truth, total_weight)
 
         input_payload = {
             "values": _int_json_list(values),
             "weights": _int_json_list(weights),
-            "claimed_weighted_sum": str(weighted_sum),
+            "claimed_truth": str(claimed_truth),
             "claimed_total_weight": str(total_weight),
             "statement_hash": str(statement_hash_int),
         }
@@ -353,7 +484,7 @@ component main = TruthAggregationProof({n});
             "backend": backend,
             "artifact_dir": artifact_dir,
             "verification_key_path": vkey_path,
-            "weighted_sum": weighted_sum,
+            "truth": claimed_truth,
             "total_weight": total_weight,
             "proof_json": proof_json,
             "public_json": public_json,
@@ -367,7 +498,7 @@ component main = TruthAggregationProof({n});
     def _binding_hash_int(
         values: Sequence[int],
         weights: Sequence[int],
-        weighted_sum: int,
+        claimed_truth: int,
         total_weight: int,
     ) -> int:
         acc = 0
@@ -375,7 +506,7 @@ component main = TruthAggregationProof({n});
             acc += int(v) * (i + 1)
         for i, w in enumerate(weights):
             acc += int(w) * (i + 1001)
-        acc += int(weighted_sum)
+        acc += int(claimed_truth)
         acc += int(total_weight)
         return int(acc) % _BN128_FR
 
@@ -627,7 +758,7 @@ def attach_grouped_proofs(
                 "public_json": snark_pack["public_json"],
                 "verification_key_path": snark_pack["verification_key_path"],
                 "artifact_dir": snark_pack["artifact_dir"],
-                "weighted_sum": snark_pack["weighted_sum"],
+                "truth": snark_pack["truth"],
                 "total_weight": snark_pack["total_weight"],
                 "verified": None,
                 "verification_performed_in_python": False,

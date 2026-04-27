@@ -65,6 +65,38 @@ def symmetric_numeric_match_ratio(
     )
 
 
+def gaussian_numeric_similarity(
+    left: Iterable[float],
+    right: Iterable[float],
+    tol: float = DEFAULT_NUMERIC_MATCH_TOL,
+) -> float:
+    """
+    Symmetric pairwise Gaussian numeric similarity for affinity matrices.
+
+    For each number in *reference*, find the best-matching candidate and score
+    with ``exp(-0.5 * (relative_error / tol)²)`` instead of a hard binary cut.
+    Result is the average of both directions (left→right, right→left) to ensure
+    symmetry.  Mathematical form is aligned with the numeric channel's Gaussian
+    consistency scoring.
+    """
+    left_vals = [float(v) for v in left]
+    right_vals = [float(v) for v in right]
+
+    def _directional(ref: list[float], cand: list[float]) -> float:
+        if not ref:
+            return 1.0
+        if not cand:
+            return 0.0
+        scores: list[float] = []
+        for r in ref:
+            denom = max(abs(r), 1e-8)
+            best_rel = min(abs(r - c) / denom for c in cand)
+            scores.append(float(np.exp(-0.5 * (best_rel / max(tol, 1e-12)) ** 2)))
+        return float(np.mean(scores))
+
+    return 0.5 * (_directional(left_vals, right_vals) + _directional(right_vals, left_vals))
+
+
 def blend_semantic_numeric_scores(
     sem_score: float,
     num_score: Optional[float],

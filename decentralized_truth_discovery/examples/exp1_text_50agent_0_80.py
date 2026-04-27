@@ -1,5 +1,5 @@
 """
-50-agent E1-Text experiment over 0-80% malicious ratios.
+50-agent E1-Text experiment over 0-50% malicious ratios.
 
 Usage:
     python3 decentralized_truth_discovery/examples/exp1_text_50agent_0_80.py
@@ -22,9 +22,12 @@ from decentralized_truth_discovery.examples import exp_utils
 from decentralized_truth_discovery.examples.exp_utils import (
     load_batches,
     metric_data_accuracy,
-    plot_text,
     to_text_df,
 )
+
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 
 DEFAULT_DATA_DIR = ROOT / "decentralized_truth_discovery" / "data_agent-50_news-300"
 DEFAULT_OUT_DIR = (
@@ -33,15 +36,19 @@ DEFAULT_OUT_DIR = (
     / "examples"
     / "outputs"
     / "exp1_text"
-    / "data_agent-50_news-300_0_80"
+    / "1.2-agent-50-news-300-50%-0.9-numonly"
 )
-BAD_COUNTS = [5, 10, 15, 20, 25, 30, 35, 40]
+BAD_COUNTS = [5, 10, 15, 20, 25]
+THRESHOLD = 0.90
 
 
-def build_file_map(data_dir: Path, bad_counts: Iterable[int]) -> Dict[int, Path]:
-    files = {0: data_dir / "demo.json"}
+def build_file_map(data_dir: Path, bad_counts: Iterable[int], numeric_only: bool = False) -> Dict[int, Path]:
+    files = {0: data_dir / "demo_div.json"}
     for bad_k in bad_counts:
-        files[bad_k] = data_dir / f"demo_{bad_k}bad_collude.json"
+        if numeric_only:
+            files[bad_k] = data_dir / f"demo_{bad_k}bad_numonly.json"
+        else:
+            files[bad_k] = data_dir / f"demo_{bad_k}bad_collude.json"
     missing = [str(path) for path in files.values() if not path.exists()]
     if missing:
         raise FileNotFoundError("Missing experiment files:\n" + "\n".join(missing))
@@ -62,8 +69,33 @@ def run_semantic_single(df: pd.DataFrame) -> Dict[Tuple[int, str], str]:
     return preds
 
 
-def run_experiment(data_dir: Path, out_dir: Path) -> pd.DataFrame:
-    files = build_file_map(data_dir, BAD_COUNTS)
+def _plot_text(x_vals, results, xlabel, title_prefix, out_dir):
+    """Plot data accuracy with threshold=0.90 for text methods."""
+    plt.rcParams["font.family"] = ["Arial Unicode MS", "Hiragino Sans GB", "Songti SC", "DejaVu Sans"]
+    plt.rcParams["font.sans-serif"] = ["Arial Unicode MS", "Hiragino Sans GB", "Songti SC", "DejaVu Sans"]
+    plt.rcParams["axes.unicode_minus"] = False
+    colors = {"SenteTruth": "#2ecc71", "BasicTruth": "#e67e22", "SemanticTruth": "#9b59b6"}
+    markers = {"SenteTruth": "s", "BasicTruth": "D", "SemanticTruth": "*"}
+    fig, ax = plt.subplots(figsize=(7, 5))
+    for m in ["SenteTruth", "BasicTruth", "SemanticTruth"]:
+        ax.plot(x_vals, results[m]["data_accuracy"],
+                color=colors[m], marker=markers[m], label=m,
+                linewidth=1.8, markersize=6)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(f"Data Accuracy (hybrid score ≥ {THRESHOLD})")
+    ax.set_title(f"{title_prefix} — 文本数据准确率（混合场景）")
+    ax.set_ylim(-0.05, 1.05)
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    plt.tight_layout()
+    path = out_dir / "mixed_text.png"
+    plt.savefig(path, dpi=150, bbox_inches="tight")
+    plt.close()
+    print(f"  → 已保存 {path}")
+
+
+def run_experiment(data_dir: Path, out_dir: Path, numeric_only: bool = False) -> pd.DataFrame:
+    files = build_file_map(data_dir, BAD_COUNTS, numeric_only=numeric_only)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     clean_df = to_text_df(load_batches(files[0]))
@@ -76,11 +108,11 @@ def run_experiment(data_dir: Path, out_dir: Path) -> pd.DataFrame:
     print("clean: SemanticTruth")
     clean_semantic = run_semantic_single(clean_df)
 
-    results = {m: {"data_accuracy": []} for m in ["SenteTruth", "BasicTruth", "SemanticTruth"]}
+    methods = ["SenteTruth", "BasicTruth", "SemanticTruth"]
+    results = {m: {"data_accuracy": []} for m in methods}
     x_vals = [0.0]
-    results["SenteTruth"]["data_accuracy"].append(metric_data_accuracy(clean_sente, clean_sente))
-    results["BasicTruth"]["data_accuracy"].append(metric_data_accuracy(clean_basic, clean_basic))
-    results["SemanticTruth"]["data_accuracy"].append(metric_data_accuracy(clean_semantic, clean_semantic))
+    for m, preds in [("SenteTruth", clean_sente), ("BasicTruth", clean_basic), ("SemanticTruth", clean_semantic)]:
+        results[m]["data_accuracy"].append(metric_data_accuracy(preds, preds, threshold=THRESHOLD))
 
     for bad_k in BAD_COUNTS:
         ratio = bad_k / 50 * 100
@@ -93,11 +125,14 @@ def run_experiment(data_dir: Path, out_dir: Path) -> pd.DataFrame:
         noisy_semantic = run_semantic_single(noisy_df)
 
         x_vals.append(ratio)
-        results["SenteTruth"]["data_accuracy"].append(metric_data_accuracy(clean_sente, noisy_sente))
-        results["BasicTruth"]["data_accuracy"].append(metric_data_accuracy(clean_basic, noisy_basic))
-        results["SemanticTruth"]["data_accuracy"].append(metric_data_accuracy(clean_semantic, noisy_semantic))
+        for m, (c, n) in [
+            ("SenteTruth", (clean_sente, noisy_sente)),
+            ("BasicTruth", (clean_basic, noisy_basic)),
+            ("SemanticTruth", (clean_semantic, noisy_semantic)),
+        ]:
+            results[m]["data_accuracy"].append(metric_data_accuracy(c, n, threshold=THRESHOLD))
 
-    plot_text(x_vals, results, "恶意节点比例 (%)", "E1-Text: 恶意节点比例", out_dir)
+    _plot_text(x_vals, results, "恶意节点比例 (%)", "E1-Text: 恶意节点比例", out_dir)
 
     rows = []
     for idx, ratio in enumerate(x_vals):
@@ -119,11 +154,20 @@ def run_experiment(data_dir: Path, out_dir: Path) -> pd.DataFrame:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run 50-agent text exp1 over 0-80% malicious ratios.")
+    parser = argparse.ArgumentParser(description="Run 50-agent text exp1 over 0-50% malicious ratios.")
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR)
+    parser.add_argument(
+        "--numeric-only",
+        action="store_true",
+        help="Use numeric-only attack data (num_demo_* files). "
+             "Output dir gets _numonly suffix.",
+    )
     args = parser.parse_args()
-    run_experiment(args.data_dir, args.out_dir)
+    out_dir = args.out_dir
+    if args.numeric_only:
+        out_dir = out_dir.parent / (out_dir.name + "_numonly")
+    run_experiment(args.data_dir, out_dir, numeric_only=args.numeric_only)
 
 
 if __name__ == "__main__":

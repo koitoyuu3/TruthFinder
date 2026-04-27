@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-datas_CLLM 文本方法对比实验
+data_CLLM 文本方法对比实验
 ===============================================
 
 对比方法:
@@ -14,7 +14,7 @@ datas_CLLM 文本方法对比实验
   - substitution
 
 输入数据:
-  decentralized_truth_discovery/datas_CLLM/
+  decentralized_truth_discovery/data_CLLM/
 
 输出:
   CSV 结果文件 + 控制台透视表
@@ -46,7 +46,7 @@ from exp_utils import eval_text
 
 
 ROOT = Path(__file__).resolve().parents[2]
-DATA_ROOT = ROOT / "decentralized_truth_discovery" / "datas_CLLM"
+DATA_ROOT = ROOT / "decentralized_truth_discovery" / "data_CLLM"
 OUT_ROOT = Path(__file__).parent / "outputs" / "compare_cllm_text_methods"
 
 MODEL_FILES = ("gpt", "google", "chatglm", "llama", "tencent")
@@ -61,7 +61,7 @@ METHOD_ORDER = ("SenteTruth", "BasicTruth", "SemanticTruth")
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="基于 datas_CLLM 的文本方法对比实验")
+    parser = argparse.ArgumentParser(description="基于 data_CLLM 的文本方法对比实验")
     parser.add_argument(
         "--dataset",
         default="BASE",

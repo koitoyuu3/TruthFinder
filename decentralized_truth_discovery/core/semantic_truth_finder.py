@@ -18,8 +18,7 @@ from .hybrid_text_alignment import (
     DEFAULT_SEMANTIC_NUMERIC_ALPHA,
     blend_semantic_numeric_scores,
     extract_numeric_values,
-    numeric_match_ratio,
-    symmetric_numeric_match_ratio,
+    gaussian_numeric_similarity,
 )
 from .text_vectorization import build_tfidf_vectorizer
 from .zk_proof import ZKProofEngine, attach_grouped_proofs
@@ -38,7 +37,7 @@ except Exception:  # pragma: no cover - import environment dependent
 class SemanticTruthFinder:
     def __init__(
         self,
-        tukey_c: float = 1.5,
+        tukey_c: float = 4.685,
         irls_max_iter: int = 10,
         weiszfeld_max_iter: int = 10,
         inner_iter: int = 3,
@@ -56,8 +55,8 @@ class SemanticTruthFinder:
         enable_zk_proof: bool = False,
         zk_proof_secret: Optional[str] = None,
     ):
-        # Fix 2: tukey_c 从 4.685（高斯噪声调参）降至 1.5（拜占庭对抗场景）
-        # c=1.5 时偏离 0.9σ 的点权重仅 3.7%，能有效排除 adversarial outlier
+        # tukey_c=4.685: 经典取值，高斯噪声下 95% 渐近效率
+        # 拜占庭对抗由跨 batch 的 Beta-Bernoulli 可靠度追踪 + reliability gate 承担
         self.tukey_c = max(float(tukey_c), 1e-8)
         self.irls_max_iter = max(1, int(irls_max_iter))
         self.weiszfeld_max_iter = max(1, int(weiszfeld_max_iter))
@@ -391,28 +390,43 @@ class SemanticTruthFinder:
         return clusters, membership
 
     def _numeric_similarity(self, left: List[float], right: List[float]) -> float:
-        return symmetric_numeric_match_ratio(left, right, tol=self.numeric_tol)
+        return gaussian_numeric_similarity(left, right, tol=self.numeric_tol)
 
-    def _numeric_match_ratio(self, reference: List[float], candidate: List[float]) -> float:
-        return numeric_match_ratio(reference, candidate, tol=self.numeric_tol)
-
-    def _cluster_numeric_consensus(self, numeric_lists: List[List[float]]) -> List[float]:
+    def _cluster_numeric_consensus(
+        self,
+        numeric_lists: List[List[float]],
+        weights: Optional[np.ndarray] = None,
+    ) -> List[float]:
         """
-        簇内数值共识：对每个数值位置取中位数。
+        簇内数值共识：对每个数值位置取加权中位数（有 weights 时）或普通中位数。
         只使用拥有最众数长度的成员做位置对齐，避免数值个数不同导致位置错位。
         若簇内文本均不含数字，返回空列表（不惩罚纯文本对象）。
         """
-        non_empty = [lst for lst in numeric_lists if lst]
-        if not non_empty:
+        non_empty_indices = [i for i, lst in enumerate(numeric_lists) if lst]
+        if not non_empty_indices:
             return []
-        if len(non_empty) == 1:
-            return list(non_empty[0])
+        if len(non_empty_indices) == 1:
+            return list(numeric_lists[non_empty_indices[0]])
 
+        non_empty = [numeric_lists[i] for i in non_empty_indices]
         mode_len = Counter(len(lst) for lst in non_empty).most_common(1)[0][0]
-        aligned = [lst for lst in non_empty if len(lst) == mode_len]
+
+        aligned_orig = [i for i in non_empty_indices if len(numeric_lists[i]) == mode_len]
+        aligned = [numeric_lists[i] for i in aligned_orig]
         if not aligned:
             min_len = min(len(lst) for lst in non_empty)
-            aligned = [lst[:min_len] for lst in non_empty]
+            aligned_orig = non_empty_indices
+            aligned = [numeric_lists[i][:min_len] for i in aligned_orig]
+
+        if weights is not None and len(aligned) > 1:
+            aligned_w = np.array([weights[i] for i in aligned_orig], dtype=float)
+            return [
+                self._weighted_median(
+                    np.array([lst[k] for lst in aligned], dtype=float),
+                    aligned_w,
+                )
+                for k in range(len(aligned[0]))
+            ]
 
         return [float(np.median([lst[i] for lst in aligned])) for i in range(len(aligned[0]))]
 
@@ -431,6 +445,50 @@ class SemanticTruthFinder:
             num_score=num_score,
             alpha=self.semantic_numeric_alpha,
         )
+
+    def _gaussian_numeric_score(
+        self,
+        consensus: List[float],
+        all_numeric_values: List[List[float]],
+        source_values: List[float],
+    ) -> Optional[float]:
+        """
+        与数值通道一致的高斯衰减评分。
+
+        对每个对齐位置 k：
+          residual_k  = source_value[k] - consensus[k]
+          scale_k     = max(1.4826 * MAD_k, std_k, ε)     ← 同数值通道
+          score_k     = exp(-0.5 * (residual_k / scale_k)²)
+        最终 num_score = mean(score_k)。
+        """
+        if not consensus:
+            return None
+        if not source_values:
+            return 0.0
+
+        mode_len = len(consensus)
+        if len(source_values) != mode_len:
+            return 0.0
+
+        aligned = [lst for lst in all_numeric_values if lst and len(lst) == mode_len]
+        if not aligned:
+            return 0.0
+
+        scores: List[float] = []
+        for k in range(mode_len):
+            truth_k = consensus[k]
+            all_vals_k = np.array([lst[k] for lst in aligned], dtype=float)
+            residuals_k = all_vals_k - truth_k
+            residual_mad = float(np.median(np.abs(residuals_k - np.median(residuals_k))))
+            score_scale = max(
+                1.4826 * residual_mad,
+                float(np.std(residuals_k)),
+                self.convergence_tol,
+            )
+            r = source_values[k] - truth_k
+            scores.append(float(np.exp(-0.5 * (r / score_scale) ** 2)))
+
+        return float(np.mean(scores))
 
     def _text_pipeline(
         self,
@@ -497,16 +555,18 @@ class SemanticTruthFinder:
             local_best = int(np.argmax(vote_scores))
             truth_map[str(object_id)] = texts[local_best]
 
-            # Consistency 更新：语义对比胜出者；数值对比全局中位共识
+            # Consistency 更新：语义对比胜出者；数值用高斯衰减+MAD自适应scale（与数值通道一致）
             truth_emb = embeddings[local_best]
-            global_num_consensus = self._cluster_numeric_consensus(report_numeric_values)
+            global_num_consensus = self._cluster_numeric_consensus(
+                report_numeric_values, weights=rel_weights,
+            )
             for idx, source in enumerate(sources):
                 sem_score = float(np.clip(float(embeddings[idx] @ truth_emb), 0.0, 1.0))
-                num_score = None
-                if global_num_consensus or report_numeric_values[idx]:
-                    num_score = self._numeric_match_ratio(
-                        global_num_consensus, report_numeric_values[idx]
-                    )
+                num_score = self._gaussian_numeric_score(
+                    global_num_consensus,
+                    report_numeric_values,
+                    report_numeric_values[idx],
+                )
                 score = self._combine_consistency_components(
                     sem_score=sem_score,
                     num_score=num_score,

@@ -1265,6 +1265,7 @@ def plot_text(
     xlabel: str,
     title_prefix: str,
     out_dir: Path,
+    threshold: float = 0.85,
 ) -> None:
     """绘制文本实验图（Data Accuracy）。"""
     plt.rcParams["font.family"] = ["Arial Unicode MS", "Hiragino Sans GB", "Songti SC", "DejaVu Sans"]
@@ -1276,7 +1277,7 @@ def plot_text(
                 color=COLORS[m], marker=MARKERS[m], label=m,
                 linewidth=1.8, markersize=6)
     ax.set_xlabel(xlabel)
-    ax.set_ylabel("Data Accuracy (SBERT cosine ≥ 0.85)")
+    ax.set_ylabel(f"Data Accuracy (hybrid score ≥ {threshold:g})")
     ax.set_title(f"{title_prefix} — 文本数据准确率（混合场景）")
     ax.set_ylim(-0.05, 1.05)
     ax.legend()

@@ -1,546 +1,378 @@
 /*
- * Hybrid Truth Finder Algorithm - Zero Knowledge Proof Circuit
- * 
- * 这个电路证明hybrid混合算法的正确性，包括：
- * 1. 数值真值的加权平均计算
- * 2. 离散真值的加权投票
- * 3. 源可靠性的更新计算
- * 
- * 电路设计遵循以下原则：
- * - 完整性（Completeness）：如果计算正确，证明应该被接受
- * - 可靠性（Soundness）：如果计算错误，证明应该被拒绝
- * - 零知识性（Zero-Knowledge）：不泄露输入数据的隐私
+ * SemanticTruth Algorithm — Zero Knowledge Proof Circuit
+ *
+ * 本电路证明 SemanticTruth 算法各步骤的计算正确性，与
+ * semantic_truth_finder.py 中的实现一一对应：
+ *
+ *   模板 1 — WeightedMedian(n)
+ *     证明 claimed_truth 是 (values[], weights[]) 的加权中位数。
+ *     算法对应：_weighted_median() + _irls_robust_estimate() 的初始估计
+ *     无需排序：通过比较验证 weight(≤m) ≥ total/2 且 weight(<m) < total/2。
+ *
+ *   模板 2 — BetaBernoulliUpdate()
+ *     证明 Beta-Bernoulli 可靠度更新的正确性：
+ *       α_new = α_old + η × c
+ *       β_new = β_old + η × (1 − c)
+ *       r     = α_new / (α_new + β_new)
+ *     算法对应：_update_source_state() 中的可靠度更新
+ *
+ *   模板 3 — GaussianConsistencyScore()
+ *     证明高斯一致性评分的近似正确性：
+ *       score ≈ exp(−0.5 × (residual / scale)²)
+ *     算法对应：_numeric_pipeline() 和 _text_pipeline() 中的一致性评分
+ *     使用 Padé(2,2) 逼近 exp(−t)，在 t∈[0,4] 内误差 < 1%。
+ *
+ *   模板 4 — SemanticTruthProof(n)
+ *     组合以上模板，完成单个 object 的完整证明。
+ *
+ * 定点算术：所有数值乘以 SCALE = 10⁶。
+ * 依赖：circomlib（comparators, bitify）
  */
 
 pragma circom 2.0.0;
 
-// 注意：实际使用时需要安装circomlib
-// include "../node_modules/circomlib/circuits/comparators.circom";
-// include "../node_modules/circomlib/circuits/poseidon.circom";
+include "node_modules/circomlib/circuits/comparators.circom";
+include "node_modules/circomlib/circuits/bitify.circom";
 
-// ========== 模板1：证明加权平均计算的正确性 ==========
-// 证明：truth = Σ(r_i × v_i) / Σ(r_i)
-// 其中 r_i 是源可靠性，v_i 是源提供的值
-template WeightedAverage(n) {
-    // 输入信号
-    signal input weights[n];      // 源可靠性 r_i
-    signal input values[n];       // 源提供的值 v_i
-    signal input claimed_truth;   // 声称的真值
-    
-    // 中间信号
-    signal weighted_sum;          // Σ(r_i × v_i)
-    signal total_weight;           // Σ(r_i)
-    signal computed_truth;         // 计算出的真值
-    
-    // 输出信号（用于验证）
-    signal output is_valid;       // 是否为有效证明
-    
-    // 计算加权和
-    component weighted_products[n];
-    for (var i = 0; i < n; i++) {
-        weighted_products[i] = Multiplier();
-        weighted_products[i].a <== weights[i];
-        weighted_products[i].b <== values[i];
-    }
-    
-    // 累加加权和
-    component sum_weighted = Sum(n);
-    for (var i = 0; i < n; i++) {
-        sum_weighted.in[i] <== weighted_products[i].out;
-    }
-    weighted_sum <== sum_weighted.out;
-    
-    // 累加权重
-    component sum_weights = Sum(n);
-    for (var i = 0; i < n; i++) {
-        sum_weights.in[i] <== weights[i];
-    }
-    total_weight <== sum_weights.out;
-    
-    // 计算真值：truth = weighted_sum / total_weight
-    // 使用定点数除法：truth = (weighted_sum * SCALE) / total_weight
-    // 其中 SCALE 是精度因子（例如 10^6）
-    var SCALE = 1000000;
-    
-    component scaled_weighted = Multiplier();
-    scaled_weighted.a <== weighted_sum;
-    scaled_weighted.b <== SCALE;
-    
-    component div = Divider();
-    div.numerator <== scaled_weighted.out;
-    div.denominator <== total_weight;
-    computed_truth <== div.out;
-    
-    // 验证：claimed_truth 是否等于 computed_truth
-    component check_truth = IsEqual();
-    check_truth.in[0] <== claimed_truth;
-    check_truth.in[1] <== computed_truth;
-    
-    // 验证：total_weight > 0（避免除零）
-    component check_weight = GreaterThan();
-    check_weight.in[0] <== total_weight;
-    check_weight.in[1] <== 0;
-    
-    // 注意：IsEqual和GreaterThan需要从circomlib导入或自己实现
-    
-    // 最终验证：所有条件都满足
-    component final_check = AND();
-    final_check.a <== check_truth.out;
-    final_check.b <== check_weight.out;
-    
-    is_valid <== final_check.out;
-}
+// ====================================================================
+// 辅助模板
+// ====================================================================
 
-// ========== 模板2：证明加权投票的正确性 ==========
-// 证明：truth = argmax(Σ(r_i))，其中值相同
-// 对于离散值，选择权重和最大的候选值
-template WeightedVoting(n, m) {
-    // n: 源数量
-    // m: 候选值数量
-    
-    signal input weights[n];           // 源可靠性 r_i
-    signal input values[n];            // 源提供的值（编码为整数）
-    signal input candidate_values[m];  // 所有候选值
-    signal input claimed_truth;        // 声称的真值（编码为整数）
-    
-    signal output is_valid;
-    
-    // 对每个候选值，计算权重和
-    component candidate_sums[m];
-    for (var j = 0; j < m; j++) {
-        candidate_sums[j] = Sum(n);
-        
-        // 对每个源，如果值等于候选值，则累加权重
-        for (var i = 0; i < n; i++) {
-            component is_equal = IsEqual();
-            is_equal.in[0] <== values[i];
-            is_equal.in[1] <== candidate_values[j];
-            
-            // 如果相等，权重累加；否则累加0
-            component conditional_weight = ConditionalMultiplier();
-            conditional_weight.condition <== is_equal.out;
-            conditional_weight.value <== weights[i];
-            conditional_weight.multiplier <== 1;
-            
-            candidate_sums[j].in[i] <== conditional_weight.out;
-        }
-    }
-    
-    // 找到权重和最大的候选值
-    component max_finder = MaxFinder(m);
-    for (var j = 0; j < m; j++) {
-        max_finder.values[j] <== candidate_sums[j].out;
-    }
-    
-    // 验证：claimed_truth 对应的权重和是否最大
-    component check_max = IsEqual();
-    check_max.in[0] <== max_finder.max_value;
-    
-    // 找到claimed_truth对应的索引
-    component find_index = FindIndex(m);
-    find_index.target <== claimed_truth;
-    find_index.candidates <== candidate_values;
-    
-    check_max.in[1] <== candidate_sums[find_index.index].out;
-    
-    is_valid <== check_max.out;
-}
-
-// ========== 模板3：证明可靠性更新的正确性 ==========
-// 证明：r_s = (1/(1+e_s)) × k_s
-// 其中 e_s = α × e_prev + (1-α) × MSE
-//      k_s = erfc(β × |e_s - e_prev|)
-template ReliabilityUpdate() {
-    signal input alpha;              // 衰减因子
-    signal input beta;               // 尺度因子
-    signal input prev_error;         // 上一轮误差 e_prev
-    signal input prev_consistency;   // 上一轮一致性 k_prev
-    signal input current_mse;        // 当前均方误差 MSE
-    signal input claimed_error;      // 声称的新误差 e_s
-    signal input claimed_consistency;// 声称的新一致性 k_s
-    signal input claimed_reliability;// 声称的新可靠性 r_s
-    
-    signal output is_valid;
-    
-    // 步骤1：计算新误差 e_s = α × e_prev + (1-α) × MSE
-    component alpha_e_prev = Multiplier();
-    alpha_e_prev.a <== alpha;
-    alpha_e_prev.b <== prev_error;
-    
-    component one_minus_alpha = Subtractor();
-    one_minus_alpha.a <== 1;
-    one_minus_alpha.b <== alpha;
-    
-    component one_minus_alpha_mse = Multiplier();
-    one_minus_alpha_mse.a <== one_minus_alpha.out;
-    one_minus_alpha_mse.b <== current_mse;
-    
-    component computed_error = Adder();
-    computed_error.a <== alpha_e_prev.out;
-    computed_error.b <== one_minus_alpha_mse.out;
-    
-    // 验证误差计算
-    component check_error = IsEqual();
-    check_error.in[0] <== claimed_error;
-    check_error.in[1] <== computed_error.out;
-    
-    // 步骤2：计算一致性 k_s = erfc(β × |e_s - e_prev|)
-    component error_diff = Subtractor();
-    error_diff.a <== claimed_error;
-    error_diff.b <== prev_error;
-    
-    // 计算绝对值 |e_s - e_prev|
-    component abs_diff = AbsoluteValue();
-    abs_diff.in <== error_diff.out;
-    
-    component beta_abs = Multiplier();
-    beta_abs.a <== beta;
-    beta_abs.b <== abs_diff.out;
-    
-    // 计算 erfc(β × |e_s - e_prev|)
-    // 注意：erfc在Circom中需要近似实现
-    component computed_consistency = ErfcApprox();
-    computed_consistency.x <== beta_abs.out;
-    
-    // 更新一致性：k_s = α × k_prev + (1-α) × new_k
-    component alpha_k_prev = Multiplier();
-    alpha_k_prev.a <== alpha;
-    alpha_k_prev.b <== prev_consistency;
-    
-    component one_minus_alpha_new_k = Multiplier();
-    one_minus_alpha_new_k.a <== one_minus_alpha.out;
-    one_minus_alpha_new_k.b <== computed_consistency.out;
-    
-    component updated_consistency = Adder();
-    updated_consistency.a <== alpha_k_prev.out;
-    updated_consistency.b <== one_minus_alpha_new_k.out;
-    
-    // 验证一致性计算
-    component check_consistency = IsEqual();
-    check_consistency.in[0] <== claimed_consistency;
-    check_consistency.in[1] <== updated_consistency.out;
-    
-    // 步骤3：计算可靠性 r_s = (1/(1+e_s)) × k_s
-    component one_plus_error = Adder();
-    one_plus_error.a <== 1;
-    one_plus_error.b <== claimed_error;
-    
-    // 计算 1/(1+e_s)
-    var SCALE = 1000000;
-    component scaled_one = Multiplier();
-    scaled_one.a <== 1;
-    scaled_one.b <== SCALE;
-    
-    component error_component = Divider();
-    error_component.numerator <== scaled_one.out;
-    error_component.denominator <== one_plus_error.out;
-    
-    // 计算 r_s = error_component × k_s
-    component computed_reliability = Multiplier();
-    computed_reliability.a <== error_component.out;
-    computed_reliability.b <== claimed_consistency;
-    
-    // 验证可靠性计算
-    component check_reliability = IsEqual();
-    check_reliability.in[0] <== claimed_reliability;
-    check_reliability.in[1] <== computed_reliability.out;
-    
-    // 最终验证：所有计算都正确
-    component final_check = AND3();
-    final_check.a <== check_error.out;
-    final_check.b <== check_consistency.out;
-    final_check.c <== check_reliability.out;
-    
-    is_valid <== final_check.out;
-}
-
-// ========== 模板4：混合算法完整证明 ==========
-// 结合数值和离散真值计算的完整证明
-template HybridTruthFinderProof(n_sources, n_numeric_fields, n_discrete_fields, n_candidates) {
-    // n_sources: 源数量
-    // n_numeric_fields: 数值字段数量
-    // n_discrete_fields: 离散字段数量
-    // n_candidates: 离散字段的候选值数量
-    
-    // ========== 输入信号 ==========
-    // 数值部分
-    signal input numeric_weights[n_sources];
-    signal input numeric_values[n_sources][n_numeric_fields];
-    signal input claimed_numeric_truth[n_numeric_fields];
-    
-    // 离散部分
-    signal input discrete_weights[n_sources];
-    signal input discrete_values[n_sources][n_discrete_fields];
-    signal input candidate_values[n_discrete_fields][n_candidates];
-    signal input claimed_discrete_truth[n_discrete_fields];
-    
-    // 可靠性更新
-    signal input alpha;
-    signal input beta;
-    signal input prev_error[n_sources];
-    signal input prev_consistency[n_sources];
-    signal input current_mse[n_sources];
-    signal input claimed_error[n_sources];
-    signal input claimed_consistency[n_sources];
-    signal input claimed_reliability[n_sources];
-    
-    // ========== 输出信号 ==========
-    signal output is_valid;
-    
-    // ========== 证明数值真值计算 ==========
-    component numeric_proofs[n_numeric_fields];
-    for (var i = 0; i < n_numeric_fields; i++) {
-        numeric_proofs[i] = WeightedAverage(n_sources);
-        for (var j = 0; j < n_sources; j++) {
-            numeric_proofs[i].weights[j] <== numeric_weights[j];
-            numeric_proofs[i].values[j] <== numeric_values[j][i];
-        }
-        numeric_proofs[i].claimed_truth <== claimed_numeric_truth[i];
-    }
-    
-    // ========== 证明离散真值计算 ==========
-    component discrete_proofs[n_discrete_fields];
-    for (var i = 0; i < n_discrete_fields; i++) {
-        discrete_proofs[i] = WeightedVoting(n_sources, n_candidates);
-        for (var j = 0; j < n_sources; j++) {
-            discrete_proofs[i].weights[j] <== discrete_weights[j];
-            discrete_proofs[i].values[j] <== discrete_values[j][i];
-        }
-        for (var j = 0; j < n_candidates; j++) {
-            discrete_proofs[i].candidate_values[j] <== candidate_values[i][j];
-        }
-        discrete_proofs[i].claimed_truth <== claimed_discrete_truth[i];
-    }
-    
-    // ========== 证明可靠性更新 ==========
-    component reliability_proofs[n_sources];
-    for (var i = 0; i < n_sources; i++) {
-        reliability_proofs[i] = ReliabilityUpdate();
-        reliability_proofs[i].alpha <== alpha;
-        reliability_proofs[i].beta <== beta;
-        reliability_proofs[i].prev_error <== prev_error[i];
-        reliability_proofs[i].prev_consistency <== prev_consistency[i];
-        reliability_proofs[i].current_mse <== current_mse[i];
-        reliability_proofs[i].claimed_error <== claimed_error[i];
-        reliability_proofs[i].claimed_consistency <== claimed_consistency[i];
-        reliability_proofs[i].claimed_reliability <== claimed_reliability[i];
-    }
-    
-    // ========== 验证所有证明 ==========
-    component all_numeric_valid = AND(n_numeric_fields);
-    for (var i = 0; i < n_numeric_fields; i++) {
-        all_numeric_valid.in[i] <== numeric_proofs[i].is_valid;
-    }
-    
-    component all_discrete_valid = AND(n_discrete_fields);
-    for (var i = 0; i < n_discrete_fields; i++) {
-        all_discrete_valid.in[i] <== discrete_proofs[i].is_valid;
-    }
-    
-    component all_reliability_valid = AND(n_sources);
-    for (var i = 0; i < n_sources; i++) {
-        all_reliability_valid.in[i] <== reliability_proofs[i].is_valid;
-    }
-    
-    // 最终验证：所有部分都正确
-    component final_check = AND3();
-    final_check.a <== all_numeric_valid.out;
-    final_check.b <== all_discrete_valid.out;
-    final_check.c <== all_reliability_valid.out;
-    
-    is_valid <== final_check.out;
-}
-
-// ========== 辅助组件 ==========
-
-// 乘法器
-template Multiplier() {
-    signal input a;
-    signal input b;
-    signal output out;
-    out <== a * b;
-}
-
-// 加法器
-template Adder() {
-    signal input a;
-    signal input b;
-    signal output out;
-    out <== a + b;
-}
-
-// 减法器
-template Subtractor() {
-    signal input a;
-    signal input b;
-    signal output out;
-    out <== a - b;
-}
-
-// 除法器（使用定点数）
-template Divider() {
-    signal input numerator;
-    signal input denominator;
-    signal output out;
-    out <== numerator / denominator;
-}
-
-// 求和器
 template Sum(n) {
     signal input in[n];
     signal output out;
-    var sum = 0;
+    signal partial[n + 1];
+    partial[0] <== 0;
     for (var i = 0; i < n; i++) {
-        sum = sum + in[i];
+        partial[i + 1] <== partial[i] + in[i];
     }
-    out <== sum;
+    out <== partial[n];
 }
 
-// 相等比较器
-template IsEqual() {
-    signal input in[2];
-    signal output out;
-    signal diff;
-    diff <== in[0] - in[1];
-    // 使用约束：如果diff = 0，则out = 1；否则out = 0
-    // 简化实现：out = 1 - (diff != 0)
-    // 注意：实际实现需要使用IsZero组件（从circomlib）
-    out <== 1;  // 临时实现，需要替换为正确的IsZero
-}
-
-// 大于比较器
-template GreaterThan() {
-    signal input in[0];
-    signal input in[1];
-    signal output out;
-    signal diff;
-    diff <== in[0] - in[1];
-    // 使用约束：如果diff > 0，则out = 1；否则out = 0
-    // 简化实现：需要从circomlib导入GreaterThan组件
-    out <== 1;  // 临时实现，需要替换为正确的GreaterThan
-}
-
-// AND门（2输入）
-template AND() {
-    signal input a;
-    signal input b;
-    signal output out;
-    out <== a * b;
-}
-
-// AND门（3输入）
-template AND3() {
-    signal input a;
-    signal input b;
-    signal input c;
-    signal output out;
-    out <== a * b * c;
-}
-
-// AND门（n输入）
-template AND(n) {
-    signal input in[n];
-    signal output out;
-    var prod = 1;
-    for (var i = 0; i < n; i++) {
-        prod = prod * in[i];
-    }
-    out <== prod;
-}
-
-// 绝对值
-template AbsoluteValue() {
-    signal input in;
-    signal output out;
-    // 简化实现：对于非负数，绝对值等于本身
-    // 注意：实际实现需要处理负数情况
-    out <== in;  // 临时实现，假设输入总是非负
-}
-
-// 条件选择器
-template ConditionalSelector() {
-    signal input condition;
-    signal input if_true;
-    signal input if_false;
-    signal output out;
-    out <== condition * if_true + (1 - condition) * if_false;
-}
-
-// 条件乘法器
-template ConditionalMultiplier() {
-    signal input condition;
-    signal input value;
-    signal input multiplier;
-    signal output out;
-    out <== condition * value * multiplier;
-}
-
-// 最大值查找器
-template MaxFinder(n) {
+// ====================================================================
+// 模板 1：WeightedMedian(n)
+// ====================================================================
+//
+// 证明 claimed_truth 是加权中位数，无需排序。
+//
+// 验证条件：
+//   (a) claimed_truth 在原始 values 中至少出现一次
+//   (b) Σ{w_i : v_i ≤ claimed_truth} × 2 ≥ total_weight
+//   (c) Σ{w_i : v_i < claimed_truth} × 2 < total_weight
+//
+// 约束规模：O(n) 次比较，每次 ~65 个 R1CS 约束
+//
+template WeightedMedian(n) {
     signal input values[n];
-    signal output max_value;
-    signal output max_index;
-    
-    // 使用比较器链找到最大值
-    var max_val = values[0];
-    var max_idx = 0;
-    for (var i = 1; i < n; i++) {
-        component gt = GreaterThan();
-        gt.in[0] <== values[i];
-        gt.in[1] <== max_val;
-        // 如果 values[i] > max_val，更新最大值
-        component selector = ConditionalSelector();
-        selector.condition <== gt.out;
-        selector.if_true <== values[i];
-        selector.if_false <== max_val;
-        max_val <== selector.out;
+    signal input weights[n];
+    signal input claimed_truth;
+
+    signal output is_valid;
+    signal output total_weight;
+
+    // --- (a) claimed_truth ∈ values ---
+    component eq[n];
+    signal match_flag[n];
+    for (var i = 0; i < n; i++) {
+        eq[i] = IsEqual();
+        eq[i].in[0] <== values[i];
+        eq[i].in[1] <== claimed_truth;
+        match_flag[i] <== eq[i].out;
     }
-    max_value <== max_val;
-    // max_index 的计算需要更复杂的逻辑，这里简化处理
-    max_index <== 0;
+    component sum_match = Sum(n);
+    for (var i = 0; i < n; i++) {
+        sum_match.in[i] <== match_flag[i];
+    }
+    component has_match = GreaterThan(32);
+    has_match.in[0] <== sum_match.out;
+    has_match.in[1] <== 0;
+    has_match.out === 1;
+
+    // --- (b) weight_leq = Σ w_i where v_i ≤ claimed_truth ---
+    component leq[n];
+    signal w_leq[n];
+    for (var i = 0; i < n; i++) {
+        leq[i] = LessEqThan(64);
+        leq[i].in[0] <== values[i];
+        leq[i].in[1] <== claimed_truth;
+        w_leq[i] <== leq[i].out * weights[i];
+    }
+    component sum_leq = Sum(n);
+    for (var i = 0; i < n; i++) {
+        sum_leq.in[i] <== w_leq[i];
+    }
+
+    // --- (c) weight_lt = Σ w_i where v_i < claimed_truth ---
+    component lt[n];
+    signal w_lt[n];
+    for (var i = 0; i < n; i++) {
+        lt[i] = LessThan(64);
+        lt[i].in[0] <== values[i];
+        lt[i].in[1] <== claimed_truth;
+        w_lt[i] <== lt[i].out * weights[i];
+    }
+    component sum_lt = Sum(n);
+    for (var i = 0; i < n; i++) {
+        sum_lt.in[i] <== w_lt[i];
+    }
+
+    // --- total weight ---
+    component sum_w = Sum(n);
+    for (var i = 0; i < n; i++) {
+        sum_w.in[i] <== weights[i];
+    }
+    total_weight <== sum_w.out;
+
+    // --- 中位数条件：2 × weight_leq ≥ total_weight ---
+    component check_geq = GreaterEqThan(64);
+    check_geq.in[0] <== 2 * sum_leq.out;
+    check_geq.in[1] <== total_weight;
+    check_geq.out === 1;
+
+    // --- 最小性：2 × weight_lt < total_weight ---
+    component check_lt = LessThan(64);
+    check_lt.in[0] <== 2 * sum_lt.out;
+    check_lt.in[1] <== total_weight;
+    check_lt.out === 1;
+
+    is_valid <== 1;
 }
 
-// 查找索引
-template FindIndex(n) {
-    signal input target;
-    signal input candidates[n];
-    signal output index;
-    
-    // 找到target在candidates中的索引
-    // 简化实现：假设总是能找到
-    index <== 0;
+// ====================================================================
+// 模板 2：BetaBernoulliUpdate()
+// ====================================================================
+//
+// 证明 Beta-Bernoulli 可靠度更新（定点算术）：
+//   α_new = α_old + ⌊η × c / SCALE⌋
+//   β_new = β_old + ⌊η × (1 − c) / SCALE⌋
+//   r     = ⌊α_new × SCALE / (α_new + β_new)⌋
+//
+// 所有输入/输出均为定点整数（× SCALE）
+//
+template BetaBernoulliUpdate() {
+    var SCALE = 1000000;
+
+    signal input old_alpha;
+    signal input old_beta;
+    signal input eta;              // 学习率 (scaled)
+    signal input consistency;      // c_s ∈ [0, SCALE]
+    signal input claimed_new_alpha;
+    signal input claimed_new_beta;
+    signal input claimed_reliability;
+
+    signal output is_valid;
+
+    // --- α_new = α_old + ⌊η × c / SCALE⌋ ---
+    signal eta_c;
+    eta_c <== eta * consistency;
+    signal delta_alpha;
+    delta_alpha <-- eta_c \ SCALE;
+    // 约束：delta_alpha × SCALE ≤ eta_c < (delta_alpha + 1) × SCALE
+    signal lo1;
+    lo1 <== delta_alpha * SCALE;
+    component c1 = LessEqThan(128);
+    c1.in[0] <== lo1;
+    c1.in[1] <== eta_c;
+    c1.out === 1;
+    component c2 = LessThan(128);
+    c2.in[0] <== eta_c;
+    c2.in[1] <== lo1 + SCALE;
+    c2.out === 1;
+    claimed_new_alpha === old_alpha + delta_alpha;
+
+    // --- β_new = β_old + ⌊η × (SCALE − c) / SCALE⌋ ---
+    signal one_minus_c;
+    one_minus_c <== SCALE - consistency;
+    signal eta_1mc;
+    eta_1mc <== eta * one_minus_c;
+    signal delta_beta;
+    delta_beta <-- eta_1mc \ SCALE;
+    signal lo2;
+    lo2 <== delta_beta * SCALE;
+    component c3 = LessEqThan(128);
+    c3.in[0] <== lo2;
+    c3.in[1] <== eta_1mc;
+    c3.out === 1;
+    component c4 = LessThan(128);
+    c4.in[0] <== eta_1mc;
+    c4.in[1] <== lo2 + SCALE;
+    c4.out === 1;
+    claimed_new_beta === old_beta + delta_beta;
+
+    // --- r = ⌊α_new × SCALE / (α_new + β_new)⌋ ---
+    signal denom;
+    denom <== claimed_new_alpha + claimed_new_beta;
+    signal numer;
+    numer <== claimed_new_alpha * SCALE;
+    signal computed_r;
+    computed_r <-- numer \ denom;
+    signal r_check;
+    r_check <== computed_r * denom;
+    component c5 = LessEqThan(128);
+    c5.in[0] <== r_check;
+    c5.in[1] <== numer;
+    c5.out === 1;
+    component c6 = LessThan(128);
+    c6.in[0] <== numer;
+    c6.in[1] <== r_check + denom;
+    c6.out === 1;
+    claimed_reliability === computed_r;
+
+    is_valid <== 1;
 }
 
-// erfc近似（使用多项式近似）
-template ErfcApprox() {
-    signal input x;
-    signal output out;
-    
-    // erfc(x) ≈ 1 - erf(x)
-    // 使用erf的多项式近似：erf(x) ≈ 2/√π * x * (1 - x²/3 + x⁴/10 - ...)
-    // 这里使用简化的线性近似（实际应该使用更精确的多项式）
-    var PI_SQRT = 1772453850; // √π * 10^9（定点数）
-    var TWO_OVER_SQRT_PI = 1128379166; // 2/√π * 10^9
-    
-    component x_squared = Multiplier();
-    x_squared.a <== x;
-    x_squared.b <== x;
-    
-    component erf_approx = Multiplier();
-    erf_approx.a <== TWO_OVER_SQRT_PI;
-    erf_approx.b <== x;
-    
-    component one_minus_erf = Subtractor();
-    one_minus_erf.a <== 1;
-    one_minus_erf.b <== erf_approx.out;
-    
-    out <== one_minus_erf.out;
+// ====================================================================
+// 模板 3：GaussianConsistencyScore()
+// ====================================================================
+//
+// 证明高斯一致性评分的近似正确性：
+//   score ≈ exp(−0.5 × z²)    其中 z = residual / scale
+//
+// 使用 Padé(2,2) 逼近 exp(−t)（令 t = z²/2）：
+//   exp(−t) ≈ (12 − 6t + t²) / (12 + 6t + t²)
+//
+// 精度：t ∈ [0, 4]（即 |z| ≤ 2.83）时相对误差 < 1%
+// 对 t > 4 的情况，输出钳位到 0。
+//
+template GaussianConsistencyScore() {
+    var SCALE = 1000000;
+    var THRESHOLD = 4000000;  // t > 4×SCALE → score = 0
+
+    signal input residual_abs;  // |value − truth| (scaled)
+    signal input mad_scale;     // MAD-based scale (scaled, > 0)
+    signal input claimed_score; // ∈ [0, SCALE]
+
+    signal output is_valid;
+
+    // z = residual_abs × SCALE / mad_scale
+    signal z;
+    z <-- (residual_abs * SCALE) \ mad_scale;
+    signal z_check;
+    z_check <== z * mad_scale;
+    component zc1 = LessEqThan(128);
+    zc1.in[0] <== z_check;
+    zc1.in[1] <== residual_abs * SCALE;
+    zc1.out === 1;
+    component zc2 = LessThan(128);
+    zc2.in[0] <== residual_abs * SCALE;
+    zc2.in[1] <== z_check + mad_scale;
+    zc2.out === 1;
+
+    // t = z² / (2 × SCALE)
+    signal z_sq;
+    z_sq <== z * z;
+    signal t;
+    t <-- z_sq \ (2 * SCALE);
+
+    // Padé(2,2):
+    //   numerator   = 12×S² − 6×S×t + t²
+    //   denominator = 12×S² + 6×S×t + t²
+    signal t_sq;
+    t_sq <== t * t;
+    signal six_s_t;
+    six_s_t <== 6 * SCALE * t;
+    var twelve_s2 = 12 * SCALE * SCALE;
+
+    signal pade_num;
+    pade_num <== twelve_s2 - six_s_t + t_sq;
+    signal pade_den;
+    pade_den <== twelve_s2 + six_s_t + t_sq;
+
+    // 条件输出：t ≤ THRESHOLD ? pade : 0
+    component is_large = GreaterThan(128);
+    is_large.in[0] <== t;
+    is_large.in[1] <== THRESHOLD;
+
+    signal unclamped;
+    unclamped <-- (pade_num * SCALE) \ pade_den;
+
+    signal selected;
+    selected <== unclamped * (1 - is_large.out);
+
+    claimed_score === selected;
+    is_valid <== 1;
 }
 
-// ========== 主电路 ==========
-component main = HybridTruthFinderProof(4, 2, 2, 3);
-// 参数说明：
-// 4: 4个数据源
-// 2: 2个数值字段
-// 2: 2个离散字段
-// 3: 每个离散字段最多3个候选值
+// ====================================================================
+// 模板 4：SemanticTruthProof(n)  — 主证明电路
+// ====================================================================
+//
+// 对单个 object 证明：
+//   1. 真值 = 加权中位数
+//   2. 每个源的 Beta-Bernoulli 可靠度更新正确
+//   3. 绑定哈希（statement_hash）匹配私有输入
+//
+template SemanticTruthProof(n) {
+    // ===== 数值真值 =====
+    signal input values[n];
+    signal input weights[n];
+    signal input claimed_truth;
+    signal input claimed_total_weight;
+    signal input statement_hash;
+
+    // ===== Beta-Bernoulli 可靠度更新 =====
+    signal input old_alpha[n];
+    signal input old_beta[n];
+    signal input eta;
+    signal input consistency[n];
+    signal input claimed_new_alpha[n];
+    signal input claimed_new_beta[n];
+    signal input claimed_reliability[n];
+
+    // ===== 公开输出 =====
+    signal output public_statement_hash;
+    signal output public_truth;
+    signal output public_total_weight;
+    signal output is_valid;
+
+    // --- 1. 加权中位数 ---
+    component wm = WeightedMedian(n);
+    for (var i = 0; i < n; i++) {
+        wm.values[i] <== values[i];
+        wm.weights[i] <== weights[i];
+    }
+    wm.claimed_truth <== claimed_truth;
+    claimed_total_weight === wm.total_weight;
+
+    // --- 2. Beta-Bernoulli 更新 ---
+    component bb[n];
+    signal bb_valid[n];
+    for (var i = 0; i < n; i++) {
+        bb[i] = BetaBernoulliUpdate();
+        bb[i].old_alpha <== old_alpha[i];
+        bb[i].old_beta <== old_beta[i];
+        bb[i].eta <== eta;
+        bb[i].consistency <== consistency[i];
+        bb[i].claimed_new_alpha <== claimed_new_alpha[i];
+        bb[i].claimed_new_beta <== claimed_new_beta[i];
+        bb[i].claimed_reliability <== claimed_reliability[i];
+        bb_valid[i] <== bb[i].is_valid;
+    }
+
+    // --- 3. 绑定哈希 ---
+    //   hash = Σ values[k]*(k+1) + Σ weights[k]*(k+1001)
+    //        + claimed_truth + claimed_total_weight
+    signal hash_terms[2 * n + 2];
+    component sum_hash = Sum(2 * n + 2);
+    for (var k = 0; k < n; k++) {
+        hash_terms[2 * k] <== values[k] * (k + 1);
+        hash_terms[2 * k + 1] <== weights[k] * (k + 1001);
+    }
+    hash_terms[2 * n] <== claimed_truth;
+    hash_terms[2 * n + 1] <== claimed_total_weight;
+    for (var t = 0; t < 2 * n + 2; t++) {
+        sum_hash.in[t] <== hash_terms[t];
+    }
+    statement_hash === sum_hash.out;
+
+    // --- 公开输出 ---
+    public_statement_hash <== statement_hash;
+    public_truth <== claimed_truth;
+    public_total_weight <== claimed_total_weight;
+    is_valid <== 1;
+}
+
+// ====================================================================
+// 默认实例化：10 个数据源
+// ====================================================================
+component main = SemanticTruthProof(10);

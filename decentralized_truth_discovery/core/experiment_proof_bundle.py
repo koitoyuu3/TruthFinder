@@ -81,14 +81,14 @@ def groth16_proof_to_solidity_call(proof: Mapping[str, Any]) -> Dict[str, Any]:
         "pubSignals": pub_signals,
         "publicSignalCount": len(pub_signals),
         "outputStatementHashField": pub_signals[0],
-        "outputWeightedSum": pub_signals[1],
+        "outputTruth": pub_signals[1],
         "outputTotalWeight": pub_signals[2],
         "outputIsValid": pub_signals[3],
     }
     if len(pub_signals) >= 3:
         payload.update(
             {
-                "claimedWeightedSum": pub_signals[-3],
+                "claimedTruth": pub_signals[-3],
                 "claimedTotalWeight": pub_signals[-2],
                 "inputStatementHashField": pub_signals[-1],
             }

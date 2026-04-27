@@ -27,7 +27,7 @@ from decentralized_truth_discovery.examples.exp_utils import (
 )
 
 DEFAULT_DATA_DIR = ROOT / "decentralized_truth_discovery" / "data_agent-50_news-300"
-DEFAULT_OUT_DIR = (
+DEFAULT_OUT_BASE = (
     ROOT
     / "decentralized_truth_discovery"
     / "examples"
@@ -36,6 +36,7 @@ DEFAULT_OUT_DIR = (
     / "data_agent-50_news-300"
     / "bad_5"
 )
+DEFAULT_THRESHOLD = 0.90
 BAD_COUNT = 5
 AGENT_RANGE = [15, 20, 25, 30, 35, 40, 45, 50]
 TITLE = "E4-Text: Agent 数量变化"
@@ -47,6 +48,8 @@ def save_results(
     agent_range: List[int],
     txt_results: Dict[str, Dict[str, List[float]]],
     out_dir: Path,
+    dataset_name: str,
+    accuracy_threshold: float,
 ) -> Path:
     rows = []
     for i, agent_count in enumerate(agent_range):
@@ -58,8 +61,9 @@ def save_results(
                     "data_accuracy": txt_results[method]["data_accuracy"][i]
                     if i < len(txt_results[method]["data_accuracy"])
                     else float("nan"),
-                    "dataset": "data_agent-50_news-300",
+                    "dataset": dataset_name,
                     "bad_count": BAD_COUNT,
+                    "accuracy_threshold": accuracy_threshold,
                 }
             )
     path = out_dir / "results.csv"
@@ -67,7 +71,7 @@ def save_results(
     return path
 
 
-def run_experiment(data_dir: Path, out_dir: Path) -> None:
+def run_experiment(data_dir: Path, out_dir: Path, accuracy_threshold: float) -> None:
     clean_path = data_dir / "demo.json"
     noisy_path = data_dir / f"demo_{BAD_COUNT}bad_collude.json"
     for path in [clean_path, noisy_path]:
@@ -86,8 +90,8 @@ def run_experiment(data_dir: Path, out_dir: Path) -> None:
     print(TITLE)
     print("=" * 60)
     print(
-        "dataset = text:data_agent-50_news-300/demo_*bad_collude.json, "
-        f"bad_count = {BAD_COUNT}"
+        f"dataset = text:{data_dir.name}/demo_*bad_collude.json, "
+        f"bad_count = {BAD_COUNT}, accuracy_threshold = {accuracy_threshold:g}"
     )
 
     for n_agents in AGENT_RANGE:
@@ -99,15 +103,21 @@ def run_experiment(data_dir: Path, out_dir: Path) -> None:
         noisy_txt_df = to_text_df(mal_txt_batches, agent_subset=subset)
 
         if not clean_txt_df.empty and not noisy_txt_df.empty:
-            res_txt = eval_text(clean_txt_df, noisy_txt_df)
+            res_txt = eval_text(clean_txt_df, noisy_txt_df, accuracy_threshold=accuracy_threshold)
             for method in TEXT_METHODS:
                 txt_results[method]["data_accuracy"].append(res_txt[method]["data_accuracy"])
         else:
             for method in TEXT_METHODS:
                 txt_results[method]["data_accuracy"].append(float("nan"))
 
-    plot_text(AGENT_RANGE, txt_results, X_LABEL, TITLE, out_dir)
-    results_path = save_results(AGENT_RANGE, txt_results, out_dir)
+    plot_text(AGENT_RANGE, txt_results, X_LABEL, TITLE, out_dir, threshold=accuracy_threshold)
+    results_path = save_results(
+        AGENT_RANGE,
+        txt_results,
+        out_dir,
+        dataset_name=data_dir.name,
+        accuracy_threshold=accuracy_threshold,
+    )
     print(f"saved {out_dir / 'mixed_text.png'}")
     print(f"saved {results_path}")
 
@@ -115,9 +125,35 @@ def run_experiment(data_dir: Path, out_dir: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run 50-agent text exp4 with fixed 5 malicious agents.")
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
-    parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR)
+    parser.add_argument(
+        "--out-dir",
+        type=Path,
+        default=None,
+        help="Output directory. Default: <exp4_text>/<data-dir name>/bad_5/threshold_{th}/",
+    )
+    parser.add_argument(
+        "--accuracy-threshold",
+        type=float,
+        default=DEFAULT_THRESHOLD,
+        help="Hybrid-score threshold for Data Accuracy metric (default: 0.90).",
+    )
     args = parser.parse_args()
-    run_experiment(args.data_dir, args.out_dir)
+
+    if args.out_dir is None:
+        out_dir = (
+            ROOT
+            / "decentralized_truth_discovery"
+            / "examples"
+            / "outputs"
+            / "exp4_text"
+            / args.data_dir.name
+            / "bad_5"
+            / f"threshold_{args.accuracy_threshold:.2f}"
+        )
+    else:
+        out_dir = args.out_dir
+
+    run_experiment(args.data_dir, out_dir, accuracy_threshold=args.accuracy_threshold)
 
 
 if __name__ == "__main__":

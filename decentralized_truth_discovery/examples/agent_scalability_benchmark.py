@@ -266,6 +266,46 @@ def _batches_to_numeric_df(
     return pd.DataFrame(rows, columns=["website", "object", "fact", "batch_index"])
 
 
+def _batches_to_text_df(
+    batches: Sequence[Dict[str, Any]],
+    *,
+    agent_subset: Sequence[str] | None = None,
+) -> pd.DataFrame:
+    """Build a (website, object, fact=text, batch_index) DataFrame from text-style
+    demo data where each item's `response` is a free-form string (e.g. a Chinese
+    news summary). Used by the text-mode scalability benchmark; SemanticTruth
+    and SenteTruth consume this directly via SBERT/TF-IDF encoding.
+    """
+    agent_set = {str(agent) for agent in agent_subset} if agent_subset is not None else None
+    rows: List[Dict[str, Any]] = []
+    for batch in batches:
+        batch_index = int(batch.get("batchIndex", 0))
+        for item in batch.get("items", []):
+            if not isinstance(item, dict):
+                continue
+            website = str(item.get("agent", "")).strip()
+            if agent_set is not None and website not in agent_set:
+                continue
+            response = item.get("response")
+            if not isinstance(response, str):
+                continue
+            text = response.strip()
+            if not text:
+                continue
+            object_id = str(item.get("object", "")).strip()
+            if not object_id:
+                continue
+            rows.append(
+                {
+                    "website": website,
+                    "object": object_id,
+                    "fact": text,
+                    "batch_index": batch_index,
+                }
+            )
+    return pd.DataFrame(rows, columns=["website", "object", "fact", "batch_index"])
+
+
 def _run_silently(fn):
     import io
 
@@ -668,6 +708,71 @@ def _run_numeric_method_by_name(method_name: str, numeric_df: pd.DataFrame) -> t
         return source_scores, elapsed
 
     raise ValueError(f"Unsupported method: {method_name}")
+
+
+TEXT_CAPABLE_METHODS = ("SemanticTruth", "SenteTruth")
+
+
+def _run_text_method_by_name(
+    method_name: str,
+    text_df: pd.DataFrame,
+    *,
+    use_sbert: bool = True,
+) -> tuple[Dict[str, float], float]:
+    """Text-mode aggregation for the two text-capable methods.
+
+    SemanticTruth runs the dual-channel pipeline with an empty numeric channel
+    (text-only workload), and SenteTruth ingests the text fact directly.
+    `use_sbert=True` exercises the real sentence-transformer model so that
+    per-process RSS reflects the model's footprint.
+    """
+    from decentralized_truth_discovery.core import SemanticTruthFinder
+    from decentralized_truth_discovery.core.sente_truth_finder import SenteTruthFinder
+
+    if text_df is None or text_df.empty:
+        return {}, 0.0
+
+    if method_name == "SemanticTruth":
+        start = time.perf_counter()
+        model = _run_silently(
+            lambda: SemanticTruthFinder(enable_zk_proof=False, use_sbert=use_sbert)
+        )
+        empty_numeric_df = pd.DataFrame(columns=["website", "object", "fact", "batch_index"])
+        for batch_index in sorted(text_df["batch_index"].unique()):
+            group_df = text_df[text_df["batch_index"] == batch_index][
+                ["website", "object", "fact", "batch_index"]
+            ].copy()
+            _run_silently(
+                lambda grp=group_df: model.process_batch(empty_numeric_df.copy(), grp)
+            )
+        elapsed = time.perf_counter() - start
+        details = model.get_reliability()
+        source_scores = {
+            str(website): float(metrics.get("reliability", np.nan))
+            for website, metrics in details.items()
+            if pd.notna(metrics.get("reliability", np.nan))
+        }
+        return source_scores, elapsed
+
+    if method_name == "SenteTruth":
+        start = time.perf_counter()
+        model = _run_silently(lambda: SenteTruthFinder(enable_zk_proof=False, use_sbert=use_sbert))
+        for batch_index in sorted(text_df["batch_index"].unique()):
+            group_df = text_df[text_df["batch_index"] == batch_index][
+                ["website", "fact", "object", "batch_index"]
+            ].copy()
+            _run_silently(lambda grp=group_df, bi=batch_index: model.process_batch(grp, epoch=int(bi)))
+        elapsed = time.perf_counter() - start
+        source_scores = {
+            str(website): float(score)
+            for website, score in model.node_credibility.items()
+            if pd.notna(score)
+        }
+        return source_scores, elapsed
+
+    raise ValueError(
+        f"Unsupported text method: {method_name}. Text-mode supports {TEXT_CAPABLE_METHODS}."
+    )
 
 
 def _invoke_worker(

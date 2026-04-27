@@ -1,0 +1,6 @@
+method,run_count,success_count,overall_mean_elapsed_sec,overall_mean_peak_delta_rss_mb,overall_mean_source_score_pct,overall_mean_latency_rank,overall_mean_memory_rank,overall_mean_quality_rank,overall_mean_composite_rank,overall_mean_composite_score,success_rate,runtime_scaling_exponent,memory_scaling_exponent
+DecentTruth,1,1,0.12115995799999979,0.0,100.0,1.0,1.5,1.0,1.0,100.0,1.0,,
+BasicTruth,1,1,0.6009127080000027,0.0,99.89999999999998,3.0,1.5,2.0,2.0,98.3773685755359,1.0,,
+SenFeedTruth,1,1,0.15858241599999978,289.84375,91.7915001363811,2.0,5.0,3.0,3.0,61.59314905190267,1.0,,
+SemanticTruth,1,1,11.960429459,103.671875,85.31397333068,4.0,3.0,4.0,4.0,42.55077028504169,1.0,,
+SenteTruth,1,1,13.762285375000001,244.453125,50.00000000000001,5.0,4.0,5.0,5.0,5.481132075471698,1.0,,

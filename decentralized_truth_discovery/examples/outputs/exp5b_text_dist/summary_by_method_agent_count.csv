@@ -1,0 +1,7 @@
+method,agent_count,run_count,success_count,mean_elapsed_sec,std_elapsed_sec,mean_peak_rss_mb,mean_peak_delta_rss_mb,std_peak_delta_rss_mb,mean_source_score_pct,std_source_score_pct,mean_latency_rank,mean_memory_rank,mean_quality_rank,mean_composite_rank,mean_composite_score,success_rate,runtime_scale_vs_min_agents,memory_scale_vs_min_agents,runtime_scaling_exponent,memory_scaling_exponent
+SemanticTruth,2,1,1,12.011921459000003,,751.578125,582.546875,,85.46278132336818,,2.0,2.0,1.0,2.0,20.0,1.0,1.0,1.0,0.44931876188768677,
+SenteTruth,2,1,1,10.422416543000004,,786.71875,35.140625,,49.99999999999999,,1.0,1.0,2.0,1.0,80.0,1.0,1.0,1.0,0.39641911736688545,
+SemanticTruth,4,1,0,,,786.71875,0.0,,,,,,,,,0.0,,0.0,0.44931876188768677,
+SenteTruth,4,1,0,,,786.71875,0.0,,,,,,,,,0.0,,0.0,0.39641911736688545,
+SemanticTruth,8,1,1,22.39387933400002,,786.71875,0.0,,85.33667497182367,,2.0,1.5,1.0,2.0,55.0,1.0,1.8643045086863494,0.0,0.44931876188768677,
+SenteTruth,8,1,1,18.05662241699997,,786.71875,0.0,,50.0,,1.0,1.5,2.0,1.0,80.0,1.0,1.7324794439469338,0.0,0.39641911736688545,

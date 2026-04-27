@@ -32,7 +32,7 @@ from decentralized_truth_discovery.core import SemanticTruthFinder
 
 
 ROOT = Path(__file__).resolve().parents[2]
-LOCAL_DATA_ROOT = ROOT / "decentralized_truth_discovery" / "datas_CLLM"
+LOCAL_DATA_ROOT = ROOT / "decentralized_truth_discovery" / "data_CLLM"
 EXTERNAL_DATA_ROOT = Path("/Users/huabowen/CLLM/datas")
 MODEL_FILES = ("gpt", "google", "chatglm", "llama", "tencent")
 
