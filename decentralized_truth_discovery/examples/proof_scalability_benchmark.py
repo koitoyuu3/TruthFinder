@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import gc
 import json
 import os
 import resource
@@ -30,7 +31,9 @@ from decentralized_truth_discovery.examples.five_methods_comparison import (
 )
 
 DEFAULT_OUTPUT_ROOT = Path(__file__).resolve().parent / "outputs" / "proof_scalability"
-DEFAULT_BATCH_COUNTS = (150,)
+DEFAULT_BATCH_COUNTS = (5, 25, 50, 100, 150, 300)
+DEFAULT_REPEATS = 30
+DEFAULT_WARMUP = 1
 
 
 @dataclass(frozen=True)
@@ -176,14 +179,25 @@ def _verify_bundle_payload(bundle_payload: Mapping[str, Any]) -> Dict[str, Any]:
 
 
 def _worker_verify_bundle(bundle_path: Path, memory_sample_interval: float) -> WorkerVerificationResult:
+    # Pre-touch the file so page-cache state is consistent across repeats.
+    with bundle_path.open("rb") as file_obj:
+        file_obj.read(1)
+
     sampler = _PeakRssSampler(memory_sample_interval)
+    gc.collect()
+    gc_was_enabled = gc.isenabled()
+    gc.disable()
     sampler.start()
     started_at = time.perf_counter()
-    with bundle_path.open("r", encoding="utf-8") as file_obj:
-        payload = json.load(file_obj)
-    verification = _verify_bundle_payload(payload)
-    verify_elapsed_sec = time.perf_counter() - started_at
-    baseline_rss_mb, peak_rss_mb, peak_delta_rss_mb = sampler.stop()
+    try:
+        with bundle_path.open("r", encoding="utf-8") as file_obj:
+            payload = json.load(file_obj)
+        verification = _verify_bundle_payload(payload)
+        verify_elapsed_sec = time.perf_counter() - started_at
+    finally:
+        baseline_rss_mb, peak_rss_mb, peak_delta_rss_mb = sampler.stop()
+        if gc_was_enabled:
+            gc.enable()
     return WorkerVerificationResult(
         verified=bool(verification["verified"]),
         proof_group_count=int(verification["proof_group_count"]),
@@ -230,6 +244,7 @@ def _measure_bundle(
     bundle_path: Path,
     repeats: int,
     memory_sample_interval: float,
+    warmup: int = 0,
 ) -> List[Dict[str, Any]]:
     with bundle_path.open("r", encoding="utf-8") as file_obj:
         payload = json.load(file_obj)
@@ -240,6 +255,15 @@ def _measure_bundle(
     bundle_size_bytes = bundle_path.stat().st_size
     row_count = int(payload.get("row_count", 0))
     proof_group_count = int(len(proof_groups))
+
+    # Discard `warmup` invocations to avoid cold-start outliers (page cache,
+    # subprocess interpreter import, lazy-loaded modules) skewing the mean.
+    for _ in range(max(int(warmup), 0)):
+        _invoke_verify_worker(
+            script_path=script_path,
+            bundle_path=bundle_path,
+            memory_sample_interval=memory_sample_interval,
+        )
 
     rows: List[Dict[str, Any]] = []
     for repeat_index in range(1, repeats + 1):
@@ -285,6 +309,7 @@ def _build_summary_df(raw_df: pd.DataFrame) -> pd.DataFrame:
             verify_elapsed_sec_std=("verify_elapsed_sec", "std"),
             verify_peak_rss_mb_mean=("peak_rss_mb", "mean"),
             verify_peak_delta_rss_mb_mean=("peak_delta_rss_mb", "mean"),
+            verify_peak_delta_rss_mb_std=("peak_delta_rss_mb", "std"),
             verified_all=("verified", "all"),
             result_digest_ok_all=("result_digest_ok", "all"),
             experiment_digest_ok_all=("experiment_digest_ok", "all"),
@@ -313,7 +338,13 @@ def _build_cli() -> argparse.ArgumentParser:
         default="numeric,text",
         help="Comma-separated domains to benchmark. Supported: numeric,text",
     )
-    parser.add_argument("--repeats", type=_positive_int, default=3)
+    parser.add_argument("--repeats", type=_positive_int, default=DEFAULT_REPEATS)
+    parser.add_argument(
+        "--warmup",
+        type=int,
+        default=DEFAULT_WARMUP,
+        help="Number of warmup verify runs to discard per bundle (must be >= 0).",
+    )
     parser.add_argument("--memory-sample-interval", type=_positive_float, default=0.01)
     parser.add_argument("--worker-verify-bundle", type=Path, default=None)
     return parser
@@ -331,6 +362,7 @@ def _run_benchmark_mode(args: argparse.Namespace) -> int:
     unsupported_domains = [domain for domain in requested_domains if domain not in {"numeric", "text"}]
     if unsupported_domains:
         raise ValueError(f"Unsupported domains: {unsupported_domains}")
+    warmup = max(int(args.warmup), 0)
 
     output_root = Path(args.output_root).resolve()
     output_root.mkdir(parents=True, exist_ok=True)
@@ -347,6 +379,7 @@ def _run_benchmark_mode(args: argparse.Namespace) -> int:
     print(f"Batch counts:  {batch_counts}")
     print(f"Domains:       {requested_domains}")
     print(f"Repeats:       {args.repeats}")
+    print(f"Warmup:        {warmup}")
 
     for batch_count in batch_counts:
         bundle_output_dir = output_root / f"bundles_batch_{batch_count}"
@@ -370,6 +403,7 @@ def _run_benchmark_mode(args: argparse.Namespace) -> int:
                         bundle_path=Path(artifact.output_path),
                         repeats=args.repeats,
                         memory_sample_interval=args.memory_sample_interval,
+                        warmup=warmup,
                     )
                 )
 
@@ -391,6 +425,7 @@ def _run_benchmark_mode(args: argparse.Namespace) -> int:
                         bundle_path=Path(artifact.output_path),
                         repeats=args.repeats,
                         memory_sample_interval=args.memory_sample_interval,
+                        warmup=warmup,
                     )
                 )
 
@@ -412,6 +447,7 @@ def _run_benchmark_mode(args: argparse.Namespace) -> int:
                 "batch_counts": batch_counts,
                 "domains": requested_domains,
                 "repeats": int(args.repeats),
+                "warmup": int(warmup),
                 "memory_sample_interval": float(args.memory_sample_interval),
                 "artifacts": {
                     "raw_results_csv": str(raw_csv_path),

@@ -1,9 +1,9 @@
 {
   "experiment_id": "demo_text_BasicTruth",
-  "experiment_digest": "3e29cc451c6c72cf243c3e0c66d4eb901d8090be17c015e5bc78382977f3a6fc",
+  "experiment_digest": "17d071ac84662c326ed583ede522d66d77c9efbc77a070a9ed87e122a0cc57f3",
   "method": "BasicTruth",
   "row_count": 50,
-  "result_digest": "9184044254cd4c973c94b9b16018e28a990156a6e86abcc7f770d4b30909b7a7",
+  "result_digest": "348747305b165f2434200fbc4b6235fac7502338551b2a03bb920ba8e4438eb7",
   "rows": [
     {
       "website": "agent-1",
@@ -14,7 +14,7 @@
       "fact_confidence": 0.6901068629135223,
       "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
       "source_reliability": 0.6901068629135223,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -28,7 +28,7 @@
       "fact_confidence": 0.6912952988584944,
       "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
       "source_reliability": 0.6912952988584944,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -42,7 +42,7 @@
       "fact_confidence": 0.6596408595528174,
       "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
       "source_reliability": 0.6596408595528174,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -56,7 +56,7 @@
       "fact_confidence": 0.6051007761169627,
       "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
       "source_reliability": 0.6051007761169627,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -70,7 +70,7 @@
       "fact_confidence": 0.615325462761034,
       "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
       "source_reliability": 0.615325462761034,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -84,7 +84,7 @@
       "fact_confidence": 0.6738009349279067,
       "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
       "source_reliability": 0.6738009349279067,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -98,7 +98,7 @@
       "fact_confidence": 0.653040930526282,
       "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
       "source_reliability": 0.653040930526282,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -112,7 +112,7 @@
       "fact_confidence": 0.6558567807072658,
       "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
       "source_reliability": 0.6558567807072658,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -126,7 +126,7 @@
       "fact_confidence": 0.6640250875252149,
       "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
       "source_reliability": 0.6640250875252149,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -140,7 +140,7 @@
       "fact_confidence": 0.6810382765552746,
       "global_truth": "Agilent Technologies, Inc. (A)的新期权合约将在2024年8月开始交易，涉及的看跌和看涨期权可能为卖方带来更高溢价，当前看跌期权的行权价为125.00，有77%的概率到期无价值。",
       "source_reliability": 0.6810382765552746,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -154,7 +154,7 @@
       "fact_confidence": 0.7714826752050856,
       "global_truth": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
       "source_reliability": 0.7714826752050856,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -168,7 +168,7 @@
       "fact_confidence": 0.7393795158080188,
       "global_truth": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
       "source_reliability": 0.7393795158080188,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -182,7 +182,7 @@
       "fact_confidence": 0.7369175055589506,
       "global_truth": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
       "source_reliability": 0.7369175055589506,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -196,7 +196,7 @@
       "fact_confidence": 0.7411122967085269,
       "global_truth": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
       "source_reliability": 0.7411122967085269,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -210,7 +210,7 @@
       "fact_confidence": 0.7501411326091921,
       "global_truth": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
       "source_reliability": 0.7501411326091921,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -224,7 +224,7 @@
       "fact_confidence": 0.7279828532135548,
       "global_truth": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
       "source_reliability": 0.7279828532135548,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -238,7 +238,7 @@
       "fact_confidence": 0.7225738904664669,
       "global_truth": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
       "source_reliability": 0.7225738904664669,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -252,7 +252,7 @@
       "fact_confidence": 0.7180984882123553,
       "global_truth": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
       "source_reliability": 0.7180984882123553,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -266,7 +266,7 @@
       "fact_confidence": 0.7147547210122449,
       "global_truth": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
       "source_reliability": 0.7147547210122449,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -280,7 +280,7 @@
       "fact_confidence": 0.7505504398153531,
       "global_truth": "Wolfe Research对Agilent Technologies启动覆盖并给予出performance评级，尽管未披露明确财务数字，公司最近宣布每股0.24美元的季度股息。",
       "source_reliability": 0.7505504398153531,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -294,7 +294,7 @@
       "fact_confidence": 0.8498512842004212,
       "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
       "source_reliability": 0.8498512842004212,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -308,7 +308,7 @@
       "fact_confidence": 0.8339845117346829,
       "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
       "source_reliability": 0.8339845117346829,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -322,7 +322,7 @@
       "fact_confidence": 0.8224531185964726,
       "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
       "source_reliability": 0.8224531185964726,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -336,7 +336,7 @@
       "fact_confidence": 0.8315034111754124,
       "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
       "source_reliability": 0.8315034111754124,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -350,7 +350,7 @@
       "fact_confidence": 0.8019346240557818,
       "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
       "source_reliability": 0.8019346240557818,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -364,7 +364,7 @@
       "fact_confidence": 0.8131023609356545,
       "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
       "source_reliability": 0.8131023609356545,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -378,7 +378,7 @@
       "fact_confidence": 0.8252875072813777,
       "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
       "source_reliability": 0.8252875072813777,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -392,7 +392,7 @@
       "fact_confidence": 0.8098387923142086,
       "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
       "source_reliability": 0.8098387923142086,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -406,7 +406,7 @@
       "fact_confidence": 0.8333286280569742,
       "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
       "source_reliability": 0.8333286280569742,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -420,7 +420,7 @@
       "fact_confidence": 0.8173733997310793,
       "global_truth": "Agilent Technologies的股价已超过分析师的12个月目标价132.36美元，现报133.74美元/股。",
       "source_reliability": 0.8173733997310793,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -434,7 +434,7 @@
       "fact_confidence": 0.9028621145790062,
       "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
       "source_reliability": 0.9028621145790062,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -448,7 +448,7 @@
       "fact_confidence": 0.8887228112644655,
       "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
       "source_reliability": 0.8887228112644655,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -462,7 +462,7 @@
       "fact_confidence": 0.8667353467691243,
       "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
       "source_reliability": 0.8667353467691243,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -476,7 +476,7 @@
       "fact_confidence": 0.8517262891217948,
       "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
       "source_reliability": 0.8517262891217948,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -490,7 +490,7 @@
       "fact_confidence": 0.8819558225067048,
       "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
       "source_reliability": 0.8819558225067048,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -504,7 +504,7 @@
       "fact_confidence": 0.8603344155826157,
       "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
       "source_reliability": 0.8603344155826157,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -518,7 +518,7 @@
       "fact_confidence": 0.8871908940489212,
       "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
       "source_reliability": 0.8871908940489212,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -532,7 +532,7 @@
       "fact_confidence": 0.8773898051722397,
       "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
       "source_reliability": 0.8773898051722397,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -546,7 +546,7 @@
       "fact_confidence": 0.8976843571939584,
       "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
       "source_reliability": 0.8976843571939584,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -560,7 +560,7 @@
       "fact_confidence": 0.8864274064000293,
       "global_truth": "Agilent Technologies A增强了BioTek Cytation C10成像读取器，新增水浸技术和共焦旋转盘技术，公司在全球微孔板读取器和活细胞成像市场前景看好，但目前Zacks评级为卖出。",
       "source_reliability": 0.8864274064000293,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -574,7 +574,7 @@
       "fact_confidence": 0.9513769081836904,
       "global_truth": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
       "source_reliability": 0.9513769081836904,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -588,7 +588,7 @@
       "fact_confidence": 0.9404681484016427,
       "global_truth": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
       "source_reliability": 0.9404681484016427,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -602,7 +602,7 @@
       "fact_confidence": 0.9468951418778624,
       "global_truth": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
       "source_reliability": 0.9468951418778624,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -616,7 +616,7 @@
       "fact_confidence": 0.9291519667796346,
       "global_truth": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
       "source_reliability": 0.9291519667796346,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -630,7 +630,7 @@
       "fact_confidence": 0.9467415382799448,
       "global_truth": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
       "source_reliability": 0.9467415382799448,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -644,7 +644,7 @@
       "fact_confidence": 0.9327865027413499,
       "global_truth": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
       "source_reliability": 0.9327865027413499,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -658,7 +658,7 @@
       "fact_confidence": 0.9402106077338741,
       "global_truth": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
       "source_reliability": 0.9402106077338741,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -672,7 +672,7 @@
       "fact_confidence": 0.947241753727524,
       "global_truth": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
       "source_reliability": 0.947241753727524,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -686,7 +686,7 @@
       "fact_confidence": 0.8548236067123219,
       "global_truth": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
       "source_reliability": 0.8548236067123219,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -700,7 +700,7 @@
       "fact_confidence": 0.9198199333872493,
       "global_truth": "NASDAQ 100 Pre-Market Indicator 上涨至 15,858.26，ProShares UltraPro Short QQQ (SQQQ) 下跌至 16.37 美元，Palantir Technologies Inc. (PLTR) 上涨至 17.45 美元，未披露明确财务数字。",
       "source_reliability": 0.9198199333872493,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -712,9 +712,9 @@
         "proof_scope": "text:BasicTruth:full_run"
       },
       "group_digest": "3189628e7e6549c34c76da3d1ba5db63e3a1e84d891b12c4dc394ef381ecd1f4",
-      "result_digest": "a25a05e50aee259f3da7dff3bf8c2223b0407e4c4f44b9be0792a0bb91bf1a89",
+      "result_digest": "1aa9c49ffd60d72f2a2ca67a418ab3e6f0e019a5840af5a74172fc873a616950",
       "row_count": 50,
-      "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+      "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_backend": "schnorr",
       "statement_hash": "0598c3b22261e2a045727c9402f053f7803bf50203f8ba4d673902ce879d4834",
@@ -724,11 +724,11 @@
       "public_json": null,
       "proof_json": null,
       "proof_payload": {
-        "proof_id": "e0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+        "proof_id": "e6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
         "scheme": "schnorr_nizk_v1",
         "backend": "schnorr",
         "group": "modp2048_subgroup",
-        "generated_at": 1775623961,
+        "generated_at": 1777361122,
         "prover_id": "BasicTruth",
         "statement": {
           "extra_public_data": {
@@ -746,10 +746,10 @@
           "truth_digest": "dca2241483adcc5b252bdcfc9d000bc898f947603c10f0dde46f332e7a2ff8bb"
         },
         "statement_hash": "0598c3b22261e2a045727c9402f053f7803bf50203f8ba4d673902ce879d4834",
-        "public_key": "0xb312579e0b711d10c58a065b59f9cd257aee1e439426cf6edbf734dce9ebfb7e53dfe96f1b55e59cea5343442592a587bc8abafcd9f99c08639755c813cf3c81b70c81d439225d632adcaa75f910288aae95b1598769e4545a58e8676d52293481bf94ff110f4219aecbe8cbd6c1718c134e510c10400a8c1723f8ae0f98b71eee8b534256dae5d651afe6fc73e744cd0f4244b520b9f52694fb911ac4c1465cae160ede769afdc927bf99ab82b45388432bfbecbff1f7947290abb8e65dd1d6af8c606d63bb145ae84368c39e3eda17b0241d6511001acd3925b5419d4fde41245a245c91e40769ee71274b84af62036ec4140b7ae3d8e8067c34b25f2b405d",
-        "commitment": "0x6ff96ba4ce1fb4d4609a81278cb125af4793db0ec17e3c15ebea2b2405c32baaf84ca9734a25e0aa2b8ef80ad408a487b6c3aed3a5d93461ac1bcd4dc6ecdfac5073339f8a03c0eab9a8af9a79d5cb86906403049fca6438a981e4e4acf4fae8988c203f36e262ee2bfcd73a9630f123b32d9e1552f66855f2b4a5827d1cfd8adb4a32d976d8e3ee6c64a23b6965ee793438f8eca57fc9ac018888605f57dd57d9bfc88efc7b82922d1afec270aa1bbe95737b6943d36cc8db61e3a5c9db84742301bc71f2b4b579770980f5cb925b5f5fbdce191de4f562c33ae82ee94fe9edab6ca41fb9afd6a27c5d61edf843c8fed923543dcefdc68d392ae9b874242eeb",
-        "challenge": "0x9ea52fa57ece2972a5a70f8af17cc9612d3918887c5ca1517f9505165459547e",
-        "response": "0x3ed1e401c3694b4b494a76f7e234d4928be05bd738635331d03c863fb5220cbba584d86e339b8663f2439e18ff57c12f19cf12e620964e2398aef3dc32ac73a473c73686df42744583e5dc5957b9fc5a1c50ebd66aed036645214966355dd8e34c5db1aa7ff565ee89a185023d21ccf9405a2a2a1f0e90ad2dd969513a1476bffca1237c65cb933165cdf50a670d4a144f174fa48d0efd213503d77d2af140c68a0049263e99780c5b1af88872d2c4d18dd0b464d834cf50240ebf2d5ec78b45233886d0ab23191048a995c2041cc5b6b1d413a3d062c0cfa3377c50ef0146e908bf67b89e820042796ce6a5df6b395b9de7066b8b79327a61da5b4dace27830",
+        "public_key": "0x98a4eb9b26cfc9b4cb78e68d43c79cab0acb1bc8fe55b42953f2cc9cde8538b9e4af3e0d884d08bd2c8b80f304eee17bcbc466f2db6f7b7a5d47cc5aac47d37a3f1769db0191d0b2616f943492718b61ce3fec87f54245f6764005d98a6539289bcfe1c7db69f49e857b8ee65a6a62bc165a86d5250be3b6cd8a3267056e5fff49826c32070a4a402d89c5e63b7ab1150a99816418f269d6e90e48cec4b8c4183ff1220502b70c14fdaa4ed917510db315f877561868ff62e8b82ba0b322a200cbdf65a048ed0c164eb39a978112596f248c931197d265a3d54282ede43a542029c364fcf909ae8028fdf3f5176ce5681b6c65156c20c99c8b4dc4e6e83f2712",
+        "commitment": "0xbf0e23854e8e33b530f8dcfbbd148c1df6a653d5bf199eeedb82f17d0685a8985eaf0486d8244ca4ce230831cccf1042e3597eb83193fa09d536345196dac5dea9dbc83206de29a3d83bd40638cafe82bd1684173ecaa5a0577a5be825fc70a0af50a785a5ba90d64427a622edb7ea3afb19b45480bed9fe73a9aa8676293be386a45e149628b6a9dd51e14a272858d2da202d786c105ee986859294eae7a43ab1577bca972c783f8eeb829fb0da03c6160cf58bbdc7eec9817f691770e10d34c87aadb4560a775d4e35f946020d13303cd4d0e76c1c8902dfe28fec21e6245634cbdf3b6ccccfb1b76aa648662352aaaf9527e4e72036b33d9b9eab3ae3cbce",
+        "challenge": "0x1720305d8203ec1111a77b6d02511940a85df98ab0162de305efd369af73eb7f",
+        "response": "0x11d7e6410b2c4366f51c93e32f1bd82fefadc0362f32ed9e1d163402629b851d5fefe920bf42cd7e9445afc1ede6dc7185b7a0d1bd5a27030d163ad2a72626cc1f223d4b1ede99bb3b992d2ec79ecd56ada49bc3f3ef68cdf78af4f9fc12c35a26c5545201d522bb1b81b6fb0871e1b7856865ccdb6e29b82be1bda70ee37c62c765f1be7403be8a1ad0c4936ccaf2ebddef41595aaa4454cb37c3be99ba2d68eaa6b3b5371e8ae8de52b372aec05c26887dfb4e7161cbc4970451b9a6d7f6ea6004632abd7e1e2815f30647416610fc5e833eee12c0cca243a754e033c829eb5b4599108da9f858f17a0e551cc6f215e0f72c75cd62b4d3c3fb5b3ca58b4c43",
         "verified": null,
         "verification_performed_in_python": false,
         "verification_hint": "verify externally"
@@ -758,8 +758,8 @@
       "contract_submission": {
         "experimentId": "0x6a7263653501604e12ed8f1ffe7318b9e1957e12ce84c5ad61010725bbcb48a4",
         "groupId": "0x3189628e7e6549c34c76da3d1ba5db63e3a1e84d891b12c4dc394ef381ecd1f4",
-        "resultDigest": "0xa25a05e50aee259f3da7dff3bf8c2223b0407e4c4f44b9be0792a0bb91bf1a89",
-        "proofId": "0xe0d69ac92a78e5a83bfe572513e39b3b94cbfd32b145a2c4cbb77299652b8b70",
+        "resultDigest": "0x1aa9c49ffd60d72f2a2ca67a418ab3e6f0e019a5840af5a74172fc873a616950",
+        "proofId": "0xe6252e66909b029722990657c410c560a2fe78d65770d238f3b84aa41c5ec28c",
         "statementDigestSha256": "0x0598c3b22261e2a045727c9402f053f7803bf50203f8ba4d673902ce879d4834"
       },
       "rows": null

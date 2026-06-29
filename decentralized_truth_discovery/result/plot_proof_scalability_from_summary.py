@@ -54,10 +54,10 @@ MARKER_MAP = {
     "SemanticTruth": "P",
 }
 METRIC_SPECS = (
-    ("proof_size_bytes", "Bundle Size", "bytes"),
-    ("proof_payload_bytes", "Proof Payload Size", "bytes"),
-    ("verify_peak_delta_rss_mb_mean", "Verify Peak RSS Delta", "mb"),
-    ("verify_elapsed_sec_mean", "Verify Time", "sec"),
+    ("proof_size_bytes", "Bundle Size", "bytes", None, True),
+    ("proof_payload_bytes", "Proof Payload Size", "bytes", None, False),
+    ("verify_peak_delta_rss_mb_mean", "Verify Peak RSS Delta", "mb", "verify_peak_delta_rss_mb_std", False),
+    ("verify_elapsed_sec_mean", "Verify Time", "sec", "verify_elapsed_sec_std", False),
 )
 
 
@@ -66,7 +66,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--png", type=Path, default=DEFAULT_PNG)
     parser.add_argument("--pdf", type=Path, default=DEFAULT_PDF)
-    parser.add_argument("--batch-count", type=int, default=150)
+    parser.add_argument(
+        "--batch-count",
+        type=int,
+        default=None,
+        help="If set, restrict the plot to a single batch_count (single-point lines).",
+    )
     parser.add_argument("--dpi", type=int, default=280)
     return parser.parse_args()
 
@@ -222,78 +227,154 @@ def select_batch(df: pd.DataFrame, batch_count: int) -> pd.DataFrame:
     return batch_df.reset_index(drop=True)
 
 
-def _plot_metric_panel(
+def _plot_scalability_panel(
     ax: plt.Axes,
     domain_df: pd.DataFrame,
     metric: str,
+    std_column: str | None,
     title: str,
     formatter_kind: str,
     row_label: str,
+    use_log: bool,
 ) -> None:
     if domain_df.empty:
         ax.set_visible(False)
         return
 
-    values = pd.to_numeric(domain_df[metric], errors="coerce").astype(float).tolist()
-    methods = domain_df["method"].tolist()
-    x_positions = np.arange(len(methods))
-    colors = [COLOR_MAP.get(method, "#4a4a4a") for method in methods]
-    bars = ax.bar(x_positions, values, color=colors, width=0.68, edgecolor="none", zorder=3)
+    methods_present = sorted(
+        domain_df["method"].dropna().unique().tolist(),
+        key=_method_rank,
+    )
 
-    ax.set_xticks(x_positions)
-    ax.set_xticklabels([DISPLAY_NAMES.get(method, method) for method in methods], rotation=20, ha="right")
+    plotted_any = False
+    for method_name in methods_present:
+        series = (
+            domain_df[domain_df["method"] == method_name]
+            .sort_values("batch_count")
+        )
+        x_values = pd.to_numeric(series["batch_count"], errors="coerce").astype(float).tolist()
+        y_values = pd.to_numeric(series[metric], errors="coerce").astype(float).tolist()
+        if not x_values or not y_values:
+            continue
+
+        std_values = None
+        if std_column and std_column in series.columns:
+            std_values = pd.to_numeric(series[std_column], errors="coerce").astype(float).tolist()
+
+        color = COLOR_MAP.get(method_name, "#4a4a4a")
+        marker = MARKER_MAP.get(method_name, "o")
+        label = DISPLAY_NAMES.get(method_name, method_name)
+
+        if std_values is not None and any(not np.isnan(value) and value > 0 for value in std_values):
+            ax.errorbar(
+                x_values,
+                y_values,
+                yerr=std_values,
+                color=color,
+                marker=marker,
+                markersize=5.5,
+                linewidth=1.5,
+                capsize=3,
+                elinewidth=0.9,
+                label=label,
+                zorder=3,
+            )
+        else:
+            ax.plot(
+                x_values,
+                y_values,
+                color=color,
+                marker=marker,
+                markersize=5.5,
+                linewidth=1.5,
+                label=label,
+                zorder=3,
+            )
+        plotted_any = True
+
+    if not plotted_any:
+        ax.set_visible(False)
+        return
+
     ax.set_title(title, pad=8)
+    ax.set_xlabel("Batch count")
     if row_label:
         ax.set_ylabel(row_label)
     _apply_metric_formatter(ax, formatter_kind)
     _style_axis(ax)
 
-    lower, upper, zoomed = _compute_bar_axis_limits(values)
-    ax.set_ylim(lower, upper)
-    if zoomed:
-        _add_zoom_note(ax, lower)
+    unique_batches = sorted(
+        {int(value) for value in pd.to_numeric(domain_df["batch_count"], errors="coerce").dropna().tolist()}
+    )
+    if len(unique_batches) > 1:
+        ax.set_xscale("log")
+        ax.set_xticks(unique_batches)
+        ax.set_xticklabels([str(value) for value in unique_batches])
+    else:
+        ax.set_xticks(unique_batches)
 
-    span = upper - lower
-    offset = max(span * 0.025, 0.01)
-    for bar, value in zip(bars, values):
-        ax.text(
-            bar.get_x() + bar.get_width() / 2,
-            bar.get_height() + offset,
-            _format_metric_value(value, formatter_kind),
-            ha="center",
-            va="bottom",
-            fontsize=8,
-        )
+    if use_log:
+        ax.set_yscale("log")
 
 
-def plot_panels(df: pd.DataFrame, png_path: Path, pdf_path: Path, dpi: int, batch_count: int) -> None:
+def plot_panels(
+    df: pd.DataFrame,
+    png_path: Path,
+    pdf_path: Path,
+    dpi: int,
+    batch_count: int | None = None,
+) -> None:
     apply_style()
 
-    batch_df = select_batch(df, batch_count)
+    plot_df = df.copy()
+    if batch_count is not None:
+        plot_df = select_batch(plot_df, batch_count)
+
     domains = ("numeric", "text")
     fig, axes = plt.subplots(2, 4, figsize=(16, 7.8), constrained_layout=False)
-    fig.subplots_adjust(top=0.86, left=0.06, right=0.985, bottom=0.11, wspace=0.26, hspace=0.34)
+    fig.subplots_adjust(top=0.86, left=0.06, right=0.985, bottom=0.12, wspace=0.26, hspace=0.42)
 
+    legend_handles: dict[str, tuple] = {}
     for row_index, domain in enumerate(domains):
-        domain_df = batch_df[batch_df["domain"] == domain].copy().reset_index(drop=True)
+        domain_df = plot_df[plot_df["domain"] == domain].copy().reset_index(drop=True)
         row_label = "Numeric" if domain == "numeric" else "Text"
 
-        for col_index, (metric, title, formatter_kind) in enumerate(METRIC_SPECS):
+        for col_index, (metric, title, formatter_kind, std_column, use_log) in enumerate(METRIC_SPECS):
             ax = axes[row_index, col_index]
-            _plot_metric_panel(
+            _plot_scalability_panel(
                 ax=ax,
                 domain_df=domain_df,
                 metric=metric,
+                std_column=std_column,
                 title=f"{title} ({domain})",
                 formatter_kind=formatter_kind,
                 row_label=row_label if col_index == 0 else "",
+                use_log=use_log,
             )
+            handles, labels = ax.get_legend_handles_labels()
+            for handle, label in zip(handles, labels):
+                legend_handles.setdefault(label, handle)
 
-    fig.suptitle(
-        f"Proof Bundle Summary at Batch = {batch_count}",
-        y=0.995,
-        fontsize=14,
-    )
+    if legend_handles:
+        ordered_labels = [
+            DISPLAY_NAMES.get(method, method)
+            for method in METHOD_ORDER
+            if DISPLAY_NAMES.get(method, method) in legend_handles
+        ]
+        fig.legend(
+            handles=[legend_handles[label] for label in ordered_labels],
+            labels=ordered_labels,
+            loc="lower center",
+            ncol=len(ordered_labels),
+            frameon=False,
+            bbox_to_anchor=(0.5, 0.01),
+        )
+
+    if batch_count is None:
+        title_text = "Proof Bundle Scalability across Batch Counts"
+    else:
+        title_text = f"Proof Bundle Summary at Batch = {batch_count}"
+    fig.suptitle(title_text, y=0.995, fontsize=14)
 
     png_path.parent.mkdir(parents=True, exist_ok=True)
     pdf_path.parent.mkdir(parents=True, exist_ok=True)

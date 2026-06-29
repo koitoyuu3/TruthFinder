@@ -65,42 +65,35 @@ class MethodProtocol:
     per_batch_gather: bool = True
 
 
-# Protocols are derived from the algorithm structure described in
-# `examples/outputs/exp5_agent_scalability_benchmark/agent_scalability_benchmark.md`
-# and the corresponding core implementations.
+# Per the experiment design, every method runs exactly one algorithm iteration
+# per batch, so all protocols are single-round (gather + broadcast). No extra
+# round trips are added on top of the mandatory data gather and reliability
+# broadcast.
 METHOD_PROTOCOLS: Dict[str, MethodProtocol] = {
-    # BasicTruth: trust↔confidence iteration converges over ~5 rounds in the
-    # canonical TruthFinder. Each round is a coord↔agent exchange.
     "BasicTruth": MethodProtocol(
         method_name="BasicTruth",
         broadcast_reliability=True,
-        extra_round_trips=5,
+        extra_round_trips=0,
         per_batch_gather=True,
     ),
-    # DecentTruth: local x̃ → global x̂ → ε update is one coord↔agent exchange,
-    # but the global broadcast is the defining step of the protocol.
     "DecentTruth": MethodProtocol(
         method_name="DecentTruth",
         broadcast_reliability=True,
         extra_round_trips=0,
         per_batch_gather=True,
     ),
-    # SenFeedTruth: incremental MAP is single round; we charge an average of 2
-    # extra rounds for the shock-fallback path (worst case is bursty).
     "SenFeedTruth": MethodProtocol(
         method_name="SenFeedTruth",
         broadcast_reliability=True,
-        extra_round_trips=2,
+        extra_round_trips=0,
         per_batch_gather=True,
     ),
-    # SenteTruth: single round vote (gather embeddings, argmax, broadcast).
     "SenteTruth": MethodProtocol(
         method_name="SenteTruth",
         broadcast_reliability=True,
         extra_round_trips=0,
         per_batch_gather=True,
     ),
-    # SemanticTruth: dual-channel gather + soft vote, single round.
     "SemanticTruth": MethodProtocol(
         method_name="SemanticTruth",
         broadcast_reliability=True,

@@ -41,7 +41,7 @@ DEFAULT_OUT_DIR = (
     / "exp1_numeric"
     / "data_agent-50_news-300_collude_relative"
 )
-BAD_COUNTS = [0, 5, 10, 15, 20, 25, 30, 35, 40]
+BAD_COUNTS = [0, 5, 10, 15, 20, 25]
 N_AGENTS_50 = 50
 
 

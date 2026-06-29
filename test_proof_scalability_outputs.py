@@ -29,8 +29,8 @@ class TestProofScalabilityOutputs(unittest.TestCase):
     def setUpClass(cls):
         cls.plot_module = _load_plot_module()
 
-    def test_default_batch_counts_focus_on_150(self):
-        self.assertEqual(DEFAULT_BATCH_COUNTS, (150,))
+    def test_default_batch_counts_sweep_for_scalability(self):
+        self.assertEqual(DEFAULT_BATCH_COUNTS, (5, 25, 50, 100, 150, 300))
 
     def test_build_summary_df_preserves_proof_bundle_path(self):
         raw_df = pd.DataFrame(

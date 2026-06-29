@@ -35,15 +35,15 @@ from decentralized_truth_discovery.examples.exp_utils import (
 )
 
 DEFAULT_DATA_DIR = ROOT / "decentralized_truth_discovery" / "data_agent-50_news-300"
-DEFAULT_OUT_DIR = (
-    ROOT
-    / "decentralized_truth_discovery"
-    / "examples"
-    / "outputs"
-    / "exp3_text"
-    / "data_agent-50_news-300"
-    / "10bad_at_50__20bad_at_100__30bad_at_200"
+DEFAULT_SCHEDULE_TAG = "10bad_at_50__20bad_at_100__30bad_at_200"
+OUTPUTS_BASE = (
+    ROOT / "decentralized_truth_discovery" / "examples" / "outputs" / "exp3_text"
 )
+DEFAULT_OUT_DIR = OUTPUTS_BASE / DEFAULT_DATA_DIR.name / DEFAULT_SCHEDULE_TAG
+
+
+def _default_out_dir(data_dir: Path) -> Path:
+    return OUTPUTS_BASE / data_dir.name / DEFAULT_SCHEDULE_TAG
 TITLE = "E3-Text: Progressive Byzantine Source Mutiny"
 N_AGENTS_50 = 50
 
@@ -52,12 +52,14 @@ def save_results(
     accuracy_results: Dict[str, Dict[int, float]],
     hybrid_score_results: Dict[str, Dict[int, float]],
     out_dir: Path,
+    dataset_name: str,
     phase1_start: int,
     phase2_start: int,
     phase3_start: int,
     phase1_bad_count: int,
     phase2_bad_count: int,
     phase3_bad_count: int,
+    accuracy_threshold: float,
 ) -> Path:
     rows = []
     for method in TEXT_METHODS:
@@ -71,7 +73,7 @@ def save_results(
                     "method": method,
                     "data_accuracy": acc_series.get(batch_idx, float("nan")),
                     "mean_hybrid_score": score_series.get(batch_idx, float("nan")),
-                    "dataset": "data_agent-50_news-300",
+                    "dataset": dataset_name,
                     "attack_profile": "collude",
                     "phase1_start_batch": phase1_start,
                     "phase2_start_batch": phase2_start,
@@ -79,6 +81,7 @@ def save_results(
                     "phase1_bad_count": phase1_bad_count,
                     "phase2_bad_count": phase2_bad_count,
                     "phase3_bad_count": phase3_bad_count,
+                    "accuracy_threshold": accuracy_threshold,
                 }
             )
     path = out_dir / "results.csv"
@@ -146,6 +149,7 @@ def run_experiment(
     phase1_bad_count: int,
     phase2_bad_count: int,
     phase3_bad_count: int,
+    accuracy_threshold: float = 0.85,
 ) -> None:
     files = build_file_map(data_dir, phase1_bad_count, phase2_bad_count, phase3_bad_count)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -190,7 +194,11 @@ def run_experiment(
         n_total=n_batches,
         mode="text",
     )
-    accuracy_results, hybrid_score_results = eval_text_metrics_per_batch(clean_txt_df, phased_txt_df)
+    accuracy_results, hybrid_score_results = eval_text_metrics_per_batch(
+        clean_txt_df,
+        phased_txt_df,
+        accuracy_threshold=accuracy_threshold,
+    )
 
     event_lines = [
         (phase1_start, f"{phase1_bad_count} bad ({phase1_bad_count / N_AGENTS_50:.0%})"),
@@ -211,8 +219,8 @@ def run_experiment(
     plot_temporal_metric(
         accuracy_results,
         TEXT_METHODS,
-        ylabel="Data Accuracy",
-        title=f"{TITLE} — Thresholded Accuracy",
+        ylabel=f"Data Accuracy (hybrid ≥ {accuracy_threshold:g})",
+        title=f"{TITLE} — Thresholded Accuracy (≥{accuracy_threshold:g})",
         out_path=accuracy_path,
         event_lines=event_lines,
         y_lim=(0.0, 1.05),
@@ -221,12 +229,14 @@ def run_experiment(
         accuracy_results,
         hybrid_score_results,
         out_dir,
+        dataset_name=data_dir.name,
         phase1_start=phase1_start,
         phase2_start=phase2_start,
         phase3_start=phase3_start,
         phase1_bad_count=phase1_bad_count,
         phase2_bad_count=phase2_bad_count,
         phase3_bad_count=phase3_bad_count,
+        accuracy_threshold=accuracy_threshold,
     )
 
     print(f"saved {mixed_path}")
@@ -237,23 +247,43 @@ def run_experiment(
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run 50-agent text exp3 with staged malicious activation.")
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
-    parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR)
+    parser.add_argument(
+        "--out-dir",
+        type=Path,
+        default=None,
+        help="默认根据 --data-dir 自动派生为 outputs/exp3_text/<data-dir-name>/<schedule>。",
+    )
     parser.add_argument("--phase1-start", type=int, default=50)
     parser.add_argument("--phase2-start", type=int, default=100)
     parser.add_argument("--phase3-start", type=int, default=200)
     parser.add_argument("--phase1-bad-count", type=int, default=10)
     parser.add_argument("--phase2-bad-count", type=int, default=20)
     parser.add_argument("--phase3-bad-count", type=int, default=30)
+    parser.add_argument(
+        "--accuracy-threshold",
+        type=float,
+        default=0.85,
+        help="DataAccuracy 的 hybrid score 判定阈值（默认 0.85，可设为 0.90）。",
+    )
     args = parser.parse_args()
+
+    if args.out_dir is None:
+        out_dir = _default_out_dir(args.data_dir)
+        if args.accuracy_threshold != 0.85:
+            out_dir = out_dir.parent / f"{out_dir.name}__thr{args.accuracy_threshold:.2f}"
+    else:
+        out_dir = args.out_dir
+
     run_experiment(
         data_dir=args.data_dir,
-        out_dir=args.out_dir,
+        out_dir=out_dir,
         phase1_start=args.phase1_start,
         phase2_start=args.phase2_start,
         phase3_start=args.phase3_start,
         phase1_bad_count=args.phase1_bad_count,
         phase2_bad_count=args.phase2_bad_count,
         phase3_bad_count=args.phase3_bad_count,
+        accuracy_threshold=args.accuracy_threshold,
     )
 
 

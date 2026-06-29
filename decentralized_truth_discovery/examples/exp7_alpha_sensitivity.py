@@ -5,7 +5,7 @@ from __future__ import annotations
 ================================================
 自变量: alpha in {0.0, 0.1, ..., 1.0}
         DataAcc(alpha) = proportion of samples where
-            alpha * SemSim(clean, noisy) + (1 - alpha) * NumSim(clean, noisy) >= 0.85
+            alpha * SemSim(clean, noisy) + (1 - alpha) * NumSim(clean, noisy) >= 0.9
 
 意义:
   alpha = 0.0  -->  纯数值匹配
@@ -58,18 +58,20 @@ from decentralized_truth_discovery.core.hybrid_text_alignment import (  # noqa: 
 # ── Configuration ─────────────────────────────────────────────────────────────
 
 DEFAULT_DATA_DIR = ROOT / "decentralized_truth_discovery" / "data_agent-50_news-300"
+
+N_AGENTS = 50
+BAD_COUNTS = [0, 5, 10, 15, 20, 25, 30, 35, 40]
+ALPHA_VALUES = [round(x * 0.1, 1) for x in range(11)]
+ACCURACY_THRESHOLD = 0.9
+
+# Output directory tagged by threshold so different thresholds don't overwrite each other.
 DEFAULT_OUT_DIR = (
     ROOT
     / "decentralized_truth_discovery"
     / "examples"
     / "outputs"
-    / "exp7_alpha_sensitivity"
+    / f"exp7_alpha_sensitivity_th{ACCURACY_THRESHOLD:.2f}"
 )
-
-N_AGENTS = 50
-BAD_COUNTS = [0, 5, 10, 15, 20, 25, 30, 35, 40]
-ALPHA_VALUES = [round(x * 0.1, 1) for x in range(11)]
-ACCURACY_THRESHOLD = 0.85
 
 TITLE = "E5: Alpha Sensitivity Analysis"
 X_LABEL = r"$\alpha$ (semantic weight)"

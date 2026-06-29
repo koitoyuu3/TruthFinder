@@ -1,9 +1,9 @@
 {
   "experiment_id": "num_demo_numeric_BasicTruth",
-  "experiment_digest": "deac143e9ee1c390f2813470c2d6efb60427a2ea7b018c045ae9c1b7723d4f82",
+  "experiment_digest": "0dfa09ea90fe21247f64d3846031322dde497edcd7b5167b56f34f857f9f60fe",
   "method": "BasicTruth",
   "row_count": 150,
-  "result_digest": "9d8c1355816c276b9da59fd7e9064f4d10a2b3f5ec367df57564745c1ba10d35",
+  "result_digest": "dc0f44c657d149e1797686dd7625265335cce6b1ee796c17e0ffe77ec85d4d19",
   "rows": [
     {
       "website": "agent-1",
@@ -14,7 +14,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 90490.22,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -28,7 +28,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 0.1548,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -42,7 +42,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 3026.33,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -56,7 +56,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 90490.22,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -70,7 +70,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 0.1548,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -84,7 +84,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 3026.33,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -98,7 +98,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 90490.22,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -112,7 +112,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 0.1548,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -126,7 +126,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 3026.33,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -140,7 +140,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 90490.22,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -154,7 +154,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 0.1548,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -168,7 +168,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 3026.33,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -182,7 +182,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 90490.22,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -196,7 +196,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 0.1548,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -210,7 +210,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 3026.33,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -224,7 +224,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 90490.22,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -238,7 +238,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 0.1548,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -252,7 +252,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 3026.33,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -266,7 +266,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 90490.22,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -280,7 +280,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 0.1548,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -294,7 +294,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 3026.33,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -308,7 +308,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 90490.22,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -322,7 +322,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 0.1548,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -336,7 +336,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 3026.33,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -350,7 +350,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 90490.22,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -364,7 +364,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 0.1548,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -378,7 +378,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 3026.33,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -392,7 +392,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 90490.22,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -406,7 +406,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 0.1548,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -420,7 +420,7 @@
       "fact_confidence": 0.8888888888888888,
       "global_truth": 3026.33,
       "source_reliability": 0.8888888888888888,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -434,7 +434,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 90232.46,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -448,7 +448,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 0.15424,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -462,7 +462,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 3016.6,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -476,7 +476,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 90232.46,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -490,7 +490,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 0.15424,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -504,7 +504,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 3016.6,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -518,7 +518,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 90232.46,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -532,7 +532,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 0.15424,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -546,7 +546,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 3016.6,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -560,7 +560,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 90232.46,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -574,7 +574,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 0.15424,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -588,7 +588,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 3016.6,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -602,7 +602,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 90232.46,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -616,7 +616,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 0.15424,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -630,7 +630,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 3016.6,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -644,7 +644,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 90232.46,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -658,7 +658,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 0.15424,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -672,7 +672,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 3016.6,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -686,7 +686,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 90232.46,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -700,7 +700,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 0.15424,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -714,7 +714,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 3016.6,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -728,7 +728,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 90232.46,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -742,7 +742,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 0.15424,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -756,7 +756,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 3016.6,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -770,7 +770,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 90232.46,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -784,7 +784,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 0.15424,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -798,7 +798,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 3016.6,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -812,7 +812,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 90232.46,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -826,7 +826,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 0.15424,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -840,7 +840,7 @@
       "fact_confidence": 0.9986301369863014,
       "global_truth": 3016.6,
       "source_reliability": 0.9986301369863014,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -854,7 +854,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 90409.15,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -868,7 +868,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 0.15436,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -882,7 +882,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 3033.22,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -896,7 +896,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 90409.15,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -910,7 +910,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 0.15436,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -924,7 +924,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 3033.22,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -938,7 +938,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 90409.15,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -952,7 +952,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 0.15436,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -966,7 +966,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 3033.22,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -980,7 +980,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 90409.15,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -994,7 +994,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 0.15436,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1008,7 +1008,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 3033.22,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1022,7 +1022,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 90409.15,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1036,7 +1036,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 0.15436,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1050,7 +1050,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 3033.22,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1064,7 +1064,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 90409.15,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1078,7 +1078,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 0.15436,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1092,7 +1092,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 3033.22,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1106,7 +1106,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 90409.15,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1120,7 +1120,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 0.15436,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1134,7 +1134,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 3033.22,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1148,7 +1148,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 90409.15,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1162,7 +1162,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 0.15436,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1176,7 +1176,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 3033.22,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1190,7 +1190,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 90409.15,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1204,7 +1204,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 0.15436,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1218,7 +1218,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 3033.22,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1232,7 +1232,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 90409.15,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1246,7 +1246,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 0.15436,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1260,7 +1260,7 @@
       "fact_confidence": 0.9999999974294183,
       "global_truth": 3033.22,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1274,7 +1274,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 90665.37,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1288,7 +1288,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15426,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1302,7 +1302,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3031.14,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1316,7 +1316,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 90665.37,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1330,7 +1330,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15426,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1344,7 +1344,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3031.14,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1358,7 +1358,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 90665.37,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1372,7 +1372,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15426,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1386,7 +1386,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3031.14,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1400,7 +1400,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 90665.37,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1414,7 +1414,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15426,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1428,7 +1428,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3031.14,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1442,7 +1442,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 90665.37,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1456,7 +1456,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15426,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1470,7 +1470,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3031.14,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1484,7 +1484,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 90665.37,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1498,7 +1498,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15426,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1512,7 +1512,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3031.14,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1526,7 +1526,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 90665.37,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1540,7 +1540,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15426,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1554,7 +1554,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3031.14,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1568,7 +1568,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 90665.37,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1582,7 +1582,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15426,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1596,7 +1596,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3031.14,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1610,7 +1610,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 90665.37,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1624,7 +1624,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15426,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1638,7 +1638,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3031.14,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1652,7 +1652,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 90665.37,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1666,7 +1666,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15426,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1680,7 +1680,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3031.14,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1694,7 +1694,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 91067.26,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1708,7 +1708,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15506,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1722,7 +1722,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3048.42,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1736,7 +1736,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 91067.26,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1750,7 +1750,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15506,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1764,7 +1764,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3048.42,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1778,7 +1778,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 91067.26,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1792,7 +1792,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15506,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1806,7 +1806,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3048.42,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1820,7 +1820,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 91067.26,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1834,7 +1834,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15506,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1848,7 +1848,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3048.42,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1862,7 +1862,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 91067.26,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1876,7 +1876,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15506,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1890,7 +1890,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3048.42,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1904,7 +1904,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 91067.26,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1918,7 +1918,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15506,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1932,7 +1932,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3048.42,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1946,7 +1946,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 91067.26,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1960,7 +1960,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15506,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1974,7 +1974,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3048.42,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -1988,7 +1988,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 91067.26,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -2002,7 +2002,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15506,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -2016,7 +2016,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3048.42,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -2030,7 +2030,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 91067.26,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -2044,7 +2044,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15506,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -2058,7 +2058,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3048.42,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -2072,7 +2072,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 91067.26,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -2086,7 +2086,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 0.15506,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -2100,7 +2100,7 @@
       "fact_confidence": 0.9999999989999999,
       "global_truth": 3048.42,
       "source_reliability": 0.999,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_verified": null,
       "proof_verification_mode": "external"
@@ -2112,9 +2112,9 @@
         "proof_scope": "numeric:BasicTruth:full_run"
       },
       "group_digest": "85a2ed1431eff9ded8befb5992b0060cd1f0d8969c33ca0b2c62f31f858e2433",
-      "result_digest": "a9ea2a974c20ee1a1719b59bf26c99e8ea624b608f735eb03c280c4307dccbe9",
+      "result_digest": "9db2450a8b128018d9374d5e0437c8a90f30888d95f8860097edc15dc91ab414",
       "row_count": 150,
-      "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+      "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
       "proof_scheme": "schnorr_nizk_v1",
       "proof_backend": "schnorr",
       "statement_hash": "b44a57da47520abd3be1e9806a199bcf7b61703cd969769260718bdefaa33e29",
@@ -2124,11 +2124,11 @@
       "public_json": null,
       "proof_json": null,
       "proof_payload": {
-        "proof_id": "5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+        "proof_id": "76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
         "scheme": "schnorr_nizk_v1",
         "backend": "schnorr",
         "group": "modp2048_subgroup",
-        "generated_at": 1775623871,
+        "generated_at": 1777360037,
         "prover_id": "BasicTruth",
         "statement": {
           "extra_public_data": {
@@ -2146,10 +2146,10 @@
           "truth_digest": "8a01b47e91eb00a73db8bc3dee45d348f1b0bbd1a07b9ba790017d8c2c2565ea"
         },
         "statement_hash": "b44a57da47520abd3be1e9806a199bcf7b61703cd969769260718bdefaa33e29",
-        "public_key": "0x9c0ef889bd76496a2a05d4acd727093daa605e04497722c0b3421ba6ec503e653b0ef7826ab95a9c1688140579de82684073d1b033e9c299690e90f7ddee01a1e93c30d91578f670f327209d8dc4962296be2e59d38d44d62161b23e086e53adb772d94f2c6624ba0e86bea677feaad352895a58e0c744c07e1a37e54b05d8b2f219e1b50ea706a40ebcd36f41de2804756c6ca7ecaa01e8a0ba240d03be48942e2563d338da692ba50cc2bae17b95879c00b3fc7e39486f698d341c78ae0ff103d8abda9a7ef7a73f5cf1b782c523b11c645703707803b234996c9e484f4b101db9a713501ee08f6c3457780b8ff62b995d5f0622722ee3fcc89abf2b994411",
-        "commitment": "0x9b6920ff3ea517359a46720a48b788c887316943e912a33cbe425feddc9c02198155527bf20eb5bae3b0233cbc436e24dfc98d70e1de9b4f178ede723b0596831f014d31779fd12d7f559a14354bfa8ad4dc4546cfe8588bbe3a57768923af21578e67523269d0eb730ac01fa2f7de0beb9505c101b9cee89a6f6a3a35c09afd313b580cbce9d74c5650cdc75e30d9550ad5299f4d63f4db4aef358c0e07b68b291be011512b569665e4b24dfec4a78b1e126ed186782c2279bbf0ebb16305502268deba338f0697a9e9da91cee4a41705b9065e9235a6b5ba40f245ff280246ac91b8b677f20f91e0f5f0e55348edcd643e5bf079f2f3814eeccd3682232d87",
-        "challenge": "0x8713cb5ec95bb24f4ca7f581633d3d7bb37d38ed23e727fe835035c0ff71b0e",
-        "response": "0x5334152c5c2fc340dc99ed65460cf8b7d5bfe5370869bb1dae11bce3943ad78a4cbd5d6f75cc78e8b8c349cfa9a0f8f995518045a7b5a72eb5aad5d0db7695bf389ff285b8ee8e97ff6ab84486d6fcc40809cf927d4b86453ef1ed75216a8b394bd9a6e7346802f521162aa516e0c4dd5a3ac9447f00a546a22a8725ee50c1e4a40c070a1eb684e8437a42391638705a45d2fe3285c1c55ef486c768433e7459d51f6ea089ba6b17864aeb90b0e0b92d46142d67c4e0be104fedf93ffbd52c74e129760356e38aae01acecd8833fb2db8622c85032124249dcf932b498b004783773706f0c9b48ad1679091573fde3c645f1750dd17de07ae8115d2728c60d56",
+        "public_key": "0x1befebd3fa27826900a63d9bcee03f115aa20bf0b902c09035a462945e22c96f7470bd9f773376c74658b7e24b7d7061e39875add29415d798840f7f125ac7b84b043a9b825c80350e913a59d2ff047e232ae2e7aa2bd561c96c0d75c5631161cb4131db2f03777ffa94577c467deff68910ca8513ad87a8dc1f291b45c613d1588e06d018c0f5f4e59c8f1841aee4156d3684ebe855d79840daa4aa8e37dec0d77d1d16652ee2316f2ab63a9cdfc503336a9614a3518a19d55b585241e76d090c5a08ec2bfd4f52874c149322bc8ca94cc92824957415b9456976a967eadfd17a7d3590c527374ae786142c16117466f0406b03383af022f8902a50c46b0908",
+        "commitment": "0xe5de6700763b81716904461ec11d555760edbc8ec8c9b95a33b2a0fb8d5809567f8d8115435777a158ff9916a8d634c947e173679c7409067e949070d032cc6b6eb3490046a01e25fe2e7eb1609ec6208cfc79539fda664fa9c0e3a0d01270d04359b7303d4db511bb3a21d584f11ebaadbe48db0948ee1e183e74a7d47f3fb30ad36a780b5bdbe9b23e994f286871083d59b3872c01f43174bc4f3abe00d37f7f6066a3561dff52e0404514b0680fa060f47a453d226b7ddbe8f6c3cfe7a529b71fc9526d4ff7bbc9ef7585a729ebfab163c131e99148d7869163275389139ea009bac59ddb5c4ba57e2cfa9e010fc6203626a1bc8962d27eda3a8d16d3066c",
+        "challenge": "0xc5b93e01e5b91af2e3595858a324ea7b11fac87af508e09fdd14d833ab922f5",
+        "response": "0xd046ed265d66aa31d92d8dc2ef29116d8bc6e60cca8545076713be865a70062e72946869c536d72d1ccf99125bbdaf28d5b2d93ac104c44660892bdfcc9208a5a2df73a94032176ff72ef2577c0b67b6582ca775adcd38d4823ca7e1011f7e08222daff510fd30bcf81f1de2f85a5e904b4ae7e57af1888f4b5d7037c523bbdf6df7d61d77a159692cb56099d176ce9ad786ede1c60f3c34f93eabdeb1180e2da1bb716418ded7bc782bb1336db8fdde5022b44f10373a95e95bb277761dc9af9ea18a5867f4bd6b499bbbbe509432878069516b635b724d45fdbcb2d2a6fac35245c7ebfcbdf4a7856752d5745d84f27c270f2bbb4b7c9850bfd08ab269f97",
         "verified": null,
         "verification_performed_in_python": false,
         "verification_hint": "verify externally"
@@ -2158,8 +2158,8 @@
       "contract_submission": {
         "experimentId": "0x5d8cc021ac451bead405326586c2a6e508d13806b00b9ce4bd1c9a4569d29247",
         "groupId": "0x85a2ed1431eff9ded8befb5992b0060cd1f0d8969c33ca0b2c62f31f858e2433",
-        "resultDigest": "0xa9ea2a974c20ee1a1719b59bf26c99e8ea624b608f735eb03c280c4307dccbe9",
-        "proofId": "0x5a5c2381dd8ba3837791ab0f9fd0114efcb61367a43d4e9d2f9087fad6cdea3b",
+        "resultDigest": "0x9db2450a8b128018d9374d5e0437c8a90f30888d95f8860097edc15dc91ab414",
+        "proofId": "0x76867c375143f7a50eb3deaf643b18bd0c5e0983a32273ee3e88cc405a3c1185",
         "statementDigestSha256": "0xb44a57da47520abd3be1e9806a199bcf7b61703cd969769260718bdefaa33e29"
       },
       "rows": null
